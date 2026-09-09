@@ -2,6 +2,9 @@
 
 Next-generation institutional web experience for **CIIRC®**, a Scientific and Industrial Research Organization (SIRO) recognized by DSIR, Ministry of Science & Technology, Government of India. Joint initiative of Sri Sringeri Sharada Peetham & Jyothy Institute of Technology.
 
+- **Live Production URL**: [https://ciirc.vercel.app](https://ciirc.vercel.app)
+- **Deployment Dashboard**: [https://vercel.com/sanstack256s-projects/ciirc](https://vercel.com/sanstack256s-projects/ciirc)
+
 ## Technology Stack
 
 - **Framework**: Next.js 14 (App Router)
