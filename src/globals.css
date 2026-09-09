@@ -1,0 +1,463 @@
+/* ==========================================================================
+   CIIRC DESIGN SYSTEM — SOPHISTICATED DARK RESEARCH IDENTITY
+   Centre for Incubation, Innovation, Research and Consultancy
+   ========================================================================== */
+
+:root {
+  /* --- 1. FOUNDATION (Deep Dark Surfaces Hierarchy) --- */
+  --bg-deep: #030A13;          /* Deepest page/hero background */
+  --bg: #050D18;               /* Primary page background */
+  --bg-section: #071321;       /* Section variation background */
+  --surface: #0B1B2C;          /* Cards and panels */
+  --surface-elevated: #10253A; /* Hover, selected & elevated surfaces */
+  --surface-subtle: #081624;   /* Inset / subtle recessed panels */
+
+  /* --- 2. TYPOGRAPHY HIERARCHY --- */
+  --text-primary: #EAF2F8;     /* Headings, key figures, high priority */
+  --text-secondary: #AFC2D4;   /* Body copy, descriptions, supporting text */
+  --text-muted: #6F879D;       /* Metadata, captions, secondary labels */
+
+  /* --- 3. DISCOVERY (Research & Interaction) --- */
+  --primary: #3B8CFF;          /* Research Blue: links, indicators, active states */
+  --primary-bright: #67B7FF;   /* Signal Blue: numbers, highlights, tiny accents */
+  --primary-subtle: rgba(59, 140, 255, 0.12);
+  --primary-glow: rgba(59, 140, 255, 0.25);
+
+  /* --- 4. SCIENTIFIC (Bio, Environment, Water, Life Sciences) --- */
+  --scientific: #22C7B8;       /* Scientific Teal */
+  --scientific-subtle: rgba(34, 199, 184, 0.12);
+  --scientific-glow: rgba(34, 199, 184, 0.25);
+
+  /* --- 5. ATTENTION (High-Priority Action, Scarce) --- */
+  --accent: #F6B84B;           /* Amber */
+  --accent-foreground: #030A13;/* Deepest dark text on Amber buttons */
+  --accent-hover: #E5A434;
+  --accent-subtle: rgba(246, 184, 75, 0.12);
+
+  /* --- 6. STRUCTURE & DIVIDERS --- */
+  --border: #14283D;           /* Hairline structural dividers & card borders */
+  --border-subtle: #0E1D2D;
+  --border-focus: #3B8CFF;
+
+  /* --- 7. STATUS TOKENS --- */
+  --success: #22C7B8;
+  --warning: #F6B84B;
+  --error: #F05D5E;
+
+  /* --- 8. TYPOGRAPHY FONTS & SCALES --- */
+  --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-display: 'Plus Jakarta Sans', var(--font-sans);
+  --font-mono: 'Space Grotesk', ui-monospace, SFMono-Regular, monospace;
+
+  --text-xs: 0.75rem;     /* 12px */
+  --text-sm: 0.875rem;    /* 14px */
+  --text-base: 1rem;       /* 16px */
+  --text-lg: 1.125rem;    /* 18px */
+  --text-xl: 1.25rem;     /* 20px */
+  --text-2xl: 1.5rem;     /* 24px */
+  --text-3xl: 1.875rem;   /* 30px */
+  --text-4xl: 2.25rem;    /* 36px */
+  --text-5xl: 3rem;       /* 48px */
+  --text-6xl: 3.75rem;    /* 60px */
+
+  /* --- 9. SPACING TOKENS --- */
+  --space-1: 0.25rem;   /* 4px */
+  --space-2: 0.5rem;    /* 8px */
+  --space-3: 0.75rem;   /* 12px */
+  --space-4: 1rem;      /* 16px */
+  --space-5: 1.25rem;   /* 20px */
+  --space-6: 1.5rem;    /* 24px */
+  --space-8: 2rem;      /* 32px */
+  --space-10: 2.5rem;   /* 40px */
+  --space-12: 3rem;     /* 48px */
+  --space-16: 4rem;     /* 64px */
+  --space-20: 5rem;     /* 80px */
+  --space-24: 6rem;     /* 96px */
+
+  /* --- 10. ELEVATION & RADII --- */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-full: 9999px;
+
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  --container-max-width: 1320px;
+}
+
+/* ==========================================================================
+   RESET & FOUNDATIONS
+   ========================================================================== */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-family: var(--font-sans);
+  color: var(--text-secondary);
+  background-color: var(--bg);
+  scroll-behavior: smooth;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  min-height: 100vh;
+  overflow-x: hidden;
+  line-height: 1.65;
+  font-size: var(--text-base);
+  background-color: var(--bg);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  color: var(--text-primary);
+  font-weight: 700;
+  line-height: 1.22;
+  letter-spacing: -0.02em;
+}
+
+h1 { font-size: clamp(2.4rem, 5.2vw, 3.8rem); font-weight: 800; }
+h2 { font-size: clamp(1.85rem, 3.4vw, 2.6rem); font-weight: 700; }
+h3 { font-size: clamp(1.3rem, 2.3vw, 1.75rem); }
+h4 { font-size: var(--text-lg); }
+
+p {
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+a {
+  color: var(--primary);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+a:hover {
+  color: var(--primary-bright);
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+/* ==========================================================================
+   LAYOUT CONTAINERS & SECTION RHYTHM
+   ========================================================================== */
+
+.container {
+  width: 100%;
+  max-width: var(--container-max-width);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--space-6);
+  padding-right: var(--space-6);
+}
+
+@media (max-width: 640px) {
+  .container {
+    padding-left: var(--space-4);
+    padding-right: var(--space-4);
+  }
+}
+
+.section-wrapper {
+  padding-top: var(--space-20);
+  padding-bottom: var(--space-20);
+  position: relative;
+}
+
+@media (max-width: 768px) {
+  .section-wrapper {
+    padding-top: var(--space-12);
+    padding-bottom: var(--space-12);
+  }
+}
+
+/* Section Eyebrow Component */
+.section-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-xs);
+  font-family: var(--font-mono);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--primary-bright);
+  margin-bottom: var(--space-3);
+  padding: 4px 10px;
+  background-color: var(--primary-subtle);
+  border: 1px solid rgba(59, 140, 255, 0.25);
+  border-radius: var(--radius-full);
+}
+
+.section-eyebrow.eyebrow-scientific {
+  color: var(--scientific);
+  background-color: var(--scientific-subtle);
+  border-color: rgba(34, 199, 184, 0.25);
+}
+
+.section-eyebrow.eyebrow-accent {
+  color: var(--accent);
+  background-color: var(--accent-subtle);
+  border-color: rgba(246, 184, 75, 0.25);
+}
+
+.section-title {
+  color: var(--text-primary);
+  margin-bottom: var(--space-4);
+}
+
+.section-description {
+  font-size: var(--text-lg);
+  max-width: 760px;
+  color: var(--text-secondary);
+}
+
+/* ==========================================================================
+   BUTTON & AFFORDANCE HIERARCHY
+   ========================================================================== */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  font-family: var(--font-display);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  padding: 12px 22px;
+  border-radius: var(--radius-md);
+  transition: all var(--transition-fast);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+/* Primary Action CTA: AMBER (#F6B84B) with Deep Navy text (#06111F) */
+.btn-primary {
+  background-color: var(--accent);
+  color: var(--accent-foreground);
+  font-weight: 700;
+  border: 1px solid var(--accent);
+}
+
+.btn-primary:hover {
+  background-color: var(--accent-hover);
+  color: var(--accent-foreground);
+  transform: translateY(-1px);
+}
+
+/* Secondary CTA: Research Blue outline with Ice Text */
+.btn-secondary {
+  background-color: transparent;
+  color: var(--text-primary);
+  border: 1px solid var(--primary);
+}
+
+.btn-secondary:hover {
+  background-color: var(--primary-subtle);
+  color: var(--text-primary);
+  border-color: var(--primary-bright);
+}
+
+/* Understated Surface Button */
+.btn-surface {
+  background-color: var(--surface);
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
+}
+
+.btn-surface:hover {
+  background-color: var(--surface-elevated);
+  color: var(--text-primary);
+  border-color: var(--primary);
+}
+
+/* Interactive Text Link */
+.link-arrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+  font-size: var(--text-sm);
+  color: var(--primary);
+  transition: gap var(--transition-fast), color var(--transition-fast);
+}
+
+.link-arrow:hover {
+  gap: 10px;
+  color: var(--primary-bright);
+}
+
+/* ==========================================================================
+   BADGES & LABELS
+   ========================================================================== */
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--text-xs);
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+}
+
+.badge-blue {
+  background-color: var(--primary-subtle);
+  color: var(--primary-bright);
+  border: 1px solid rgba(59, 140, 255, 0.2);
+}
+
+.badge-scientific {
+  background-color: var(--scientific-subtle);
+  color: var(--scientific);
+  border: 1px solid rgba(34, 199, 184, 0.2);
+}
+
+.badge-amber {
+  background-color: var(--accent-subtle);
+  color: var(--accent);
+  border: 1px solid rgba(246, 184, 75, 0.2);
+}
+
+.badge-surface {
+  background-color: var(--surface-subtle);
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+}
+
+/* ==========================================================================
+   ATMOSPHERIC LIGHT FIELD (SCREEN-SPACE CONTINUOUS ORGANIC DRIFT)
+   ========================================================================== */
+
+.atmospheric-canvas-layer {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 0;
+  contain: strict;
+  background-color: var(--bg-deep);
+}
+
+.atmospheric-orb {
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: var(--radius-full);
+  will-change: transform;
+  pointer-events: none;
+}
+
+/* Primary Research Blue atmospheric light field (#3B8CFF) */
+.atmospheric-orb-blue {
+  width: 75vw;
+  height: 75vw;
+  min-width: 600px;
+  min-height: 600px;
+  max-width: 1150px;
+  max-height: 1150px;
+  background: radial-gradient(
+    circle closest-side,
+    rgba(59, 140, 255, 0.28) 0%,
+    rgba(59, 140, 255, 0.15) 35%,
+    rgba(59, 140, 255, 0.05) 60%,
+    rgba(59, 140, 255, 0.01) 75%,
+    transparent 100%
+  );
+  filter: blur(45px);
+  animation: atmospheric-drift-blue 32s ease-in-out infinite;
+}
+
+/* Secondary Scientific Teal subtle accent field (#22C7B8) */
+.atmospheric-orb-teal {
+  width: 65vw;
+  height: 65vw;
+  min-width: 500px;
+  min-height: 500px;
+  max-width: 950px;
+  max-height: 950px;
+  background: radial-gradient(
+    circle closest-side,
+    rgba(34, 199, 184, 0.18) 0%,
+    rgba(34, 199, 184, 0.09) 35%,
+    rgba(34, 199, 184, 0.025) 65%,
+    transparent 100%
+  );
+  filter: blur(50px);
+  animation: atmospheric-drift-teal 40s ease-in-out infinite;
+}
+
+/* Multi-keyframe organic drifting trajectory across screen space */
+@keyframes atmospheric-drift-blue {
+  0% {
+    transform: translate3d(25vw, -5vh, 0) scale(1);
+  }
+  25% {
+    transform: translate3d(52vw, 25vh, 0) scale(1.12);
+  }
+  50% {
+    transform: translate3d(20vw, 55vh, 0) scale(0.96);
+  }
+  75% {
+    transform: translate3d(-10vw, 25vh, 0) scale(1.08);
+  }
+  100% {
+    transform: translate3d(25vw, -5vh, 0) scale(1);
+  }
+}
+
+@keyframes atmospheric-drift-teal {
+  0% {
+    transform: translate3d(-5vw, 40vh, 0) scale(0.96);
+  }
+  25% {
+    transform: translate3d(15vw, 5vh, 0) scale(1.06);
+  }
+  50% {
+    transform: translate3d(45vw, 20vh, 0) scale(1.02);
+  }
+  75% {
+    transform: translate3d(30vw, 55vh, 0) scale(1.1);
+  }
+  100% {
+    transform: translate3d(-5vw, 40vh, 0) scale(0.96);
+  }
+}
+
+/* ==========================================================================
+   ACCESSIBILITY & REDUCED MOTION
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .atmospheric-orb-blue,
+  .atmospheric-orb-teal {
+    animation: none !important;
+    transform: translate3d(25vw, 15vh, 0) scale(1) !important;
+  }
+}
