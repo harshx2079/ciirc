@@ -3,9 +3,12 @@
 import React from 'react';
 import { ArrowUpRight, GraduationCap, Quote } from 'lucide-react';
 import { CIIRC_IDENTITY } from '../data/ciircData';
+import { useScrollReveal } from '../hooks/useScrollReveal';
 
 export const DirectorMessage: React.FC = () => {
   const { director } = CIIRC_IDENTITY;
+  const textReveal = useScrollReveal<HTMLDivElement>({ threshold: 0.15 });
+  const imageReveal = useScrollReveal<HTMLDivElement>({ threshold: 0.15, delayMs: 120 });
 
   return (
     <section
@@ -27,7 +30,10 @@ export const DirectorMessage: React.FC = () => {
           }}
         >
           {/* Left Column: Statement & Authentic Quote */}
-          <div>
+          <div
+            ref={textReveal.ref}
+            className={`motion-reveal-editorial ${textReveal.isRevealed ? 'is-revealed' : ''}`}
+          >
             <div className="section-eyebrow">
               <Quote size={13} /> DIRECTOR'S MESSAGE
             </div>
@@ -92,9 +98,14 @@ export const DirectorMessage: React.FC = () => {
             </div>
           </div>
 
-          {/* Right Column: Authentic Photograph Composition */}
-          <div style={{ display: 'flex', justifyContent: 'center' }}>
+          {/* Right Column: Authentic Photograph Composition with Image Reveal */}
+          <div
+            ref={imageReveal.ref}
+            className={`motion-reveal-image ${imageReveal.isRevealed ? 'is-revealed' : ''}`}
+            style={{ display: 'flex', justifyContent: 'center' }}
+          >
             <div
+              className="card-lift"
               style={{
                 width: '100%',
                 maxWidth: '460px',

@@ -2,8 +2,12 @@
 
 import React from 'react';
 import { Microscope, ArrowUpRight, Activity, Shield } from 'lucide-react';
+import { useScrollReveal } from '../hooks/useScrollReveal';
 
 export const InstrumentationFacility: React.FC = () => {
+  const headerReveal = useScrollReveal<HTMLDivElement>({ threshold: 0.15 });
+  const gridReveal = useScrollReveal<HTMLDivElement>({ threshold: 0.10 });
+
   const instruments = [
     {
       code: "SEM",
@@ -55,6 +59,8 @@ export const InstrumentationFacility: React.FC = () => {
       <div className="container">
         {/* Section Header */}
         <div
+          ref={headerReveal.ref}
+          className={`motion-reveal-editorial ${headerReveal.isRevealed ? 'is-revealed' : ''}`}
           style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
@@ -78,6 +84,7 @@ export const InstrumentationFacility: React.FC = () => {
 
           <div>
             <div
+              className="card-lift"
               style={{
                 padding: '16px 20px',
                 backgroundColor: 'var(--surface)',
@@ -99,6 +106,8 @@ export const InstrumentationFacility: React.FC = () => {
 
         {/* Instruments Grid */}
         <div
+          ref={gridReveal.ref}
+          className={`motion-reveal ${gridReveal.isRevealed ? 'is-revealed' : ''}`}
           style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))',
@@ -109,6 +118,7 @@ export const InstrumentationFacility: React.FC = () => {
           {instruments.map((inst) => (
             <div
               key={inst.code}
+              className="card-lift"
               style={{
                 backgroundColor: 'var(--surface)',
                 padding: '24px',
@@ -116,16 +126,7 @@ export const InstrumentationFacility: React.FC = () => {
                 border: '1px solid var(--border)',
                 display: 'flex',
                 flexDirection: 'column',
-                justifyContent: 'space-between',
-                transition: 'all var(--transition-fast)'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = 'var(--surface-elevated)';
-                e.currentTarget.style.borderColor = 'var(--scientific)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = 'var(--surface)';
-                e.currentTarget.style.borderColor = 'var(--border)';
+                justifyContent: 'space-between'
               }}
             >
               <div>

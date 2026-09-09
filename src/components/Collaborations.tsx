@@ -3,8 +3,13 @@
 import React from 'react';
 import { Award, Globe2, CheckCircle2 } from 'lucide-react';
 import { STRATEGIC_COLLABORATIONS, RESEARCH_FELLOWSHIPS_WON } from '../data/ciircData';
+import { useScrollReveal } from '../hooks/useScrollReveal';
 
 export const Collaborations: React.FC = () => {
+  const headerReveal = useScrollReveal<HTMLDivElement>({ threshold: 0.15 });
+  const logosReveal = useScrollReveal<HTMLDivElement>({ threshold: 0.10 });
+  const fellowshipsReveal = useScrollReveal<HTMLDivElement>({ threshold: 0.10 });
+
   return (
     <section
       id="collaborations"
@@ -15,8 +20,12 @@ export const Collaborations: React.FC = () => {
       }}
     >
       <div className="container">
-        {/* Section Header */}
-        <div style={{ maxWidth: '820px', marginBottom: '44px' }}>
+        {/* Section Header with Editorial Reveal */}
+        <div
+          ref={headerReveal.ref}
+          className={`motion-reveal-editorial ${headerReveal.isRevealed ? 'is-revealed' : ''}`}
+          style={{ maxWidth: '820px', marginBottom: '44px' }}
+        >
           <div className="section-eyebrow">
             <Globe2 size={13} /> GLOBAL SCIENTIFIC NETWORK
           </div>
@@ -29,8 +38,10 @@ export const Collaborations: React.FC = () => {
           </p>
         </div>
 
-        {/* Sophisticated Logo System (Section 25) */}
+        {/* Sophisticated Logo System with Reveal & Card Lift */}
         <div
+          ref={logosReveal.ref}
+          className={`motion-reveal ${logosReveal.isRevealed ? 'is-revealed' : ''}`}
           style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fill, minmax(185px, 1fr))',
@@ -41,6 +52,7 @@ export const Collaborations: React.FC = () => {
           {STRATEGIC_COLLABORATIONS.map((partner) => (
             <div
               key={partner.name}
+              className="card-lift"
               style={{
                 backgroundColor: 'var(--surface)',
                 border: '1px solid var(--border)',
@@ -51,16 +63,7 @@ export const Collaborations: React.FC = () => {
                 alignItems: 'center',
                 justifyContent: 'center',
                 textAlign: 'center',
-                minHeight: '120px',
-                transition: 'all var(--transition-fast)'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = 'var(--surface-elevated)';
-                e.currentTarget.style.borderColor = 'var(--primary)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = 'var(--surface)';
-                e.currentTarget.style.borderColor = 'var(--border)';
+                minHeight: '120px'
               }}
             >
               {partner.logoUrl ? (
@@ -130,8 +133,10 @@ export const Collaborations: React.FC = () => {
           ))}
         </div>
 
-        {/* Prestigious Fellowships Won (Authentic Content from CIIRC Records) */}
+        {/* Faculty Fellowships Conferred */}
         <div
+          ref={fellowshipsReveal.ref}
+          className={`motion-reveal ${fellowshipsReveal.isRevealed ? 'is-revealed' : ''}`}
           style={{
             backgroundColor: 'var(--surface)',
             borderRadius: 'var(--radius-lg)',

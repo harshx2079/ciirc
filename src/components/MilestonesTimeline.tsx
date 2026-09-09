@@ -3,8 +3,12 @@
 import React from 'react';
 import { Compass } from 'lucide-react';
 import { HISTORIC_MILESTONES } from '../data/ciircData';
+import { useScrollReveal } from '../hooks/useScrollReveal';
 
 export const MilestonesTimeline: React.FC = () => {
+  const headerReveal = useScrollReveal<HTMLDivElement>({ threshold: 0.15 });
+  const timelineReveal = useScrollReveal<HTMLDivElement>({ threshold: 0.10 });
+
   return (
     <section
       id="milestones"
@@ -15,8 +19,12 @@ export const MilestonesTimeline: React.FC = () => {
       }}
     >
       <div className="container">
-        {/* Section Header */}
-        <div style={{ maxWidth: '820px', marginBottom: '48px' }}>
+        {/* Section Header with Editorial Reveal */}
+        <div
+          ref={headerReveal.ref}
+          className={`motion-reveal-editorial ${headerReveal.isRevealed ? 'is-revealed' : ''}`}
+          style={{ maxWidth: '820px', marginBottom: '48px' }}
+        >
           <div className="section-eyebrow eyebrow-scientific">
             <Compass size={13} /> EXPEDITIONS &amp; RECORD
           </div>
@@ -29,8 +37,10 @@ export const MilestonesTimeline: React.FC = () => {
           </p>
         </div>
 
-        {/* Editorial Timeline Grid with Thin Lines & Small Blue Indicators (Section 23) */}
+        {/* Editorial Timeline Grid with Thin Lines & Small Blue Indicators */}
         <div
+          ref={timelineReveal.ref}
+          className={`motion-reveal ${timelineReveal.isRevealed ? 'is-revealed' : ''}`}
           style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
@@ -40,6 +50,7 @@ export const MilestonesTimeline: React.FC = () => {
           {HISTORIC_MILESTONES.map((item) => (
             <div
               key={item.year + item.title}
+              className="card-lift"
               style={{
                 backgroundColor: 'var(--surface)',
                 border: '1px solid var(--border)',
@@ -47,16 +58,7 @@ export const MilestonesTimeline: React.FC = () => {
                 padding: '28px 24px',
                 display: 'flex',
                 flexDirection: 'column',
-                justifyContent: 'space-between',
-                transition: 'all var(--transition-fast)'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = 'var(--surface-elevated)';
-                e.currentTarget.style.borderColor = item.isArcticOrPolar ? 'var(--scientific)' : 'var(--primary)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = 'var(--surface)';
-                e.currentTarget.style.borderColor = 'var(--border)';
+                justifyContent: 'space-between'
               }}
             >
               <div>

@@ -3,8 +3,13 @@
 import React from 'react';
 import { Building2, CheckCircle2, Layers, Cpu, Dna, Rocket, Bot, Radio, Compass } from 'lucide-react';
 import { INDUSTRY_5_ENABLERS } from '../data/ciircData';
+import { useScrollReveal } from '../hooks/useScrollReveal';
 
 export const InstitutionalIntro: React.FC = () => {
+  const headerReveal = useScrollReveal<HTMLDivElement>({ threshold: 0.15 });
+  const panelsReveal = useScrollReveal<HTMLDivElement>({ threshold: 0.12 });
+  const enablersReveal = useScrollReveal<HTMLDivElement>({ threshold: 0.12 });
+
   const enablerIcons = [
     <Layers key="nano" size={20} color="var(--primary-bright)" />,
     <Cpu key="additive" size={20} color="var(--accent)" />,
@@ -26,6 +31,8 @@ export const InstitutionalIntro: React.FC = () => {
       <div className="container">
         {/* Editorial Two-Column Header Structure (Section 18) */}
         <div
+          ref={headerReveal.ref}
+          className={`motion-reveal-editorial ${headerReveal.isRevealed ? 'is-revealed' : ''}`}
           style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
@@ -70,6 +77,8 @@ export const InstitutionalIntro: React.FC = () => {
 
         {/* 4 Structural Metric Panels */}
         <div
+          ref={panelsReveal.ref}
+          className={`motion-reveal ${panelsReveal.isRevealed ? 'is-revealed' : ''}`}
           style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
@@ -192,6 +201,8 @@ export const InstitutionalIntro: React.FC = () => {
 
         {/* Industry 5.0 Enablers Matrix (Authentic CIIRC Architecture) */}
         <div
+          ref={enablersReveal.ref}
+          className={`motion-reveal ${enablersReveal.isRevealed ? 'is-revealed' : ''}`}
           style={{
             backgroundColor: 'var(--surface)',
             border: '1px solid var(--border)',

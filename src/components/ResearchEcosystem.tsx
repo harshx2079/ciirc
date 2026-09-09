@@ -20,11 +20,15 @@ import {
   X
 } from 'lucide-react';
 import { RESEARCH_VISTAS, ResearchVista } from '../data/ciircData';
+import { useScrollReveal } from '../hooks/useScrollReveal';
 
 export const ResearchEcosystem: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [activeModalVista, setActiveModalVista] = useState<ResearchVista | null>(null);
+
+  const headerReveal = useScrollReveal<HTMLDivElement>({ threshold: 0.15 });
+  const gridReveal = useScrollReveal<HTMLDivElement>({ threshold: 0.10 });
 
   const categories = [
     'All',
@@ -93,8 +97,12 @@ export const ResearchEcosystem: React.FC = () => {
       }}
     >
       <div className="container">
-        {/* Section Header */}
-        <div style={{ maxWidth: '820px', marginBottom: '40px' }}>
+        {/* Section Header with Editorial Reveal */}
+        <div
+          ref={headerReveal.ref}
+          className={`motion-reveal-editorial ${headerReveal.isRevealed ? 'is-revealed' : ''}`}
+          style={{ maxWidth: '820px', marginBottom: '40px' }}
+        >
           <div className="section-eyebrow">
             <Microscope size={13} /> RESEARCH ECOSYSTEM
           </div>
@@ -128,6 +136,7 @@ export const ResearchEcosystem: React.FC = () => {
                 <button
                   key={category}
                   onClick={() => setSelectedCategory(category)}
+                  className="btn-tactile"
                   style={{
                     padding: '7px 15px',
                     borderRadius: 'var(--radius-full)',
@@ -137,19 +146,7 @@ export const ResearchEcosystem: React.FC = () => {
                     backgroundColor: isActive ? 'var(--surface-elevated)' : 'var(--surface)',
                     color: isActive ? 'var(--primary-bright)' : 'var(--text-muted)',
                     border: isActive ? '1px solid var(--primary)' : '1px solid var(--border)',
-                    transition: 'all var(--transition-fast)'
-                  }}
-                  onMouseEnter={(e) => {
-                    if (!isActive) {
-                      e.currentTarget.style.color = 'var(--text-primary)';
-                      e.currentTarget.style.borderColor = 'var(--text-muted)';
-                    }
-                  }}
-                  onMouseLeave={(e) => {
-                    if (!isActive) {
-                      e.currentTarget.style.color = 'var(--text-muted)';
-                      e.currentTarget.style.borderColor = 'var(--border)';
-                    }
+                    transition: 'all var(--motion-fast) var(--ease-standard)'
                   }}
                 >
                   {category}
@@ -158,8 +155,8 @@ export const ResearchEcosystem: React.FC = () => {
             })}
           </div>
 
-          {/* Search Box */}
-          <div style={{ position: 'relative', width: '100%', maxWidth: '280px' }}>
+          {/* Search Input Box */}
+          <div style={{ position: 'relative', width: '260px' }}>
             <Search
               size={15}
               color="var(--text-muted)"
@@ -201,8 +198,10 @@ export const ResearchEcosystem: React.FC = () => {
           </div>
         </div>
 
-        {/* Research Cards Grid (Strict Section 20 Compliance) */}
+        {/* Research Cards Grid with Progressive Reveal & Quiet Card Lift */}
         <div
+          ref={gridReveal.ref}
+          className={`motion-reveal ${gridReveal.isRevealed ? 'is-revealed' : ''}`}
           style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fill, minmax(360px, 1fr))',
@@ -212,6 +211,7 @@ export const ResearchEcosystem: React.FC = () => {
           {filteredVistas.map((vista) => (
             <div
               key={vista.id}
+              className="card-lift"
               style={{
                 backgroundColor: 'var(--surface)',
                 border: '1px solid var(--border)',
@@ -219,16 +219,7 @@ export const ResearchEcosystem: React.FC = () => {
                 padding: '28px 24px',
                 display: 'flex',
                 flexDirection: 'column',
-                justifyContent: 'space-between',
-                transition: 'all var(--transition-fast)'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = 'var(--surface-elevated)';
-                e.currentTarget.style.borderColor = 'var(--primary)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = 'var(--surface)';
-                e.currentTarget.style.borderColor = 'var(--border)';
+                justifyContent: 'space-between'
               }}
             >
               <div>

@@ -3,9 +3,12 @@
 import React, { useState } from 'react';
 import { Briefcase, Calendar, ArrowUpRight } from 'lucide-react';
 import { LIVE_OPPORTUNITIES } from '../data/ciircData';
+import { useScrollReveal } from '../hooks/useScrollReveal';
 
 export const Opportunities: React.FC = () => {
   const [filter, setFilter] = useState<'All' | 'Open Application'>('All');
+  const headerReveal = useScrollReveal<HTMLDivElement>({ threshold: 0.15 });
+  const listReveal = useScrollReveal<HTMLDivElement>({ threshold: 0.10 });
 
   const items = LIVE_OPPORTUNITIES.filter((item) =>
     filter === 'All' ? true : item.status === 'Open Application'
@@ -21,8 +24,10 @@ export const Opportunities: React.FC = () => {
       }}
     >
       <div className="container">
-        {/* Section Header (Section 26) */}
+        {/* Section Header with Editorial Reveal */}
         <div
+          ref={headerReveal.ref}
+          className={`motion-reveal-editorial ${headerReveal.isRevealed ? 'is-revealed' : ''}`}
           style={{
             display: 'flex',
             justifyContent: 'space-between',
@@ -47,6 +52,7 @@ export const Opportunities: React.FC = () => {
           <div style={{ display: 'flex', gap: '8px' }}>
             <button
               onClick={() => setFilter('All')}
+              className="btn-tactile"
               style={{
                 padding: '6px 14px',
                 borderRadius: 'var(--radius-full)',
@@ -55,13 +61,14 @@ export const Opportunities: React.FC = () => {
                 backgroundColor: filter === 'All' ? 'var(--surface-elevated)' : 'var(--surface)',
                 color: filter === 'All' ? 'var(--primary-bright)' : 'var(--text-muted)',
                 border: '1px solid var(--border)',
-                transition: 'all var(--transition-fast)'
+                transition: 'all var(--motion-fast) var(--ease-standard)'
               }}
             >
               All Records
             </button>
             <button
               onClick={() => setFilter('Open Application')}
+              className="btn-tactile"
               style={{
                 padding: '6px 14px',
                 borderRadius: 'var(--radius-full)',
@@ -70,7 +77,7 @@ export const Opportunities: React.FC = () => {
                 backgroundColor: filter === 'Open Application' ? 'var(--surface-elevated)' : 'var(--surface)',
                 color: filter === 'Open Application' ? 'var(--primary-bright)' : 'var(--text-muted)',
                 border: '1px solid var(--border)',
-                transition: 'all var(--transition-fast)'
+                transition: 'all var(--motion-fast) var(--ease-standard)'
               }}
             >
               Active Fellowships Only
@@ -78,11 +85,16 @@ export const Opportunities: React.FC = () => {
           </div>
         </div>
 
-        {/* Opportunities List */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+        {/* Opportunities List with Reveal */}
+        <div
+          ref={listReveal.ref}
+          className={`motion-reveal ${listReveal.isRevealed ? 'is-revealed' : ''}`}
+          style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}
+        >
           {items.map((opp) => (
             <div
               key={opp.id}
+              className="card-lift"
               style={{
                 padding: '20px 24px',
                 backgroundColor: 'var(--surface)',
@@ -92,16 +104,7 @@ export const Opportunities: React.FC = () => {
                 justifyContent: 'space-between',
                 alignItems: 'center',
                 flexWrap: 'wrap',
-                gap: '16px',
-                transition: 'all var(--transition-fast)'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = 'var(--surface-elevated)';
-                e.currentTarget.style.borderColor = 'var(--primary)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = 'var(--surface)';
-                e.currentTarget.style.borderColor = 'var(--border)';
+                gap: '16px'
               }}
             >
               <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>

@@ -83,6 +83,20 @@
   --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
   --transition-normal: 250ms cubic-bezier(0.4, 0, 0.2, 1);
 
+  /* --- 11. CENTRALIZED MOTION SYSTEM --- */
+  --motion-instant: 100ms;
+  --motion-fast: 180ms;
+  --motion-normal: 280ms;
+  --motion-medium: 420ms;
+  --motion-slow: 650ms;
+  --motion-reveal: 800ms;
+  --motion-cinematic: 1200ms;
+
+  --ease-standard: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --ease-emphasized: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-soft: cubic-bezier(0.25, 0.75, 0.25, 1);
+  --ease-exit: cubic-bezier(0.4, 0, 1, 1);
+
   --container-max-width: 1320px;
 }
 
@@ -444,6 +458,165 @@ button {
 }
 
 /* ==========================================================================
+   MOTION SYSTEM & REUSABLE REVEAL UTILITIES
+   ========================================================================== */
+
+/* Reading / Scroll progress bar */
+.scroll-progress-line {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, var(--primary) 0%, var(--scientific) 100%);
+  transform-origin: left;
+  z-index: 9999;
+  pointer-events: none;
+  will-change: transform;
+}
+
+/* Base Scroll Reveal Classes */
+.motion-reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity var(--motion-reveal) var(--ease-emphasized),
+              transform var(--motion-reveal) var(--ease-emphasized);
+  will-change: opacity, transform;
+}
+
+.motion-reveal.is-revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Editorial Reveal for Major Headings */
+.motion-reveal-editorial {
+  opacity: 0;
+  transform: translateY(32px);
+  transition: opacity var(--motion-reveal) var(--ease-emphasized),
+              transform var(--motion-reveal) var(--ease-emphasized);
+  will-change: opacity, transform;
+}
+
+.motion-reveal-editorial.is-revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Image Reveal (Subtle Scale 1.025 -> 1.0) */
+.motion-reveal-image {
+  opacity: 0;
+  transform: scale(1.025);
+  transition: opacity var(--motion-reveal) var(--ease-standard),
+              transform var(--motion-reveal) var(--ease-standard);
+  will-change: opacity, transform;
+}
+
+.motion-reveal-image.is-revealed {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Structural Divider Reveal */
+.motion-reveal-line {
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--motion-slow) var(--ease-standard);
+  will-change: transform;
+}
+
+.motion-reveal-line.is-revealed {
+  transform: scaleX(1);
+}
+
+/* Timeline Vertical Spine Reveal */
+.motion-timeline-spine {
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform var(--motion-cinematic) var(--ease-emphasized);
+  will-change: transform;
+}
+
+.motion-timeline-spine.is-revealed {
+  transform: scaleY(1);
+}
+
+/* Micro-Interactions: Tactile Buttons */
+.btn-tactile {
+  transition: transform var(--motion-fast) var(--ease-standard),
+              background-color var(--motion-fast) var(--ease-standard),
+              box-shadow var(--motion-fast) var(--ease-standard);
+}
+
+.btn-tactile:hover {
+  transform: translateY(-1px);
+}
+
+.btn-tactile:active {
+  transform: translateY(0) scale(0.985);
+}
+
+/* Micro-Interactions: Arrow Follower */
+.group-arrow .arrow-icon {
+  transition: transform var(--motion-fast) var(--ease-standard);
+  display: inline-block;
+}
+
+.group-arrow:hover .arrow-icon {
+  transform: translateX(4px);
+}
+
+/* Micro-Interactions: Quiet Card Lift */
+.card-lift {
+  transition: transform var(--motion-normal) var(--ease-standard),
+              border-color var(--motion-normal) var(--ease-standard),
+              background-color var(--motion-normal) var(--ease-standard);
+}
+
+.card-lift:hover {
+  transform: translateY(-3px);
+  border-color: rgba(59, 140, 255, 0.28) !important;
+}
+
+/* Micro-Interactions: Nav Underline Indicator */
+.nav-link-anchor {
+  position: relative;
+  display: inline-block;
+  padding-bottom: 2px;
+}
+
+.nav-link-anchor::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: var(--primary);
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform var(--motion-fast) var(--ease-standard);
+}
+
+.nav-link-anchor:hover::after,
+.nav-link-anchor.is-active::after {
+  transform: scaleX(1);
+}
+
+/* Mobile responsive animation adjustments */
+@media (max-width: 768px) {
+  .motion-reveal {
+    transform: translateY(16px);
+  }
+  .motion-reveal-editorial {
+    transform: translateY(20px);
+  }
+  .card-lift:hover {
+    transform: translateY(-1.5px);
+  }
+}
+
+/* ==========================================================================
    ACCESSIBILITY & REDUCED MOTION
    ========================================================================== */
 
@@ -459,5 +632,22 @@ button {
   .atmospheric-orb-teal {
     animation: none !important;
     transform: translate3d(25vw, 15vh, 0) scale(1) !important;
+  }
+
+  .motion-reveal,
+  .motion-reveal-editorial,
+  .motion-reveal-image,
+  .motion-reveal-line,
+  .motion-timeline-spine {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+
+  .card-lift:hover,
+  .btn-tactile:hover,
+  .btn-tactile:active,
+  .group-arrow:hover .arrow-icon {
+    transform: none !important;
   }
 }

@@ -3,8 +3,11 @@
 import React from 'react';
 import { ArrowRight, Mail, Phone, Microscope, ShieldCheck } from 'lucide-react';
 import { CIIRC_IDENTITY } from '../data/ciircData';
+import { useScrollReveal } from '../hooks/useScrollReveal';
 
 export const CTASection: React.FC = () => {
+  const ctaReveal = useScrollReveal<HTMLDivElement>({ threshold: 0.15 });
+
   return (
     <section
       style={{
@@ -17,7 +20,11 @@ export const CTASection: React.FC = () => {
       }}
     >
       <div className="container" style={{ position: 'relative', zIndex: 2, textAlign: 'center' }}>
-        <div style={{ maxWidth: '760px', margin: '0 auto' }}>
+        <div
+          ref={ctaReveal.ref}
+          className={`motion-reveal-editorial ${ctaReveal.isRevealed ? 'is-revealed' : ''}`}
+          style={{ maxWidth: '760px', margin: '0 auto' }}
+        >
           {/* Eyebrow */}
           <div
             style={{
@@ -81,16 +88,16 @@ export const CTASection: React.FC = () => {
           >
             <a
               href={`mailto:${CIIRC_IDENTITY.email}?subject=Research%20Collaboration%20Inquiry%20-%20CIIRC`}
-              className="btn btn-primary"
+              className="btn btn-primary btn-tactile group-arrow"
             >
-              Initiate Research Collaboration <ArrowRight size={16} />
+              Initiate Research Collaboration <ArrowRight size={16} className="arrow-icon" />
             </a>
 
             <a
               href="https://ciirc.res.in/service/sophisticated-instrumentation-facility/"
               target="_blank"
               rel="noopener noreferrer"
-              className="btn btn-secondary"
+              className="btn btn-secondary btn-tactile"
             >
               <Microscope size={16} color="var(--primary-bright)" />
               Inquire About Instrumentation Usage

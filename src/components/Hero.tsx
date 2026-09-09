@@ -1,10 +1,15 @@
 'use client';
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { ArrowRight, Microscope, Compass, ShieldCheck, Activity } from 'lucide-react';
 
 export const Hero: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   // Restrained scientific network canvas (materials, instrumentation telemetry)
   useEffect(() => {
@@ -60,12 +65,11 @@ export const Hero: React.FC = () => {
           const dist = Math.sqrt(dx * dx + dy * dy);
 
           if (dist < 110) {
-            const alpha = (1 - dist / 110) * 0.22;
             ctx.beginPath();
             ctx.moveTo(nodes[i].x, nodes[i].y);
             ctx.lineTo(nodes[j].x, nodes[j].y);
-            ctx.strokeStyle = `rgba(59, 140, 255, ${alpha})`;
-            ctx.lineWidth = 0.9;
+            ctx.strokeStyle = `rgba(59, 140, 255, ${0.14 * (1 - dist / 110)})`;
+            ctx.lineWidth = 0.75;
             ctx.stroke();
           }
         }
@@ -120,7 +124,7 @@ export const Hero: React.FC = () => {
         >
           {/* Left Column: Editorial Hierarchy */}
           <div style={{ maxWidth: '680px' }}>
-            {/* Small Institutional Eyebrow */}
+            {/* 01: Small Institutional Eyebrow (200ms) */}
             <div
               style={{
                 display: 'inline-flex',
@@ -130,7 +134,10 @@ export const Hero: React.FC = () => {
                 backgroundColor: 'var(--primary-subtle)',
                 border: '1px solid rgba(59, 140, 255, 0.25)',
                 borderRadius: 'var(--radius-full)',
-                marginBottom: '20px'
+                marginBottom: '20px',
+                opacity: isMounted ? 1 : 0,
+                transform: isMounted ? 'translateY(0)' : 'translateY(14px)',
+                transition: 'opacity 650ms var(--ease-emphasized) 200ms, transform 650ms var(--ease-emphasized) 200ms'
               }}
             >
               <ShieldCheck size={14} color="var(--primary-bright)" />
@@ -148,7 +155,7 @@ export const Hero: React.FC = () => {
               </span>
             </div>
 
-            {/* Large Confident Headline */}
+            {/* 02: Large Confident Headline (350ms) */}
             <h1
               style={{
                 color: 'var(--text-primary)',
@@ -156,7 +163,10 @@ export const Hero: React.FC = () => {
                 lineHeight: 1.15,
                 fontWeight: 800,
                 letterSpacing: '-0.03em',
-                marginBottom: '20px'
+                marginBottom: '20px',
+                opacity: isMounted ? 1 : 0,
+                transform: isMounted ? 'translateY(0)' : 'translateY(24px)',
+                transition: 'opacity 750ms var(--ease-emphasized) 350ms, transform 750ms var(--ease-emphasized) 350ms'
               }}
             >
               Pioneering Product Development &amp;{' '}
@@ -165,13 +175,16 @@ export const Hero: React.FC = () => {
               </span>
             </h1>
 
-            {/* Supporting Institutional Statement */}
+            {/* 03: Supporting Institutional Statement (480ms) */}
             <p
               style={{
                 color: 'var(--text-secondary)',
                 fontSize: 'clamp(1.05rem, 1.8vw, 1.2rem)',
                 lineHeight: 1.65,
-                marginBottom: '32px'
+                marginBottom: '32px',
+                opacity: isMounted ? 1 : 0,
+                transform: isMounted ? 'translateY(0)' : 'translateY(20px)',
+                transition: 'opacity 750ms var(--ease-emphasized) 480ms, transform 750ms var(--ease-emphasized) 480ms'
               }}
             >
               The centralized scientific research and incubation centre of{' '}
@@ -181,21 +194,32 @@ export const Hero: React.FC = () => {
               laboratories to advance national defense, healthcare, and polar climate missions.
             </p>
 
-            {/* CTA Hierarchy: Exactly One Primary Amber Action + Secondary Blue Action */}
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '14px', alignItems: 'center', marginBottom: '40px' }}>
-              {/* Primary Action: AMBER with Deep Navy text */}
-              <a href="#research" className="btn btn-primary">
-                Explore Research Vistas <ArrowRight size={16} />
+            {/* 04: CTA Hierarchy (620ms) */}
+            <div
+              style={{
+                display: 'flex',
+                flexWrap: 'wrap',
+                gap: '14px',
+                alignItems: 'center',
+                marginBottom: '40px',
+                opacity: isMounted ? 1 : 0,
+                transform: isMounted ? 'translateY(0)' : 'translateY(16px)',
+                transition: 'opacity 650ms var(--ease-emphasized) 620ms, transform 650ms var(--ease-emphasized) 620ms'
+              }}
+            >
+              {/* Primary Action: AMBER with tactile click and directional arrow follower */}
+              <a href="#research" className="btn btn-primary btn-tactile group-arrow">
+                Explore Research Vistas <ArrowRight size={16} className="arrow-icon" />
               </a>
 
               {/* Secondary Action: Transparent with Research Blue border */}
-              <a href="#instrumentation" className="btn btn-secondary">
+              <a href="#instrumentation" className="btn btn-secondary btn-tactile">
                 <Microscope size={16} color="var(--primary-bright)" />
                 Instrumentation Facility (SIF)
               </a>
             </div>
 
-            {/* Verified Institutional Metadata Row */}
+            {/* 05: Verified Institutional Metadata Row (740ms) */}
             <div
               style={{
                 display: 'flex',
@@ -203,7 +227,9 @@ export const Hero: React.FC = () => {
                 gap: '20px',
                 alignItems: 'center',
                 paddingTop: '20px',
-                borderTop: '1px solid var(--border)'
+                borderTop: '1px solid var(--border)',
+                opacity: isMounted ? 1 : 0,
+                transition: 'opacity 700ms var(--ease-standard) 740ms'
               }}
             >
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -250,9 +276,18 @@ export const Hero: React.FC = () => {
             </div>
           </div>
 
-          {/* Right Column: Restrained Scientific Telemetry Visualization */}
-          <div style={{ display: 'flex', justifyContent: 'center' }}>
+          {/* Right Column: Restrained Scientific Telemetry Visualization (850ms) */}
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              opacity: isMounted ? 1 : 0,
+              transform: isMounted ? 'scale(1)' : 'scale(1.02)',
+              transition: 'opacity 900ms var(--ease-emphasized) 850ms, transform 900ms var(--ease-emphasized) 850ms'
+            }}
+          >
             <div
+              className="card-lift"
               style={{
                 width: '100%',
                 maxWidth: '480px',

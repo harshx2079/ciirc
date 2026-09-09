@@ -3,8 +3,10 @@
 import React from 'react';
 import { Mail, Phone, MapPin, ChevronRight } from 'lucide-react';
 import { CIIRC_IDENTITY } from '../data/ciircData';
+import { useScrollReveal } from '../hooks/useScrollReveal';
 
 export const Footer: React.FC = () => {
+  const footerReveal = useScrollReveal<HTMLDivElement>({ threshold: 0.10 });
   const currentYear = new Date().getFullYear();
 
   const navColumns = [
@@ -50,7 +52,10 @@ export const Footer: React.FC = () => {
         borderTop: '1px solid var(--border)'
       }}
     >
-      <div className="container">
+      <div
+        ref={footerReveal.ref}
+        className={`container motion-reveal ${footerReveal.isRevealed ? 'is-revealed' : ''}`}
+      >
         {/* Main Columns Grid */}
         <div
           style={{

@@ -3,16 +3,18 @@
 import React, { useState, useEffect } from 'react';
 import { Menu, X, ChevronRight, Mail, Phone, ShieldCheck } from 'lucide-react';
 import { CIIRC_IDENTITY } from '../data/ciircData';
+import { useScrollProgress } from '../hooks/useScrollProgress';
 
 export const Header: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const scrollProgress = useScrollProgress();
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
+      setIsScrolled(window.scrollY > 30);
     };
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -29,6 +31,13 @@ export const Header: React.FC = () => {
 
   return (
     <>
+      {/* 2px Scientific Reading / Scroll Progress Bar */}
+      <div
+        className="scroll-progress-line"
+        style={{ transform: `scaleX(${scrollProgress})` }}
+        aria-hidden="true"
+      />
+
       {/* Top Institutional Credential Strip */}
       <div
         style={{
@@ -55,14 +64,18 @@ export const Header: React.FC = () => {
           <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
             <a
               href={`mailto:${CIIRC_IDENTITY.email}`}
-              style={{ color: 'var(--text-secondary)', display: 'inline-flex', alignItems: 'center', gap: '5px', fontSize: 'inherit' }}
+              style={{ color: 'var(--text-secondary)', display: 'inline-flex', alignItems: 'center', gap: '5px', fontSize: 'inherit', transition: 'color var(--motion-fast) var(--ease-standard)' }}
+              onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--primary)')}
+              onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--text-secondary)')}
             >
               <Mail size={12} color="var(--primary)" /> {CIIRC_IDENTITY.email}
             </a>
             <span style={{ color: 'var(--border)' }}>•</span>
             <a
               href={`tel:${CIIRC_IDENTITY.phone.replace(/[^0-9]/g, '')}`}
-              style={{ color: 'var(--text-secondary)', display: 'inline-flex', alignItems: 'center', gap: '5px', fontSize: 'inherit' }}
+              style={{ color: 'var(--text-secondary)', display: 'inline-flex', alignItems: 'center', gap: '5px', fontSize: 'inherit', transition: 'color var(--motion-fast) var(--ease-standard)' }}
+              onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--primary)')}
+              onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--text-secondary)')}
             >
               <Phone size={12} color="var(--primary)" /> {CIIRC_IDENTITY.phone}
             </a>
@@ -76,14 +89,23 @@ export const Header: React.FC = () => {
           position: 'sticky',
           top: 0,
           zIndex: 50,
-          backgroundColor: isScrolled ? 'rgba(5, 13, 24, 0.94)' : 'rgba(3, 10, 19, 0.8)',
+          backgroundColor: isScrolled ? 'rgba(5, 13, 24, 0.95)' : 'rgba(3, 10, 19, 0.85)',
           backdropFilter: 'blur(14px)',
           WebkitBackdropFilter: 'blur(14px)',
-          borderBottom: '1px solid var(--border)',
-          transition: 'all var(--transition-fast)'
+          borderBottom: isScrolled ? '1px solid rgba(59, 140, 255, 0.2)' : '1px solid var(--border)',
+          transition: 'background-color var(--motion-normal) var(--ease-standard), border-color var(--motion-normal) var(--ease-standard), height var(--motion-normal) var(--ease-standard)'
         }}
       >
-        <div className="container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: '72px' }}>
+        <div
+          className="container"
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            height: isScrolled ? '64px' : '72px',
+            transition: 'height var(--motion-normal) var(--ease-standard)'
+          }}
+        >
           {/* Institutional Identity Brand */}
           <a href="#" style={{ display: 'flex', alignItems: 'center', gap: '12px', textDecoration: 'none' }}>
             <div
@@ -99,7 +121,7 @@ export const Header: React.FC = () => {
               <img
                 src="https://ciirc.res.in/wp-content/uploads/2022/02/designAsset-3.png"
                 alt="CIIRC® Logo"
-                style={{ height: '42px', width: 'auto', objectFit: 'contain' }}
+                style={{ height: '40px', width: 'auto', objectFit: 'contain' }}
                 onError={(e) => { e.currentTarget.style.display = 'none'; }}
               />
             </div>
@@ -130,20 +152,21 @@ export const Header: React.FC = () => {
             </div>
           </a>
 
-          {/* Desktop Nav Links */}
+          {/* Desktop Nav Links with Subdued Indicator Underlines */}
           <nav style={{ display: 'none', alignItems: 'center', gap: '22px' }} className="desktop-nav">
             {navLinks.map((link) => (
               <a
                 key={link.label}
                 href={link.href}
+                className="nav-link-anchor"
                 style={{
                   fontSize: 'var(--text-sm)',
                   fontWeight: 600,
                   color: 'var(--text-secondary)',
                   textDecoration: 'none',
-                  transition: 'color var(--transition-fast)'
+                  transition: 'color var(--motion-fast) var(--ease-standard)'
                 }}
-                onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--primary-bright)')}
+                onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--text-primary)')}
                 onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--text-secondary)')}
               >
                 {link.label}
@@ -155,11 +178,11 @@ export const Header: React.FC = () => {
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
             <a
               href="#research"
-              className="btn btn-primary"
+              className="btn btn-primary btn-tactile group-arrow"
               style={{ padding: '9px 18px', fontSize: 'var(--text-xs)', display: 'none' }}
               id="header-cta-desktop"
             >
-              Explore Research <ChevronRight size={14} />
+              Explore Research <ChevronRight size={14} className="arrow-icon" />
             </a>
 
             {/* Mobile Toggle */}
