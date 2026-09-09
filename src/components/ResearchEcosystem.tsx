@@ -1,458 +1,400 @@
 'use client';
 
-import React, { useState } from 'react';
-import {
-  Search,
-  ArrowUpRight,
-  Sparkles,
-  Microscope,
-  Compass,
-  Cpu,
-  Layers,
-  Dna,
-  Leaf,
-  Droplets,
-  Wind,
-  Binary,
-  Radio,
-  Building,
-  Flame,
-  X
-} from 'lucide-react';
-import { RESEARCH_VISTAS, ResearchVista } from '../data/ciircData';
-import { useScrollReveal } from '../hooks/useScrollReveal';
+import React, { useState, useEffect } from 'react';
+import { ResearchTopology } from './ResearchField';
+import { ArrowUpRight } from 'lucide-react';
 
-export const ResearchEcosystem: React.FC = () => {
-  const [selectedCategory, setSelectedCategory] = useState<string>('All');
-  const [searchQuery, setSearchQuery] = useState<string>('');
-  const [activeModalVista, setActiveModalVista] = useState<ResearchVista | null>(null);
+interface ResearchEcosystemProps {
+  onTopologyChange?: (topology: ResearchTopology) => void;
+}
 
-  const headerReveal = useScrollReveal<HTMLDivElement>({ threshold: 0.15 });
-  const gridReveal = useScrollReveal<HTMLDivElement>({ threshold: 0.10 });
+interface DomainItem {
+  index: string;
+  name: string;
+  topology: ResearchTopology;
+  discipline: string;
+  scope: string;
+  focus: string[];
+}
 
-  const categories = [
-    'All',
-    'Materials & Nano',
-    'Life & Health',
-    'Engineering',
-    'Earth & Environment',
-    'Computing & Systems',
-    'Innovation'
-  ];
+const DOMAINS: DomainItem[] = [
+  {
+    index: '01',
+    name: 'MATERIALS & NANOTECHNOLOGY',
+    topology: 'materials',
+    discipline: 'CRYSTALLINE & NANOSTRUCTURAL',
+    scope: 'Synthesis of 0D, 1D, and 2D nanomaterials, MXenes, quantum dots, and superhydrophobic interfaces.',
+    focus: ['Quantum Dots', 'Graphene & MXenes', 'Surface Physics', 'Characterization']
+  },
+  {
+    index: '02',
+    name: 'LIFE SCIENCES & HEALTHCARE',
+    topology: 'life',
+    discipline: 'BRANCHING BIOMEDICAL',
+    scope: 'Translational oncology therapeutics, point-of-care microfluidic biosensors, and botanical bioactive molecules.',
+    focus: ['Electrochemical Biosensors', 'Cellular Oncology', 'Bioactive Actives', 'Food Tech']
+  },
+  {
+    index: '03',
+    name: 'ADVANCED ENGINEERING',
+    topology: 'engineering',
+    discipline: 'GEOMETRIC TRAJECTORIES & AVIONICS',
+    scope: 'Autonomous aerial platforms flown in polar Arctic glaciers, high-temperature tribology, and geopolymer structures.',
+    focus: ['Polar Glacial UAVs', 'Tribology', 'Flight Dynamics', 'Geopolymers']
+  },
+  {
+    index: '04',
+    name: 'EARTH & ENVIRONMENT',
+    topology: 'earth',
+    discipline: 'FLUID & TOPOGRAPHIC DYNAMICS',
+    scope: 'ISRO NavIC satellite telemetry ground station, CO2 carbon capture adsorption, and nano-filtration water recovery.',
+    focus: ['ISRO NavIC Telemetry', 'Carbon Capture (CCS)', 'Water Nano-Membranes', 'Glacier GIS']
+  },
+  {
+    index: '05',
+    name: 'COMPUTING & SYSTEMS',
+    topology: 'computing',
+    discipline: 'DISCRETE COMPUTATIONAL GRIDS',
+    scope: 'Multi-scale finite element physics simulation, computational fluid dynamics, and embedded sensor architectures.',
+    focus: ['CFD Simulation', 'Finite Element FEA', 'Sensor Fusion', 'Predictive Modeling']
+  },
+  {
+    index: '06',
+    name: 'INNOVATION & VENTURES',
+    topology: 'innovation',
+    discipline: 'HIGHLY INTERCONNECTED TRANSLATION',
+    scope: 'Atal Incubation Centre (AIC-JIT) translating laboratory discoveries into commercial licenses and social impact products.',
+    focus: ['Seed Incubation', '35+ Societal Products', 'IP & Patent Filing', 'Enterprise']
+  }
+];
 
-  const filteredVistas = RESEARCH_VISTAS.filter((vista) => {
-    const matchesCategory = selectedCategory === 'All' || vista.category === selectedCategory;
-    const matchesSearch =
-      vista.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      vista.summary.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      vista.tag.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      vista.instrumentsOrFocus.some((i) => i.toLowerCase().includes(searchQuery.toLowerCase()));
-    return matchesCategory && matchesSearch;
-  });
+export const ResearchEcosystem: React.FC<ResearchEcosystemProps> = ({ onTopologyChange }) => {
+  const [activeDomain, setActiveDomain] = useState<string>('01');
+  const [scrollShift, setScrollShift] = useState(0);
 
-  const getVistaIcon = (id: string) => {
-    switch (id) {
-      case 'sophisticated-instrumentation-facility':
-        return <Microscope size={18} color="var(--primary-bright)" />;
-      case 'nanosciences-and-engineering':
-      case 'surfaces-and-interfaces':
-        return <Layers size={18} color="var(--primary-bright)" />;
-      case 'biopolymers-and-biocomposites':
-        return <Leaf size={18} color="var(--scientific)" />;
-      case 'affordable-medical-devices-sensors':
-      case 'cell-and-molecular-biology':
-      case 'nano-biotechnology':
-      case 'food-technology':
-      case 'plant-and-microbial-technology':
-        return <Dna size={18} color="var(--scientific)" />;
-      case 'ancient-indian-science-and-technology':
-        return <Compass size={18} color="var(--accent)" />;
-      case 'autonomous-systems':
-        return <Cpu size={18} color="var(--primary-bright)" />;
-      case 'thermal-engineering-tribology':
-        return <Flame size={18} color="var(--primary-bright)" />;
-      case 'construction-technology':
-        return <Building size={18} color="var(--primary-bright)" />;
-      case 'computational-engineering':
-        return <Binary size={18} color="var(--primary-bright)" />;
-      case 'remote-sensing':
-        return <Radio size={18} color="var(--primary-bright)" />;
-      case 'water':
-        return <Droplets size={18} color="var(--scientific)" />;
-      case 'environment':
-      case 'energy':
-        return <Wind size={18} color="var(--scientific)" />;
-      default:
-        return <Sparkles size={18} color="var(--primary-bright)" />;
+  useEffect(() => {
+    const handleScroll = () => {
+      const el = document.getElementById('ecosystem');
+      if (!el) return;
+      const rect = el.getBoundingClientRect();
+      const viewportHeight = window.innerHeight;
+      if (rect.top < viewportHeight && rect.bottom > 0) {
+        // Progress through ecosystem
+        const progress = Math.max(-1, Math.min(1, (viewportHeight / 2 - rect.top) / (rect.height / 2)));
+        setScrollShift(progress);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const handleDomainHover = (domain: DomainItem) => {
+    setActiveDomain(domain.index);
+    if (onTopologyChange) {
+      onTopologyChange(domain.topology);
     }
   };
 
+  // Section 17 scroll typography transformation:
+  // WE moves slightly left.
+  // RESEARCH moves upward.
+  // ACROSS moves right.
+  // BOUNDARIES. moves downward.
+  // Max movement: 60-100px
+  const shiftWE = -scrollShift * 40;
+  const shiftRESEARCH = -scrollShift * 35;
+  const shiftACROSS = scrollShift * 40;
+  const shiftBOUNDARIES = scrollShift * 35;
+
   return (
     <section
-      id="research"
-      className="section-wrapper"
+      id="ecosystem"
+      aria-label="CIIRC Research Ecosystem"
       style={{
-        backgroundColor: 'rgba(7, 19, 33, 0.40)',
-        borderBottom: '1px solid var(--border)'
+        position: 'relative',
+        width: '100%',
+        minHeight: '100vh',
+        padding: '120px 42px 140px 42px',
+        boxSizing: 'border-box',
+        borderTop: '1px solid var(--line)',
+        backgroundColor: 'var(--paper)',
+        zIndex: 2
       }}
     >
-      <div className="container">
-        {/* Section Header with Editorial Reveal */}
-        <div
-          ref={headerReveal.ref}
-          className={`motion-reveal-editorial ${headerReveal.isRevealed ? 'is-revealed' : ''}`}
-          style={{ maxWidth: '820px', marginBottom: '40px' }}
-        >
-          <div className="section-eyebrow">
-            <Microscope size={13} /> RESEARCH ECOSYSTEM
-          </div>
-          <h2 className="section-title" style={{ fontSize: 'clamp(2rem, 3.6vw, 2.75rem)' }}>
-            What We Investigate
-          </h2>
-          <p className="section-description">
-            CIIRC's 18 specialized laboratories operate across advanced materials, biotechnology, autonomous systems,
-            and polar instrumentation, supported by a central characterization suite and incubation hub.
-          </p>
+      {/* Floating Spatial Technical Labels (Section 21) */}
+      <div
+        aria-hidden="true"
+        style={{
+          position: 'absolute',
+          top: '40px',
+          right: '42px',
+          fontFamily: 'var(--font-mono)',
+          fontSize: '0.6875rem',
+          letterSpacing: '0.14em',
+          color: 'var(--ink-muted)',
+          pointerEvents: 'none'
+        }}
+      >
+        MATERIALS · │ ·──── NANO · POLAR UAV · │ ·──── 81° N
+      </div>
+
+      <div
+        aria-hidden="true"
+        style={{
+          position: 'absolute',
+          bottom: '40px',
+          left: '42px',
+          fontFamily: 'var(--font-mono)',
+          fontSize: '0.6875rem',
+          letterSpacing: '0.14em',
+          color: 'var(--ink-muted)',
+          pointerEvents: 'none'
+        }}
+      >
+        MXENE CATALYST · │ ·──── 2D · ISRO NavIC · │ ·──── TELEMETRY
+      </div>
+
+      {/* Section 16 & 17: Spatial Typography Transformation */}
+      {/* Editorial composition: WE top-left, RESEARCH center, ACROSS right, BOUNDARIES bottom-left */}
+      <div
+        style={{
+          position: 'relative',
+          width: '100%',
+          maxWidth: '1320px',
+          margin: '0 auto 100px auto',
+          minHeight: '260px',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'space-between'
+        }}
+      >
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+          {/* WE */}
+          <span
+            style={{
+              fontFamily: 'var(--font-display)',
+              fontSize: 'clamp(56px, 8vw, 110px)',
+              fontWeight: 800,
+              lineHeight: 0.85,
+              letterSpacing: '-0.06em',
+              color: 'var(--ink)',
+              transform: `translateX(${shiftWE}px)`,
+              transition: 'transform 100ms ease-out'
+            }}
+          >
+            WE
+          </span>
+
+          {/* ACROSS */}
+          <span
+            style={{
+              fontFamily: 'var(--font-display)',
+              fontSize: 'clamp(56px, 8vw, 110px)',
+              fontWeight: 800,
+              lineHeight: 0.85,
+              letterSpacing: '-0.06em',
+              color: 'var(--ink-soft)',
+              transform: `translateX(${shiftACROSS}px)`,
+              transition: 'transform 100ms ease-out'
+            }}
+          >
+            ACROSS
+          </span>
         </div>
 
-        {/* Filter & Search Bar */}
-        <div
-          style={{
-            display: 'flex',
-            flexWrap: 'wrap',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            gap: '16px',
-            marginBottom: '36px',
-            paddingBottom: '20px',
-            borderBottom: '1px solid var(--border)'
-          }}
-        >
-          {/* Category Filter Pills */}
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
-            {categories.map((category) => {
-              const isActive = selectedCategory === category;
-              return (
-                <button
-                  key={category}
-                  onClick={() => setSelectedCategory(category)}
-                  className="btn-tactile"
-                  style={{
-                    padding: '7px 15px',
-                    borderRadius: 'var(--radius-full)',
-                    fontSize: 'var(--text-xs)',
-                    fontWeight: 600,
-                    letterSpacing: '0.02em',
-                    backgroundColor: isActive ? 'var(--surface-elevated)' : 'var(--surface)',
-                    color: isActive ? 'var(--primary-bright)' : 'var(--text-muted)',
-                    border: isActive ? '1px solid var(--primary)' : '1px solid var(--border)',
-                    transition: 'all var(--motion-fast) var(--ease-standard)'
-                  }}
-                >
-                  {category}
-                </button>
-              );
-            })}
-          </div>
-
-          {/* Search Input Box */}
-          <div style={{ position: 'relative', width: '260px' }}>
-            <Search
-              size={15}
-              color="var(--text-muted)"
-              style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)' }}
-            />
-            <input
-              type="text"
-              placeholder="Search vistas or instruments..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              style={{
-                width: '100%',
-                padding: '9px 12px 9px 34px',
-                fontSize: 'var(--text-xs)',
-                borderRadius: 'var(--radius-md)',
-                border: '1px solid var(--border)',
-                backgroundColor: 'var(--surface)',
-                color: 'var(--text-primary)',
-                outline: 'none',
-                fontFamily: 'inherit'
-              }}
-              onFocus={(e) => (e.target.style.borderColor = 'var(--primary)')}
-              onBlur={(e) => (e.target.style.borderColor = 'var(--border)')}
-            />
-            {searchQuery && (
-              <button
-                onClick={() => setSearchQuery('')}
-                style={{
-                  position: 'absolute',
-                  right: '10px',
-                  top: '50%',
-                  transform: 'translateY(-50%)',
-                  color: 'var(--text-muted)'
-                }}
-              >
-                <X size={13} />
-              </button>
-            )}
-          </div>
+        {/* RESEARCH */}
+        <div style={{ textAlign: 'center', margin: '20px 0' }}>
+          <span
+            style={{
+              fontFamily: 'var(--font-display)',
+              fontSize: 'clamp(64px, 10vw, 140px)',
+              fontWeight: 800,
+              lineHeight: 0.85,
+              letterSpacing: '-0.07em',
+              color: 'var(--ultramarine)',
+              display: 'inline-block',
+              transform: `translateY(${shiftRESEARCH}px)`,
+              transition: 'transform 100ms ease-out'
+            }}
+          >
+            RESEARCH
+          </span>
         </div>
 
-        {/* Research Cards Grid with Progressive Reveal & Quiet Card Lift */}
-        <div
-          ref={gridReveal.ref}
-          className={`motion-reveal ${gridReveal.isRevealed ? 'is-revealed' : ''}`}
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(360px, 1fr))',
-            gap: '20px'
-          }}
-        >
-          {filteredVistas.map((vista) => (
+        <div style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'flex-end' }}>
+          {/* BOUNDARIES. */}
+          <span
+            style={{
+              fontFamily: 'var(--font-display)',
+              fontSize: 'clamp(56px, 8vw, 110px)',
+              fontWeight: 800,
+              lineHeight: 0.85,
+              letterSpacing: '-0.06em',
+              color: 'var(--ink)',
+              transform: `translateY(${shiftBOUNDARIES}px)`,
+              transition: 'transform 100ms ease-out'
+            }}
+          >
+            BOUNDARIES.
+          </span>
+        </div>
+      </div>
+
+      {/* Section 18, 19, 20: Research Categories as Typographic Objects (Not cards!) */}
+      <div
+        style={{
+          width: '100%',
+          maxWidth: '1320px',
+          margin: '0 auto',
+          borderTop: '1px solid var(--ink)'
+        }}
+      >
+        {DOMAINS.map((domain) => {
+          const isSelected = activeDomain === domain.index;
+
+          return (
             <div
-              key={vista.id}
-              className="card-lift"
+              key={domain.index}
+              onMouseEnter={() => handleDomainHover(domain)}
               style={{
-                backgroundColor: 'var(--surface)',
-                border: '1px solid var(--border)',
-                borderRadius: 'var(--radius-lg)',
-                padding: '28px 24px',
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'space-between'
+                position: 'relative',
+                padding: '36px 0',
+                borderBottom: '1px solid var(--line)',
+                cursor: 'pointer',
+                transition: 'background-color 250ms ease'
               }}
             >
-              <div>
-                {/* Header: Number (#67B7FF) + Domain Marker */}
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
-                  <span
-                    style={{
-                      fontFamily: 'var(--font-mono)',
-                      fontSize: 'var(--text-sm)',
-                      fontWeight: 700,
-                      color: 'var(--primary-bright)',
-                      letterSpacing: '0.04em'
-                    }}
-                  >
-                    {vista.indexNumber}
-                  </span>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <span className="badge badge-surface" style={{ fontSize: '0.68rem' }}>
-                      {vista.tag}
-                    </span>
-                    <div style={{ opacity: 0.85 }}>{getVistaIcon(vista.id)}</div>
-                  </div>
-                </div>
-
-                {/* Title (#EAF2F8) */}
-                <h3
-                  style={{
-                    fontSize: '1.2rem',
-                    fontWeight: 700,
-                    color: 'var(--text-primary)',
-                    marginBottom: '10px',
-                    lineHeight: 1.35
-                  }}
-                >
-                  {vista.title}
-                </h3>
-
-                {/* Description (#AFC2D4) */}
-                <p
-                  style={{
-                    fontSize: 'var(--text-sm)',
-                    color: 'var(--text-secondary)',
-                    lineHeight: 1.6,
-                    marginBottom: '20px'
-                  }}
-                >
-                  {vista.summary}
-                </p>
-
-                {/* Tools / Capabilities Pills */}
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginBottom: '22px' }}>
-                  {vista.instrumentsOrFocus.slice(0, 3).map((tool) => (
-                    <span
-                      key={tool}
-                      style={{
-                        fontSize: '0.7rem',
-                        fontFamily: 'var(--font-mono)',
-                        padding: '2px 8px',
-                        backgroundColor: 'var(--surface-subtle)',
-                        color: 'var(--text-muted)',
-                        borderRadius: 'var(--radius-sm)',
-                        border: '1px solid var(--border-subtle)'
-                      }}
-                    >
-                      {tool}
-                    </span>
-                  ))}
-                  {vista.instrumentsOrFocus.length > 3 && (
-                    <span style={{ fontSize: '0.7rem', fontFamily: 'var(--font-mono)', color: 'var(--text-muted)' }}>
-                      +{vista.instrumentsOrFocus.length - 3}
-                    </span>
-                  )}
-                </div>
-              </div>
-
-              {/* Card Footer: Explore Link (#3B8CFF) */}
               <div
                 style={{
-                  paddingTop: '16px',
-                  borderTop: '1px solid var(--border-subtle)',
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center'
+                  display: 'grid',
+                  gridTemplateColumns: '80px 1fr auto',
+                  alignItems: 'baseline',
+                  gap: '24px'
                 }}
+                className="domain-row"
               >
-                <button
-                  onClick={() => setActiveModalVista(vista)}
-                  className="link-arrow"
-                  style={{ color: 'var(--primary)', fontSize: 'var(--text-sm)', fontWeight: 600 }}
-                >
-                  Explore Scope &amp; Focus →
-                </button>
-
-                <a
-                  href={vista.externalUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  title="Official Lab Archive"
-                  style={{
-                    color: 'var(--text-muted)',
-                    padding: '4px',
-                    display: 'inline-flex',
-                    alignItems: 'center'
-                  }}
-                  onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--primary-bright)')}
-                  onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--text-muted)')}
-                >
-                  <ArrowUpRight size={15} />
-                </a>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Modal for In-Depth Scope & Focus */}
-        {activeModalVista && (
-          <div
-            style={{
-              position: 'fixed',
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              backgroundColor: 'rgba(6, 17, 31, 0.8)',
-              backdropFilter: 'blur(8px)',
-              zIndex: 100,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              padding: '20px'
-            }}
-            onClick={() => setActiveModalVista(null)}
-          >
-            <div
-              style={{
-                backgroundColor: 'var(--surface)',
-                borderRadius: 'var(--radius-lg)',
-                padding: '32px',
-                maxWidth: '620px',
-                width: '100%',
-                maxHeight: '90vh',
-                overflowY: 'auto',
-                border: '1px solid var(--border)',
-                position: 'relative'
-              }}
-              onClick={(e) => e.stopPropagation()}
-            >
-              <button
-                onClick={() => setActiveModalVista(null)}
-                style={{
-                  position: 'absolute',
-                  top: '18px',
-                  right: '18px',
-                  padding: '6px',
-                  color: 'var(--text-muted)'
-                }}
-                aria-label="Close"
-              >
-                <X size={18} />
-              </button>
-
-              <div style={{ marginBottom: '16px' }}>
+                {/* 01, 02... */}
                 <span
                   style={{
                     fontFamily: 'var(--font-mono)',
-                    color: 'var(--primary-bright)',
-                    fontSize: 'var(--text-xs)',
-                    fontWeight: 700,
-                    letterSpacing: '0.06em'
+                    fontSize: '1rem',
+                    fontWeight: 600,
+                    color: isSelected ? 'var(--ultramarine)' : 'var(--ink-muted)',
+                    transition: 'color 200ms ease'
                   }}
                 >
-                  VISTA {activeModalVista.indexNumber} • {activeModalVista.category}
+                  [{domain.index}]
                 </span>
-                <h3 style={{ fontSize: '1.5rem', color: 'var(--text-primary)', marginTop: '4px' }}>
-                  {activeModalVista.title}
-                </h3>
-              </div>
 
-              <div style={{ marginBottom: '20px' }}>
-                <h4 style={{ fontSize: 'var(--text-xs)', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '8px' }}>
-                  Scientific Scope &amp; Translational Objectives
-                </h4>
-                <p style={{ color: 'var(--text-secondary)', fontSize: 'var(--text-sm)', lineHeight: 1.7 }}>
-                  {activeModalVista.detailedScope}
-                </p>
-              </div>
+                {/* Large Typographic Name */}
+                <div>
+                  <h3
+                    style={{
+                      fontFamily: 'var(--font-display)',
+                      fontSize: 'clamp(28px, 3.8vw, 54px)',
+                      fontWeight: 700,
+                      letterSpacing: '-0.04em',
+                      lineHeight: 1.05,
+                      color: isSelected ? 'var(--ink)' : 'var(--ink-soft)',
+                      transition: 'color 200ms ease'
+                    }}
+                  >
+                    {domain.name}
+                  </h3>
 
-              <div style={{ marginBottom: '24px' }}>
-                <h4 style={{ fontSize: 'var(--text-xs)', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '10px' }}>
-                  Characterization Instruments &amp; Capabilities
-                </h4>
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
-                  {activeModalVista.instrumentsOrFocus.map((item) => (
-                    <span
-                      key={item}
+                  {isSelected && (
+                    <div
                       style={{
-                        padding: '6px 12px',
-                        backgroundColor: 'var(--surface-subtle)',
-                        borderRadius: 'var(--radius-sm)',
-                        fontSize: 'var(--text-xs)',
-                        fontWeight: 600,
-                        color: 'var(--text-primary)',
-                        border: '1px solid var(--border)'
+                        marginTop: '16px',
+                        maxWidth: '720px',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '12px'
                       }}
                     >
-                      {item}
-                    </span>
-                  ))}
+                      <div
+                        style={{
+                          fontFamily: 'var(--font-mono)',
+                          fontSize: '0.6875rem',
+                          letterSpacing: '0.1em',
+                          color: 'var(--ultramarine)',
+                          textTransform: 'uppercase'
+                        }}
+                      >
+                        TOPOLOGY MUTATION: {domain.discipline}
+                      </div>
+                      <p
+                        style={{
+                          fontFamily: 'var(--font-sans)',
+                          fontSize: '0.9375rem',
+                          lineHeight: 1.5,
+                          color: 'var(--ink-soft)'
+                        }}
+                      >
+                        {domain.scope}
+                      </p>
+                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginTop: '4px' }}>
+                        {domain.focus.map((f) => (
+                          <span key={f} className="scientific-badge">
+                            {f}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Indicator / Topology Callout */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                  <span
+                    style={{
+                      fontFamily: 'var(--font-mono)',
+                      fontSize: '0.6875rem',
+                      letterSpacing: '0.08em',
+                      textTransform: 'uppercase',
+                      color: isSelected ? 'var(--ultramarine)' : 'var(--ink-muted)',
+                      display: 'none'
+                    }}
+                    className="topology-label"
+                  >
+                    {domain.topology} field
+                  </span>
+                  <div
+                    style={{
+                      width: '36px',
+                      height: '36px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      border: '1px solid',
+                      borderColor: isSelected ? 'var(--ultramarine)' : 'var(--line)',
+                      backgroundColor: isSelected ? 'var(--ultramarine)' : 'transparent',
+                      color: isSelected ? 'var(--white)' : 'var(--ink)',
+                      transition: 'all 200ms ease'
+                    }}
+                  >
+                    <ArrowUpRight size={16} />
+                  </div>
                 </div>
               </div>
-
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: '16px', borderTop: '1px solid var(--border)' }}>
-                <a
-                  href={activeModalVista.externalUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn btn-primary"
-                  style={{ fontSize: 'var(--text-xs)', padding: '10px 18px' }}
-                >
-                  Visit Official Lab Archive <ArrowUpRight size={14} />
-                </a>
-                <button
-                  onClick={() => setActiveModalVista(null)}
-                  className="btn btn-surface"
-                  style={{ fontSize: 'var(--text-xs)', padding: '10px 18px' }}
-                >
-                  Close
-                </button>
-              </div>
             </div>
-          </div>
-        )}
+          );
+        })}
       </div>
+
+      <style jsx>{`
+        @media (min-width: 1024px) {
+          .topology-label {
+            display: inline-block !important;
+          }
+        }
+        @media (max-width: 767px) {
+          .domain-row {
+            grid-template-columns: 48px 1fr !important;
+          }
+        }
+      `}</style>
     </section>
   );
 };

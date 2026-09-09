@@ -1,148 +1,302 @@
 'use client';
 
-import React from 'react';
-import { ShieldCheck, Award } from 'lucide-react';
-import { CIIRC_STATS, StatItem } from '../data/ciircData';
-import { useScrollReveal } from '../hooks/useScrollReveal';
-import { useCountUp } from '../hooks/useCountUp';
+import React, { useState, useEffect, useRef } from 'react';
+import { CIIRC_STATS } from '../data/ciircData';
 
-interface StatCardProps {
-  stat: StatItem;
-  startTrigger: boolean;
+interface ImpactStatsProps {
+  onImpactVisibilityChange?: (visible: boolean) => void;
 }
 
-const StatCard: React.FC<StatCardProps> = ({ stat, startTrigger }) => {
-  const numericTarget = parseInt(stat.value.replace(/[^0-9]/g, ''), 10) || 0;
-  const count = useCountUp({ end: numericTarget, duration: 1200, startTrigger });
-  const hasPlus = stat.value.includes('+');
+// Scientific mechanical counter steps: 5 -> 50 -> 500 -> 5,000 -> 50,000+
+const ANIMATED_TARGETS = [
+  {
+    target: '50,000+',
+    steps: ['5', '50', '500', '5,000', '50,000+'],
+    label: 'SQUARE FEET LABS',
+    sublabel: 'Dedicated research infrastructure housing 19 vistas'
+  },
+  {
+    target: '27',
+    steps: ['2', '12', '19', '24', '27'],
+    label: 'DOCTORAL INVESTIGATORS',
+    sublabel: 'Alumni of IISc, IITs, NITs, Central & Foreign Universities'
+  },
+  {
+    target: '50+',
+    steps: ['5', '18', '29', '42', '50+'],
+    label: 'FUNDED PROJECTS',
+    sublabel: 'DST, DRDO, DOS/ISRO, DBT, EU & Indo-French CEFIPRA',
+    isHighlight: true
+  },
+  {
+    target: '300+',
+    steps: ['30', '95', '180', '260', '300+'],
+    label: 'PEER-REVIEWED PAPERS',
+    sublabel: 'Scopus, Web of Science, Elsevier, Springer & Wiley'
+  },
+  {
+    target: '35+',
+    steps: ['3', '11', '22', '31', '35+'],
+    label: 'SOCIETAL PRODUCTS & PATENTS',
+    sublabel: 'Developed with clinical, societal & environmental impact',
+    isHighlight: true
+  }
+];
+
+export const ImpactStats: React.FC<ImpactStatsProps> = ({ onImpactVisibilityChange }) => {
+  const sectionRef = useRef<HTMLDivElement | null>(null);
+  const [inView, setInView] = useState(false);
+  const [stepIndex, setStepIndex] = useState(0); // 0 to 4
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        const isVisible = entry.isIntersecting;
+        setInView(isVisible);
+        if (onImpactVisibilityChange) {
+          onImpactVisibilityChange(isVisible);
+        }
+      },
+      { threshold: 0.25 }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, [onImpactVisibilityChange]);
+
+  // Section 29: Mechanical scientific measurement counter
+  // 5 -> 50 -> 500 -> 5,000 -> 50,000+ over 900ms then lock
+  useEffect(() => {
+    if (!inView) {
+      setStepIndex(0);
+      return;
+    }
+
+    const interval = setInterval(() => {
+      setStepIndex((prev) => {
+        if (prev < 4) return prev + 1;
+        clearInterval(interval);
+        return 4;
+      });
+    }, 180); // 5 steps * 180ms = 900ms
+
+    return () => clearInterval(interval);
+  }, [inView]);
 
   return (
-    <div
-      className="card-lift"
+    <section
+      id="impact"
+      ref={sectionRef}
+      aria-label="CIIRC Impact & Empirical Scale"
       style={{
-        backgroundColor: 'var(--surface)',
-        border: '1px solid var(--border)',
-        borderRadius: 'var(--radius-lg)',
-        padding: '28px 24px',
+        position: 'relative',
+        width: '100%',
+        minHeight: '100vh',
+        backgroundColor: 'var(--ultramarine)', // Full-screen cobalt shock (Section 27)
+        color: 'var(--white)',
+        padding: '120px 42px 140px 42px',
+        boxSizing: 'border-box',
+        zIndex: 5,
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between'
       }}
     >
-      <div>
-        {/* Animated Number with authentic real data count-up */}
-        <div
-          style={{
-            fontFamily: 'var(--font-mono)',
-            fontSize: 'clamp(2.5rem, 4vw, 3.2rem)',
-            fontWeight: 800,
-            lineHeight: 1,
-            letterSpacing: '-0.03em',
-            color: 'var(--text-primary)',
-            marginBottom: '10px'
-          }}
-        >
-          {count}
-          {hasPlus && (
-            <span style={{ color: stat.isHighlight ? 'var(--accent)' : 'var(--primary-bright)', fontSize: '0.85em' }}>
-              +
-            </span>
-          )}
-        </div>
-
-        <div style={{ fontSize: 'var(--text-base)', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '4px' }}>
-          {stat.label}
-        </div>
-      </div>
-
-      {/* Label in #6F879D */}
+      {/* Top Header Row */}
       <div
         style={{
-          fontSize: 'var(--text-xs)',
-          color: 'var(--text-muted)',
-          lineHeight: 1.5,
-          paddingTop: '12px',
-          borderTop: '1px solid var(--border-subtle)',
-          marginTop: '16px'
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'baseline',
+          borderBottom: '1px solid rgba(255, 255, 255, 0.2)',
+          paddingBottom: '24px',
+          marginBottom: '64px'
         }}
       >
-        {stat.sublabel}
-      </div>
-    </div>
-  );
-};
-
-export const ImpactStats: React.FC = () => {
-  const headerReveal = useScrollReveal<HTMLDivElement>({ threshold: 0.15 });
-  const gridReveal = useScrollReveal<HTMLDivElement>({ threshold: 0.12 });
-
-  return (
-    <section
-      id="impact"
-      className="section-wrapper"
-      style={{
-        backgroundColor: 'rgba(3, 10, 19, 0.40)',
-        color: 'var(--text-primary)',
-        borderBottom: '1px solid var(--border)',
-        position: 'relative'
-      }}
-    >
-      <div className="container">
-        {/* Section Eyebrow & Title with Editorial Reveal */}
-        <div
-          ref={headerReveal.ref}
-          className={`motion-reveal-editorial ${headerReveal.isRevealed ? 'is-revealed' : ''}`}
-          style={{ maxWidth: '820px', marginBottom: '48px' }}
-        >
-          <div className="section-eyebrow eyebrow-accent">
-            <ShieldCheck size={13} /> IMPACT
-          </div>
-          <h2 className="section-title" style={{ fontSize: 'clamp(2rem, 3.6vw, 2.75rem)' }}>
-            Empirical Output &amp; Institutional Scale
-          </h2>
-          <p className="section-description">
-            Validated scientific output delivered across central government grants, defense and space projects,
-            international bilateral consortia, and societal product commercialization.
-          </p>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+          <span
+            style={{
+              fontFamily: 'var(--font-mono)',
+              fontSize: '0.8125rem',
+              fontWeight: 600,
+              color: 'var(--acid)',
+              letterSpacing: '0.08em'
+            }}
+          >
+            [05 / EMPIRICAL IMPACT]
+          </span>
+          <span
+            style={{
+              fontFamily: 'var(--font-mono)',
+              fontSize: '0.75rem',
+              letterSpacing: '0.1em',
+              color: 'rgba(255, 255, 255, 0.7)'
+            }}
+          >
+            VERIFIED INSTITUTIONAL AUDIT
+          </span>
         </div>
 
-        {/* Unified Statistics Grid with Count-Up Reveal */}
-        <div
-          ref={gridReveal.ref}
-          className={`motion-reveal ${gridReveal.isRevealed ? 'is-revealed' : ''}`}
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
-            gap: '24px',
-            marginBottom: '40px'
-          }}
-        >
-          {CIIRC_STATS.map((stat) => (
-            <StatCard key={stat.id} stat={stat} startTrigger={gridReveal.isRevealed} />
-          ))}
-        </div>
-
-        {/* Agency Endorsement Strip */}
-        <div
-          style={{
-            padding: '20px 24px',
-            backgroundColor: 'var(--surface-subtle)',
-            borderRadius: 'var(--radius-md)',
-            border: '1px solid var(--border)',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '14px',
-            flexWrap: 'wrap'
-          }}
-        >
-          <Award size={18} color="var(--primary-bright)" style={{ flexShrink: 0 }} />
-          <p style={{ fontSize: 'var(--text-xs)', color: 'var(--text-secondary)', margin: 0, lineHeight: 1.6 }}>
-            <strong style={{ color: 'var(--text-primary)' }}>Funded by Premier National &amp; Bilateral Agencies:</strong> DST,
-            DRDO, DBT, MOES, DOS (ISRO), VGST, KCTU, CEFIPRA (Indo-French), DST-GITA, UGC-DAE, VTU, and AYUSH;
-            including bilateral scientific programs with France, Sweden, Belarus, ASEAN, Egypt, and the European Union.
-          </p>
+        {/* Tiny Coral Event Marker (Section 27) */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <span
+            style={{
+              width: '8px',
+              height: '8px',
+              backgroundColor: 'var(--signal)',
+              display: 'inline-block'
+            }}
+          />
+          <span
+            style={{
+              fontFamily: 'var(--font-mono)',
+              fontSize: '0.6875rem',
+              letterSpacing: '0.08em',
+              color: 'rgba(255, 255, 255, 0.85)'
+            }}
+          >
+            DSIR-SIRO BENCHMARK
+          </span>
         </div>
       </div>
+
+      {/* Main Section Headline */}
+      <div style={{ marginBottom: '80px', maxWidth: '1000px' }}>
+        <h2
+          style={{
+            fontFamily: 'var(--font-display)',
+            fontSize: 'clamp(44px, 7vw, 96px)',
+            fontWeight: 800,
+            lineHeight: 0.92,
+            letterSpacing: '-0.05em',
+            color: 'var(--white)'
+          }}
+        >
+          MEASURED IN DISCOVERIES,<br />
+          <span style={{ color: 'var(--acid)' }}>DELIVERED FOR SOCIETY.</span>
+        </h2>
+      </div>
+
+      {/* Large Numbers Grid: Section 27, 28, 29 */}
+      {/* NO CARDS. NO SHADOWS. NO GRADIENTS. */}
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
+          gap: '48px',
+          borderTop: '1px solid rgba(255, 255, 255, 0.2)',
+          paddingTop: '48px'
+        }}
+        className="impact-stats-grid"
+      >
+        {ANIMATED_TARGETS.map((stat, idx) => {
+          const displayedValue = inView ? stat.steps[stepIndex] : stat.steps[0];
+
+          return (
+            <div
+              key={idx}
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                borderLeft: idx > 0 ? '1px solid rgba(255, 255, 255, 0.15)' : 'none',
+                paddingLeft: idx > 0 ? '24px' : '0'
+              }}
+              className="impact-stat-item"
+            >
+              {/* Mechanical Scientific Measurement Counter */}
+              <div
+                style={{
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: 'clamp(42px, 5.5vw, 82px)',
+                  fontWeight: 700,
+                  lineHeight: 0.9,
+                  letterSpacing: '-0.05em',
+                  color: stat.isHighlight ? 'var(--acid)' : 'var(--white)',
+                  marginBottom: '16px'
+                }}
+              >
+                {displayedValue}
+              </div>
+
+              <div
+                style={{
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: '0.75rem',
+                  fontWeight: 600,
+                  letterSpacing: '0.08em',
+                  color: 'var(--white)',
+                  textTransform: 'uppercase',
+                  marginBottom: '8px'
+                }}
+              >
+                {stat.label}
+              </div>
+
+              <p
+                style={{
+                  fontFamily: 'var(--font-sans)',
+                  fontSize: '0.8125rem',
+                  lineHeight: 1.4,
+                  color: 'rgba(255, 255, 255, 0.7)',
+                  maxWidth: '280px'
+                }}
+              >
+                {stat.sublabel}
+              </p>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Bottom Citation */}
+      <div
+        style={{
+          marginTop: '64px',
+          paddingTop: '24px',
+          borderTop: '1px solid rgba(255, 255, 255, 0.2)',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          flexWrap: 'wrap',
+          gap: '16px'
+        }}
+      >
+        <span
+          style={{
+            fontFamily: 'var(--font-mono)',
+            fontSize: '0.6875rem',
+            letterSpacing: '0.06em',
+            color: 'rgba(255, 255, 255, 0.6)'
+          }}
+        >
+          SOURCES: MINISTRY OF SCIENCE & TECHNOLOGY (DST) · DRDO · DOS/ISRO · DBT GOVT. OF INDIA
+        </span>
+
+        <span
+          style={{
+            fontFamily: 'var(--font-mono)',
+            fontSize: '0.6875rem',
+            color: 'var(--acid)',
+            letterSpacing: '0.06em'
+          }}
+        >
+          SIRO CERTIFICATION NO. 11/592/2013-TU-V
+        </span>
+      </div>
+
+      <style jsx>{`
+        @media (max-width: 767px) {
+          .impact-stat-item {
+            border-left: none !important;
+            padding-left: 0 !important;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+            padding-bottom: 24px;
+          }
+        }
+      `}</style>
     </section>
   );
 };

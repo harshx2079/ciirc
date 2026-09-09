@@ -1,149 +1,228 @@
 'use client';
 
-import React from 'react';
-import { ArrowUpRight, GraduationCap, Quote } from 'lucide-react';
+import React, { useRef, useState, useEffect } from 'react';
 import { CIIRC_IDENTITY } from '../data/ciircData';
-import { useScrollReveal } from '../hooks/useScrollReveal';
+import { Award, BookOpen, Quote } from 'lucide-react';
 
 export const DirectorMessage: React.FC = () => {
-  const { director } = CIIRC_IDENTITY;
-  const textReveal = useScrollReveal<HTMLDivElement>({ threshold: 0.15 });
-  const imageReveal = useScrollReveal<HTMLDivElement>({ threshold: 0.15, delayMs: 120 });
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const [scrollY, setScrollY] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (!containerRef.current) return;
+      const rect = containerRef.current.getBoundingClientRect();
+      const vh = window.innerHeight;
+      if (rect.top < vh && rect.bottom > 0) {
+        // Subtle vertical parallax movement
+        const shift = ((vh / 2) - (rect.top + rect.height / 2)) * 0.06;
+        setScrollY(shift);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   return (
     <section
-      id="director"
-      className="section-wrapper"
+      id="people"
+      ref={containerRef}
+      aria-label="CIIRC Scientific Leadership & Governance"
       style={{
-        backgroundColor: 'rgba(7, 19, 33, 0.40)',
-        borderBottom: '1px solid var(--border)'
+        position: 'relative',
+        width: '100%',
+        minHeight: '100vh',
+        padding: '120px clamp(16px, 3vw, 42px) 140px clamp(16px, 3vw, 42px)',
+        boxSizing: 'border-box',
+        backgroundColor: 'var(--paper)',
+        borderTop: '1px solid var(--line)',
+        overflow: 'hidden',
+        zIndex: 2
       }}
     >
-      <div className="container">
-        {/* Editorial Composition (Section 24) */}
+      <div style={{ width: '100%', maxWidth: '1440px', margin: '0 auto' }}>
+        {/* Top Header */}
         <div
           style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))',
-            gap: '48px',
-            alignItems: 'center'
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'baseline',
+            paddingBottom: '32px',
+            borderBottom: '1px solid var(--line)',
+            marginBottom: '64px'
           }}
         >
-          {/* Left Column: Statement & Authentic Quote */}
-          <div
-            ref={textReveal.ref}
-            className={`motion-reveal-editorial ${textReveal.isRevealed ? 'is-revealed' : ''}`}
-          >
-            <div className="section-eyebrow">
-              <Quote size={13} /> DIRECTOR'S MESSAGE
-            </div>
-
-            <h2
-              className="section-title"
+          <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+            <span
               style={{
-                fontSize: 'clamp(1.85rem, 3.2vw, 2.4rem)',
-                color: 'var(--text-primary)',
-                lineHeight: 1.25,
-                marginBottom: '24px'
+                fontFamily: 'var(--font-mono)',
+                fontSize: '0.8125rem',
+                fontWeight: 600,
+                color: 'var(--ultramarine)',
+                letterSpacing: '0.08em'
               }}
             >
-              "Teaching and research are becoming increasingly multidisciplinary. Globalization requires scholars prepared with a multitude of skills."
-            </h2>
+              [08 / LEADERSHIP]
+            </span>
+            <span className="micro-label">FOUNDER-DIRECTOR DIRECTIVE</span>
+          </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginBottom: '28px' }}>
-              <p style={{ color: 'var(--text-secondary)', fontSize: 'var(--text-base)', lineHeight: 1.75 }}>
-                {director.quote}
-              </p>
-              <p style={{ color: 'var(--text-muted)', fontSize: 'var(--text-sm)', lineHeight: 1.7 }}>
-                As Founding Director, Dr. Venkatesh has steered CIIRC to establish incubation and research facilities
-                spanning 18 different domains of science alongside an Atal Incubation Centre from NITI Aayog, GoI.
-              </p>
-            </div>
+          <span className="scientific-badge">
+            IISc BENGALURU ALUMNUS · Ph.D. NANOENGINEERING
+          </span>
+        </div>
 
-            {/* Director Bio & Qualifications Strip */}
+        {/* Section 33: Portrait with Overlapping Quote */}
+        <div
+          style={{
+            position: 'relative',
+            width: '100%',
+            minHeight: '70vh',
+            display: 'flex',
+            alignItems: 'center',
+            boxSizing: 'border-box'
+          }}
+          className="director-stage"
+        >
+          {/* Authentic Director Image from ciirc.res.in */}
+          <div
+            style={{
+              position: 'relative',
+              width: '44vw',
+              maxWidth: '560px',
+              height: '68vh',
+              minHeight: '480px',
+              overflow: 'hidden',
+              border: '1px solid var(--ink)',
+              backgroundColor: 'var(--paper-2)',
+              transform: `translateY(${scrollY}px)`,
+              transition: 'transform 100ms ease-out',
+              flexShrink: 0
+            }}
+            className="portrait-box"
+          >
+            <img
+              src="/images/director-krishna-venkatesh.jpg"
+              alt="Dr. Krishna Venkatesh — Founder-Director CIIRC"
+              style={{
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover',
+                objectPosition: '22% center'
+              }}
+            />
+
             <div
               style={{
-                padding: '20px 22px',
-                backgroundColor: 'var(--surface)',
-                borderRadius: 'var(--radius-lg)',
-                border: '1px solid var(--border)',
-                marginBottom: '28px'
+                position: 'absolute',
+                bottom: 0,
+                left: 0,
+                width: '100%',
+                padding: '24px',
+                background: 'linear-gradient(to top, rgba(16, 24, 32, 0.92) 0%, transparent 100%)',
+                color: 'var(--white)'
               }}
             >
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '6px' }}>
-                <GraduationCap size={18} color="var(--primary-bright)" />
-                <strong style={{ fontSize: 'var(--text-base)', color: 'var(--text-primary)' }}>
-                  {director.name}
-                </strong>
-                <span className="badge badge-blue">{director.role}</span>
+              <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6875rem', letterSpacing: '0.1em', color: 'var(--acid)' }}>
+                FOUNDER-DIRECTOR
               </div>
-              <div style={{ fontSize: 'var(--text-xs)', fontFamily: 'var(--font-mono)', color: 'var(--primary-bright)', marginBottom: '8px' }}>
-                {director.qualifications}
+              <div style={{ fontFamily: 'var(--font-display)', fontSize: '1.5rem', fontWeight: 700 }}>
+                {CIIRC_IDENTITY.director.name}
               </div>
-              <p style={{ fontSize: 'var(--text-xs)', color: 'var(--text-muted)', lineHeight: 1.5, margin: 0 }}>
-                {director.bio}
-              </p>
-            </div>
-
-            <div>
-              <a
-                href="https://ciirc.res.in/directors-profile/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="link-arrow"
-                style={{ fontSize: 'var(--text-sm)' }}
-              >
-                Read Full Director's Profile <ArrowUpRight size={15} />
-              </a>
+              <div style={{ fontFamily: 'var(--font-sans)', fontSize: '0.8125rem', color: 'rgba(255, 255, 255, 0.8)' }}>
+                {CIIRC_IDENTITY.director.qualifications}
+              </div>
             </div>
           </div>
 
-          {/* Right Column: Authentic Photograph Composition with Image Reveal */}
+          {/* Text Overlaps the Portrait: Large Quote */}
           <div
-            ref={imageReveal.ref}
-            className={`motion-reveal-image ${imageReveal.isRevealed ? 'is-revealed' : ''}`}
-            style={{ display: 'flex', justifyContent: 'center' }}
+            style={{
+              position: 'relative',
+              marginLeft: '-8vw', // Overlaps portrait
+              flex: 1,
+              maxWidth: '720px',
+              zIndex: 10,
+              backgroundColor: 'rgba(243, 240, 232, 0.96)',
+              backdropFilter: 'blur(8px)',
+              border: '1px solid var(--ink)',
+              padding: 'clamp(28px, 4vw, 48px)',
+              boxSizing: 'border-box'
+            }}
+            className="quote-overlap-card"
           >
-            <div
-              className="card-lift"
+            <div style={{ marginBottom: '20px' }}>
+              <span className="scientific-badge ultramarine">
+                LEADERSHIP MANIFESTO
+              </span>
+            </div>
+
+            <blockquote
               style={{
-                width: '100%',
-                maxWidth: '460px',
-                backgroundColor: 'var(--surface)',
-                border: '1px solid var(--border)',
-                borderRadius: 'var(--radius-lg)',
-                overflow: 'hidden',
-                boxShadow: '0 8px 24px rgba(6, 17, 31, 0.4)'
+                fontFamily: 'var(--font-display)',
+                fontSize: 'clamp(22px, 2.4vw, 38px)',
+                fontWeight: 700,
+                letterSpacing: '-0.04em',
+                lineHeight: 1.2,
+                color: 'var(--ink)',
+                marginBottom: '24px'
               }}
             >
-              <img
-                src="https://ciirc.res.in//wp-content/uploads/2021/06/unnamed.jpg"
-                alt="Dr. Krishna Venkatesh, Founder-Director CIIRC®"
-                style={{
-                  width: '100%',
-                  height: 'auto',
-                  objectFit: 'cover',
-                  display: 'block'
-                }}
-              />
-              <div
-                style={{
-                  padding: '16px 20px',
-                  backgroundColor: 'var(--surface-subtle)',
-                  borderTop: '1px solid var(--border)'
-                }}
-              >
-                <div style={{ fontWeight: 700, fontSize: 'var(--text-sm)', color: 'var(--text-primary)' }}>
-                  Dr. Krishna Venkatesh
-                </div>
-                <div style={{ fontSize: 'var(--text-xs)', color: 'var(--text-muted)' }}>
-                  Founder-Director, CIIRC® • IISc Alumnus &amp; Ph.D. in Nanoengineering
-                </div>
+              “Multidisciplinary science is not an administrative choice — it is the only viable methodology to solve the grand challenges of our era.”
+            </blockquote>
+
+            <p
+              style={{
+                fontFamily: 'var(--font-sans)',
+                fontSize: '0.9375rem',
+                lineHeight: 1.6,
+                color: 'var(--ink-soft)',
+                marginBottom: '24px'
+              }}
+            >
+              {CIIRC_IDENTITY.director.quote}
+            </p>
+
+            <div
+              style={{
+                borderTop: '1px solid var(--line)',
+                paddingTop: '18px',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '6px'
+              }}
+            >
+              <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', fontWeight: 600, color: 'var(--ink)' }}>
+                HONOURS & SCIENTIFIC COMMITTEES:
+              </div>
+              <div style={{ fontFamily: 'var(--font-sans)', fontSize: '0.8125rem', color: 'var(--ink-muted)' }}>
+                {CIIRC_IDENTITY.director.bio}
               </div>
             </div>
           </div>
         </div>
       </div>
+
+      <style jsx>{`
+        @media (max-width: 1023px) {
+          .director-stage {
+            flex-direction: column !important;
+            align-items: stretch !important;
+          }
+          .portrait-box {
+            width: 100% !important;
+            max-width: 100% !important;
+            height: 440px !important;
+            transform: none !important;
+          }
+          .quote-overlap-card {
+            width: 100% !important;
+            margin-left: 0 !important;
+            margin-top: -30px !important;
+          }
+        }
+      `}</style>
     </section>
   );
 };

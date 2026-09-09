@@ -1,192 +1,250 @@
 'use client';
 
-import React from 'react';
-import { Microscope, ArrowUpRight, Activity, Shield } from 'lucide-react';
-import { useScrollReveal } from '../hooks/useScrollReveal';
+import React, { useState, useRef, useEffect } from 'react';
+import { Microscope, ArrowUpRight } from 'lucide-react';
 
 export const InstrumentationFacility: React.FC = () => {
-  const headerReveal = useScrollReveal<HTMLDivElement>({ threshold: 0.15 });
-  const gridReveal = useScrollReveal<HTMLDivElement>({ threshold: 0.10 });
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const [scrollProgress, setScrollProgress] = useState(0); // 0 to 1
+  const [mousePos, setMousePos] = useState<{ x: number; y: number; inside: boolean }>({ x: 0, y: 0, inside: false });
 
-  const instruments = [
-    {
-      code: "SEM",
-      name: "Scanning Electron Microscope",
-      focus: "High-resolution nanoscale surface topography, morphology & elemental EDS analysis",
-      specs: "Secondary & backscattered electron imaging for nanomaterials, polymers & metallurgical alloys"
-    },
-    {
-      code: "XRD",
-      name: "X-Ray Diffractometer",
-      focus: "Crystallographic phase identification, grain sizing & lattice parameter quantification",
-      specs: "Powder & thin-film diffraction for advanced ceramics, geological specimens & catalytic materials"
-    },
-    {
-      code: "FT-IR",
-      name: "Fourier Transform Infrared Spectrophotometer",
-      focus: "Molecular bonding, organic functional group identification & chemical purity assay",
-      specs: "Attenuated Total Reflectance (ATR) and transmission modes for solid/liquid analysis"
-    },
-    {
-      code: "GC",
-      name: "Gas Chromatography System",
-      focus: "Separation, quantitative detection & profiling of volatile organic compounds and fuels",
-      specs: "High-sensitivity flame ionization detection (FID) for biofuels, botanical extracts & effluents"
-    },
-    {
-      code: "DSC & TGA",
-      name: "Simultaneous Thermal Analyzer",
-      focus: "Thermal degradation, glass transition (Tg), melting points & decomposition kinetics",
-      specs: "Sub-ambient to 1200°C inert/oxidative atmospheric profiling for composites & polymers"
-    },
-    {
-      code: "BET",
-      name: "Surface Area & Porosimetry Analyzer",
-      focus: "Specific surface area (m²/g), pore volume & micropore size distribution",
-      specs: "Nitrogen gas physisorption for carbon adsorbents, MOFs & catalytic substrates"
-    }
-  ];
+  useEffect(() => {
+    const handleScroll = () => {
+      if (!containerRef.current) return;
+      const rect = containerRef.current.getBoundingClientRect();
+      const vh = window.innerHeight;
+      if (rect.top < vh && rect.bottom > 0) {
+        const p = Math.max(0, Math.min(1, (vh - rect.top) / (vh + rect.height * 0.5)));
+        setScrollProgress(p);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    setMousePos({ x, y, inside: true });
+  };
+
+  const handleMouseLeave = () => {
+    setMousePos(prev => ({ ...prev, inside: false }));
+  };
+
+  // Section 24: As user scrolls into it, scale 1.12 -> 1.0
+  const currentScale = 1.12 - scrollProgress * 0.12;
+
+  // Section 26: cursor subtly offsets image-position (max 10px)
+  const offsetX = mousePos.inside ? ((mousePos.x / (window.innerWidth * 0.72)) - 0.5) * 20 : 0;
+  const offsetY = mousePos.inside ? ((mousePos.y / (window.innerHeight * 0.65)) - 0.5) * 20 : 0;
 
   return (
     <section
-      id="instrumentation"
-      className="section-wrapper"
+      id="facilities"
+      ref={containerRef}
+      aria-label="CIIRC Sophisticated Instrumentation Facility"
       style={{
-        backgroundColor: 'rgba(5, 13, 24, 0.35)',
-        borderBottom: '1px solid var(--border)'
+        position: 'relative',
+        width: '100%',
+        minHeight: '110vh',
+        padding: '120px 42px 140px 42px',
+        boxSizing: 'border-box',
+        backgroundColor: 'var(--paper)',
+        borderTop: '1px solid var(--line)',
+        overflow: 'hidden',
+        zIndex: 2
       }}
     >
-      <div className="container">
-        {/* Section Header */}
+      {/* Top Metadata */}
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'baseline',
+          marginBottom: '40px',
+          borderBottom: '1px solid var(--line)',
+          paddingBottom: '24px'
+        }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+          <span
+            style={{
+              fontFamily: 'var(--font-mono)',
+              fontSize: '0.8125rem',
+              fontWeight: 600,
+              color: 'var(--ultramarine)',
+              letterSpacing: '0.08em'
+            }}
+          >
+            [04 / ARCHITECTURE & INFRASTRUCTURE]
+          </span>
+          <span className="micro-label">SIF ANALYTICAL CORE · 50,000 SQ. FT.</span>
+        </div>
+
+        <span className="scientific-badge ultramarine">
+          DSIR-SIRO RECOGNIZED LABS
+        </span>
+      </div>
+
+      {/* Section 24 & 25: Asymmetric Photographic Canvas & Collision Headline */}
+      <div
+        style={{
+          position: 'relative',
+          width: '100%',
+          minHeight: '75vh',
+          display: 'flex',
+          flexDirection: 'column'
+        }}
+      >
+        {/* Section 25: Collision Headline "RESEARCH IS BUILT HERE." */}
+        {/* Partially overlapping the image, contrast-aware */}
         <div
-          ref={headerReveal.ref}
-          className={`motion-reveal-editorial ${headerReveal.isRevealed ? 'is-revealed' : ''}`}
           style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
-            gap: '32px',
-            alignItems: 'end',
-            marginBottom: '44px'
+            position: 'relative',
+            zIndex: 10,
+            pointerEvents: 'none',
+            marginBottom: '-6vw'
           }}
         >
-          <div>
-            <div className="section-eyebrow eyebrow-scientific">
-              <Microscope size={13} /> SOPHISTICATED INSTRUMENTATION FACILITY
-            </div>
-            <h2 className="section-title" style={{ fontSize: 'clamp(2rem, 3.6vw, 2.75rem)' }}>
-              Centralized Analytical Infrastructure
-            </h2>
-            <p className="section-description">
-              Housed within CIIRC's 50,000 sq.ft. facility, our central characterization suites provide atomic-to-macroscale
-              analytical tools for internal scholars, external academic researchers, and industry partners.
-            </p>
-          </div>
+          <h2
+            style={{
+              fontFamily: 'var(--font-display)',
+              fontSize: 'clamp(52px, 8.5vw, 126px)',
+              fontWeight: 800,
+              lineHeight: 0.88,
+              letterSpacing: '-0.06em',
+              color: 'var(--ink)',
+              maxWidth: '900px'
+            }}
+          >
+            RESEARCH IS<br />
+            <span style={{ color: 'var(--ultramarine)' }}>BUILT HERE.</span>
+          </h2>
+        </div>
 
-          <div>
+        {/* Section 24: Enormous Photograph 72vw width, 65vh height, placed asymmetrically */}
+        <div
+          onMouseMove={handleMouseMove}
+          onMouseLeave={handleMouseLeave}
+          style={{
+            position: 'relative',
+            width: '72vw',
+            height: '65vh',
+            minHeight: '480px',
+            marginLeft: 'auto', // Asymmetric right placement
+            overflow: 'hidden',
+            cursor: 'crosshair',
+            border: '1px solid var(--ink)',
+            backgroundColor: 'var(--paper-2)'
+          }}
+          className="facility-image-wrapper"
+        >
+          <img
+            src="https://images.unsplash.com/photo-1581093588401-fbb62a02f120?auto=format&fit=crop&w=1600&q=85"
+            alt="CIIRC Sophisticated Instrumentation Facility"
+            style={{
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+              transform: `scale(${currentScale * (mousePos.inside ? 1.015 : 1.0)}) translate(${offsetX}px, ${offsetY}px)`,
+              transition: 'transform 300ms cubic-bezier(0.16, 1, 0.3, 1)'
+            }}
+          />
+
+          {/* Section 26: VIEW FACILITY -> label near cursor inside image */}
+          {mousePos.inside && (
             <div
-              className="card-lift"
               style={{
-                padding: '16px 20px',
-                backgroundColor: 'var(--surface)',
-                borderRadius: 'var(--radius-md)',
-                border: '1px solid var(--border)',
+                position: 'absolute',
+                top: `${mousePos.y + 12}px`,
+                left: `${mousePos.x + 16}px`,
+                backgroundColor: 'var(--ink)',
+                color: 'var(--paper)',
+                fontFamily: 'var(--font-mono)',
+                fontSize: '0.6875rem',
+                letterSpacing: '0.08em',
+                padding: '6px 12px',
+                pointerEvents: 'none',
+                zIndex: 20,
                 display: 'flex',
                 alignItems: 'center',
-                gap: '14px'
+                gap: '6px',
+                border: '1px solid var(--line-light)'
               }}
             >
-              <Shield size={22} color="var(--primary-bright)" style={{ flexShrink: 0 }} />
-              <div style={{ fontSize: 'var(--text-xs)', color: 'var(--text-secondary)', lineHeight: 1.5 }}>
-                <strong style={{ color: 'var(--text-primary)' }}>Testing &amp; Consultancy Access:</strong> Students from inside
-                and outside institutions have the benefit of utilizing these facilities to carry out funded projects, dissertations, and testing.
-              </div>
+              <span>VIEW FACILITY</span>
+              <ArrowUpRight size={12} style={{ color: 'var(--acid)' }} />
+            </div>
+          )}
+
+          {/* Authentic Laboratory Overlay Badges */}
+          <div
+            style={{
+              position: 'absolute',
+              bottom: '24px',
+              left: '24px',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '6px',
+              background: 'rgba(16, 24, 32, 0.88)',
+              padding: '16px 20px',
+              color: 'var(--white)',
+              maxWidth: '380px'
+            }}
+          >
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6875rem', letterSpacing: '0.1em', color: 'var(--acid)' }}>
+              SOPHISTICATED INSTRUMENTATION FACILITY (SIF)
+            </div>
+            <div style={{ fontFamily: 'var(--font-sans)', fontSize: '0.8125rem', color: 'rgba(255, 255, 255, 0.85)' }}>
+              Housing SEM, XRD, GC, FT-IR Spectrophotometer, DSC/TGA & BET Surface Area Analyzer.
             </div>
           </div>
         </div>
 
-        {/* Instruments Grid */}
+        {/* Supporting Editorial Column */}
         <div
-          ref={gridReveal.ref}
-          className={`motion-reveal ${gridReveal.isRevealed ? 'is-revealed' : ''}`}
           style={{
+            marginTop: '40px',
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))',
-            gap: '20px',
-            marginBottom: '36px'
+            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+            gap: '32px',
+            borderTop: '1px solid var(--line)',
+            paddingTop: '32px'
           }}
         >
-          {instruments.map((inst) => (
-            <div
-              key={inst.code}
-              className="card-lift"
-              style={{
-                backgroundColor: 'var(--surface)',
-                padding: '24px',
-                borderRadius: 'var(--radius-lg)',
-                border: '1px solid var(--border)',
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'space-between'
-              }}
-            >
-              <div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-                  <span
-                    style={{
-                      fontFamily: 'var(--font-mono)',
-                      fontWeight: 700,
-                      fontSize: '1rem',
-                      color: 'var(--scientific)',
-                      padding: '3px 10px',
-                      backgroundColor: 'var(--scientific-subtle)',
-                      borderRadius: 'var(--radius-sm)',
-                      border: '1px solid rgba(34, 199, 184, 0.2)'
-                    }}
-                  >
-                    {inst.code}
-                  </span>
-                  <Activity size={16} color="var(--text-muted)" />
-                </div>
-
-                <h4 style={{ fontSize: '1.15rem', color: 'var(--text-primary)', marginBottom: '8px' }}>
-                  {inst.name}
-                </h4>
-
-                <p style={{ fontSize: 'var(--text-sm)', color: 'var(--text-secondary)', marginBottom: '14px', lineHeight: 1.5 }}>
-                  {inst.focus}
-                </p>
-
-                <div
-                  style={{
-                    fontSize: 'var(--text-xs)',
-                    color: 'var(--text-muted)',
-                    backgroundColor: 'var(--surface-subtle)',
-                    padding: '8px 12px',
-                    borderRadius: 'var(--radius-sm)',
-                    lineHeight: 1.45,
-                    border: '1px solid var(--border-subtle)'
-                  }}
-                >
-                  <strong style={{ color: 'var(--text-secondary)' }}>Analytical Capability:</strong> {inst.specs}
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Action Link */}
-        <div style={{ display: 'flex', justifyContent: 'center' }}>
-          <a
-            href="https://ciirc.res.in/service/sophisticated-instrumentation-facility/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn btn-secondary"
-            style={{ padding: '12px 24px' }}
-          >
-            Inquire About Analytical Testing Services <ArrowUpRight size={15} />
-          </a>
+          <div>
+            <div className="micro-label">CENTRALIZED CORE FACILITY</div>
+            <p style={{ fontFamily: 'var(--font-sans)', fontSize: '0.9375rem', color: 'var(--ink-soft)', marginTop: '8px' }}>
+              Open-access characterization suite providing high-resolution analytical services to scholars, academic institutions, and industrial clients across South India.
+            </p>
+          </div>
+          <div>
+            <div className="micro-label">SPECIALIZED INCUBATION BEDS</div>
+            <p style={{ fontFamily: 'var(--font-sans)', fontSize: '0.9375rem', color: 'var(--ink-soft)', marginTop: '8px' }}>
+              Dedicated cleanrooms and pilot testing bays for advanced materials, microfluidic healthcare sensors, and autonomous drone payloads.
+            </p>
+          </div>
+          <div>
+            <div className="micro-label">TRANSLATIONAL VERIFICATION</div>
+            <p style={{ fontFamily: 'var(--font-sans)', fontSize: '0.9375rem', color: 'var(--ink-soft)', marginTop: '8px' }}>
+              Strict calibration standards compliant with international protocols and national accreditation bodies.
+            </p>
+          </div>
         </div>
       </div>
+
+      <style jsx>{`
+        @media (max-width: 1023px) {
+          .facility-image-wrapper {
+            width: 100% !important;
+            height: 50vh !important;
+            margin-left: 0 !important;
+          }
+        }
+      `}</style>
     </section>
   );
 };

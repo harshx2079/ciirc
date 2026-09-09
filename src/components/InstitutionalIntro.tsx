@@ -1,284 +1,187 @@
 'use client';
 
 import React from 'react';
-import { Building2, CheckCircle2, Layers, Cpu, Dna, Rocket, Bot, Radio, Compass } from 'lucide-react';
-import { INDUSTRY_5_ENABLERS } from '../data/ciircData';
 import { useScrollReveal } from '../hooks/useScrollReveal';
+import { CIIRC_IDENTITY } from '../data/ciircData';
 
 export const InstitutionalIntro: React.FC = () => {
-  const headerReveal = useScrollReveal<HTMLDivElement>({ threshold: 0.15 });
-  const panelsReveal = useScrollReveal<HTMLDivElement>({ threshold: 0.12 });
-  const enablersReveal = useScrollReveal<HTMLDivElement>({ threshold: 0.12 });
-
-  const enablerIcons = [
-    <Layers key="nano" size={20} color="var(--primary-bright)" />,
-    <Cpu key="additive" size={20} color="var(--accent)" />,
-    <Dna key="bio" size={20} color="var(--scientific)" />,
-    <Rocket key="auto" size={20} color="var(--primary)" />,
-    <Bot key="ai" size={20} color="var(--primary-bright)" />,
-    <Radio key="5g" size={20} color="var(--scientific)" />
-  ];
+  const sectionReveal = useScrollReveal<HTMLDivElement>({ threshold: 0.12 });
 
   return (
     <section
       id="about"
-      className="section-wrapper"
       style={{
-        backgroundColor: 'rgba(5, 13, 24, 0.35)',
-        borderBottom: '1px solid var(--border)'
+        paddingTop: '180px',
+        paddingBottom: '200px',
+        backgroundColor: '#EFEEE8', // Section 25: warm paper
+        borderBottom: '1px solid rgba(23, 35, 43, 0.10)',
+        position: 'relative',
+        overflow: 'hidden'
       }}
     >
       <div className="container">
-        {/* Editorial Two-Column Header Structure (Section 18) */}
+        {/* Asymmetric Grid: Left 3 cols, Right 8 cols */}
         <div
-          ref={headerReveal.ref}
-          className={`motion-reveal-editorial ${headerReveal.isRevealed ? 'is-revealed' : ''}`}
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
-            gap: '40px',
-            alignItems: 'start',
-            marginBottom: '52px'
-          }}
+          ref={sectionReveal.ref}
+          className={`grid-12 reveal-editorial ${sectionReveal.isRevealed ? 'is-revealed' : ''}`}
+          style={{ alignItems: 'start', position: 'relative' }}
         >
-          {/* Left Column: Eyebrow + Large Statement */}
-          <div>
-            <div className="section-eyebrow">
-              <Building2 size={13} /> ABOUT CIIRC
-            </div>
-            <h2
-              className="section-title"
+          {/* Left 3 Columns: Index 01 / ABOUT CIIRC */}
+          <div className="col-3" style={{ paddingTop: '8px' }}>
+            <div
               style={{
-                fontSize: 'clamp(2rem, 3.6vw, 2.75rem)',
-                letterSpacing: '-0.025em',
-                lineHeight: 1.2
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '10px',
+                fontFamily: 'var(--font-mono)',
+                fontSize: '12px',
+                fontWeight: 650,
+                color: '#3157C8',
+                letterSpacing: '0.12em',
+                textTransform: 'uppercase'
               }}
             >
-              Converging Science, Applied Engineering, and Enterprise Incubation.
+              <span>01</span>
+              <span style={{ color: 'rgba(23, 35, 43, 0.25)' }}>/</span>
+              <span>ABOUT CIIRC</span>
+            </div>
+          </div>
+
+          {/* Right 8 Columns: Editorial Statement & Paragraphs */}
+          <div className="col-8" style={{ position: 'relative' }}>
+            <h2
+              style={{
+                fontFamily: 'var(--font-display)',
+                fontSize: 'clamp(36px, 4.4vw, 64px)',
+                fontWeight: 650,
+                lineHeight: 1.02,
+                letterSpacing: '-0.04em',
+                color: '#17232B',
+                marginBottom: '48px',
+                maxWidth: '820px'
+              }}
+            >
+              Converging science, applied engineering, and enterprise incubation.
             </h2>
-          </div>
 
-          {/* Right Column: Supporting Institutional Description */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', paddingTop: '10px' }}>
-            <p style={{ color: 'var(--text-secondary)', fontSize: 'var(--text-base)', lineHeight: 1.75 }}>
-              CIIRC® is a multidisciplinary research, innovation, and incubation centre established as a joint initiative
-              of <strong style={{ color: 'var(--text-primary)' }}>Sri Sringeri Sharada Peetham</strong>, Sringeri, and{' '}
-              <strong style={{ color: 'var(--text-primary)' }}>Jyothy Institute of Technology (JIT)</strong>.
-              It serves as JIT's centralized R&amp;D centre, holding official DSIR certification as a recognized
-              Scientific and Industrial Research Organisation (SIRO).
-            </p>
-            <p style={{ color: 'var(--text-secondary)', fontSize: 'var(--text-base)', lineHeight: 1.75 }}>
-              By integrating market research, intellectual property prosecution, and enterprise mentorship directly into
-              scientific curricula, the Centre prepares researchers to build societal enterprises through the on-campus
-              Atal Incubation Centre (AIC - JIT Foundation) and the Innovation &amp; Entrepreneurship Development Centre (IEDC).
-            </p>
-          </div>
-        </div>
+            {/* Thin horizontal line above paragraph */}
+            <div
+              style={{
+                width: '100%',
+                maxWidth: '650px',
+                height: '1px',
+                backgroundColor: 'rgba(23, 35, 43, 0.14)',
+                marginBottom: '32px'
+              }}
+            />
 
-        {/* 4 Structural Metric Panels */}
-        <div
-          ref={panelsReveal.ref}
-          className={`motion-reveal ${panelsReveal.isRevealed ? 'is-revealed' : ''}`}
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
-            gap: '16px',
-            marginBottom: '48px'
-          }}
-        >
-          <div
-            style={{
-              backgroundColor: 'var(--surface)',
-              border: '1px solid var(--border)',
-              borderRadius: 'var(--radius-lg)',
-              padding: '22px 20px',
-              transition: 'all var(--transition-fast)'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = 'var(--surface-elevated)';
-              e.currentTarget.style.borderColor = 'var(--primary)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = 'var(--surface)';
-              e.currentTarget.style.borderColor = 'var(--border)';
-            }}
-          >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
-              <CheckCircle2 size={16} color="var(--primary-bright)" />
-              <span style={{ fontWeight: 700, fontSize: 'var(--text-sm)', color: 'var(--text-primary)' }}>
-                SIRO Accreditation
-              </span>
-            </div>
-            <p style={{ fontSize: 'var(--text-xs)', color: 'var(--text-muted)', margin: 0, lineHeight: 1.5 }}>
-              Formally certified by the Department of Scientific &amp; Industrial Research, Ministry of Science &amp; Technology, GoI.
-            </p>
-          </div>
-
-          <div
-            style={{
-              backgroundColor: 'var(--surface)',
-              border: '1px solid var(--border)',
-              borderRadius: 'var(--radius-lg)',
-              padding: '22px 20px',
-              transition: 'all var(--transition-fast)'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = 'var(--surface-elevated)';
-              e.currentTarget.style.borderColor = 'var(--scientific)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = 'var(--surface)';
-              e.currentTarget.style.borderColor = 'var(--border)';
-            }}
-          >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
-              <CheckCircle2 size={16} color="var(--scientific)" />
-              <span style={{ fontWeight: 700, fontSize: 'var(--text-sm)', color: 'var(--text-primary)' }}>
-                AIC-JIT Foundation
-              </span>
-            </div>
-            <p style={{ fontSize: 'var(--text-xs)', color: 'var(--text-muted)', margin: 0, lineHeight: 1.5 }}>
-              On-campus Atal Incubation Centre sanctioned under NITI Aayog to translate lab discoveries into licensed commercial firms.
-            </p>
-          </div>
-
-          <div
-            style={{
-              backgroundColor: 'var(--surface)',
-              border: '1px solid var(--border)',
-              borderRadius: 'var(--radius-lg)',
-              padding: '22px 20px',
-              transition: 'all var(--transition-fast)'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = 'var(--surface-elevated)';
-              e.currentTarget.style.borderColor = 'var(--primary)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = 'var(--surface)';
-              e.currentTarget.style.borderColor = 'var(--border)';
-            }}
-          >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
-              <CheckCircle2 size={16} color="var(--primary)" />
-              <span style={{ fontWeight: 700, fontSize: 'var(--text-sm)', color: 'var(--text-primary)' }}>
-                50,000 Sq. Ft. Facility
-              </span>
-            </div>
-            <p style={{ fontSize: 'var(--text-xs)', color: 'var(--text-muted)', margin: 0, lineHeight: 1.5 }}>
-              18 specialized lab vistas and central characterization suites operating within Bengaluru's educational corridor.
-            </p>
-          </div>
-
-          <div
-            style={{
-              backgroundColor: 'var(--surface)',
-              border: '1px solid var(--border)',
-              borderRadius: 'var(--radius-lg)',
-              padding: '22px 20px',
-              transition: 'all var(--transition-fast)'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = 'var(--surface-elevated)';
-              e.currentTarget.style.borderColor = 'var(--accent)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = 'var(--surface)';
-              e.currentTarget.style.borderColor = 'var(--border)';
-            }}
-          >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
-              <CheckCircle2 size={16} color="var(--accent)" />
-              <span style={{ fontWeight: 700, fontSize: 'var(--text-sm)', color: 'var(--text-primary)' }}>
-                IEDC Entrepreneurship
-              </span>
-            </div>
-            <p style={{ fontSize: 'var(--text-xs)', color: 'var(--text-muted)', margin: 0, lineHeight: 1.5 }}>
-              Dedicated Innovation and Entrepreneurship Development Centre nurturing student and faculty patenting.
-            </p>
-          </div>
-        </div>
-
-        {/* Industry 5.0 Enablers Matrix (Authentic CIIRC Architecture) */}
-        <div
-          ref={enablersReveal.ref}
-          className={`motion-reveal ${enablersReveal.isRevealed ? 'is-revealed' : ''}`}
-          style={{
-            backgroundColor: 'var(--surface)',
-            border: '1px solid var(--border)',
-            borderRadius: 'var(--radius-lg)',
-            padding: '32px 28px'
-          }}
-        >
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px', marginBottom: '24px' }}>
-            <div>
-              <span style={{ fontSize: 'var(--text-xs)', fontFamily: 'var(--font-mono)', fontWeight: 700, color: 'var(--primary-bright)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
-                INDUSTRY 5.0 ENABLERS
-              </span>
-              <h3 style={{ fontSize: '1.35rem', color: 'var(--text-primary)', marginTop: '4px' }}>
-                Core Technology Drivers
-              </h3>
-            </div>
-            <span className="badge badge-amber">Multidisciplinary Matrix</span>
-          </div>
-
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))',
-              gap: '16px'
-            }}
-          >
-            {INDUSTRY_5_ENABLERS.map((item, idx) => (
-              <div
-                key={item.title}
+            <div
+              style={{
+                maxWidth: '650px',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '20px'
+              }}
+            >
+              <p
                 style={{
-                  padding: '16px',
-                  backgroundColor: 'var(--bg)',
-                  borderRadius: 'var(--radius-md)',
-                  border: '1px solid var(--border)',
-                  transition: 'all var(--transition-fast)'
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = 'var(--surface-elevated)';
-                  e.currentTarget.style.borderColor = 'var(--primary)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = 'var(--bg)';
-                  e.currentTarget.style.borderColor = 'var(--border)';
+                  fontFamily: 'var(--font-sans)',
+                  fontSize: '18px',
+                  lineHeight: 1.68,
+                  color: '#33434B'
                 }}
               >
-                <div style={{ marginBottom: '10px' }}>{enablerIcons[idx]}</div>
-                <div style={{ fontWeight: 700, fontSize: 'var(--text-sm)', color: 'var(--text-primary)', marginBottom: '4px' }}>
-                  {item.title}
-                </div>
-                <div style={{ fontSize: 'var(--text-xs)', color: 'var(--text-muted)', lineHeight: 1.45 }}>
-                  {item.desc}
-                </div>
-              </div>
-            ))}
+                CIIRC® is a multidisciplinary research, innovation, and incubation centre established as a joint initiative of{' '}
+                <strong style={{ color: '#17232B', fontWeight: 650 }}>Sri Sringeri Sharada Peetham</strong>, Sringeri, and{' '}
+                <strong style={{ color: '#17232B', fontWeight: 650 }}>Jyothy Institute of Technology (JIT)</strong>. Certified as an official{' '}
+                <strong style={{ color: '#17232B', fontWeight: 650 }}>Scientific and Industrial Research Organisation (SIRO)</strong> by DSIR,
+                Ministry of Science &amp; Technology, Government of India.
+              </p>
+
+              <p
+                style={{
+                  fontFamily: 'var(--font-sans)',
+                  fontSize: '16px',
+                  lineHeight: 1.68,
+                  color: '#69777A'
+                }}
+              >
+                Operating across 50,000 sq.ft. of centralized research space, our scholars and faculty bridge fundamental chemistry,
+                physics, and biology with industrial translational engineering. Through our on-campus Atal Incubation Centre (AIC - JIT Foundation)
+                and Innovation &amp; Entrepreneurship Development Centre (IEDC), intellectual discoveries advance systematically toward patenting,
+                field trials, and societal deployment.
+              </p>
+            </div>
           </div>
 
+          {/* Far-right vertical scientific coordinate structure */}
           <div
             style={{
-              marginTop: '24px',
-              padding: '12px 18px',
-              backgroundColor: 'var(--surface-subtle)',
-              borderRadius: 'var(--radius-sm)',
-              border: '1px solid var(--border-subtle)',
+              position: 'absolute',
+              right: '0',
+              top: '20px',
+              bottom: '20px',
+              width: '60px',
               display: 'flex',
-              alignItems: 'center',
-              gap: '12px'
+              justifyContent: 'space-between',
+              opacity: 0.35,
+              pointerEvents: 'none'
             }}
+            className="intro-coordinate-structure"
           >
-            <Compass size={18} color="var(--scientific)" style={{ flexShrink: 0 }} />
-            <span style={{ fontSize: 'var(--text-xs)', color: 'var(--text-secondary)', lineHeight: 1.5 }}>
-              Founded under the patronship of <strong>Jagadguru Shankaracharya of Sri Sringeri Sharada Peetham</strong>,
-              anchoring scientific inquiry in ethical stewardship and national capability building.
-            </span>
+            <div style={{ width: '1px', height: '100%', backgroundColor: 'rgba(49, 87, 200, 0.35)', position: 'relative' }}>
+              <div style={{ position: 'absolute', top: '15%', left: '-3px', width: '7px', height: '7px', borderRadius: '50%', backgroundColor: '#3157C8' }} />
+              <div style={{ position: 'absolute', top: '75%', left: '-3px', width: '7px', height: '7px', borderRadius: '50%', backgroundColor: '#4C8176' }} />
+            </div>
+            <div style={{ width: '1px', height: '100%', backgroundColor: 'rgba(76, 129, 118, 0.30)', position: 'relative' }}>
+              <div style={{ position: 'absolute', top: '40%', left: '-3px', width: '7px', height: '7px', borderRadius: '50%', backgroundColor: '#3157C8' }} />
+              <div style={{ position: 'absolute', top: '90%', left: '-3px', width: '7px', height: '7px', borderRadius: '50%', backgroundColor: '#17232B' }} />
+            </div>
+            <div style={{ width: '1px', height: '100%', backgroundColor: 'rgba(23, 35, 43, 0.20)', position: 'relative' }}>
+              <div style={{ position: 'absolute', top: '25%', left: '-3px', width: '7px', height: '7px', borderRadius: '50%', backgroundColor: '#4C8176' }} />
+              <div style={{ position: 'absolute', top: '60%', left: '-3px', width: '7px', height: '7px', borderRadius: '50%', backgroundColor: '#3157C8' }} />
+              <span
+                style={{
+                  position: 'absolute',
+                  top: '48%',
+                  right: '-28px',
+                  transform: 'rotate(90deg)',
+                  fontSize: '9px',
+                  letterSpacing: '0.14em',
+                  fontFamily: 'var(--font-mono)',
+                  color: '#3157C8',
+                  fontWeight: 600
+                }}
+              >
+                12.87N
+              </span>
+              <span
+                style={{
+                  position: 'absolute',
+                  top: '80%',
+                  right: '-28px',
+                  transform: 'rotate(90deg)',
+                  fontSize: '9px',
+                  letterSpacing: '0.14em',
+                  fontFamily: 'var(--font-mono)',
+                  color: '#4C8176',
+                  fontWeight: 600
+                }}
+              >
+                77.51E
+              </span>
+            </div>
           </div>
         </div>
       </div>
+
+      <style jsx>{`
+        @media (max-width: 1024px) {
+          .intro-coordinate-structure {
+            display: none !important;
+          }
+        }
+      `}</style>
     </section>
   );
 };

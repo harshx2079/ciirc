@@ -1,7 +1,6 @@
 import type { Metadata } from 'next';
 import { Inter, Plus_Jakarta_Sans, Space_Grotesk } from 'next/font/google';
 import '../globals.css';
-import { AtmosphericBackground } from '../components/AtmosphericBackground';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -11,22 +10,22 @@ const inter = Inter({
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   subsets: ['latin'],
-  weight: ['500', '600', '700', '800'],
+  weight: ['400', '500', '600', '700', '800'],
   display: 'swap',
   variable: '--font-display',
 });
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ['latin'],
-  weight: ['500', '700'],
+  weight: ['400', '500', '600', '700'],
   display: 'swap',
   variable: '--font-mono',
 });
 
 export const metadata: Metadata = {
-  title: 'CIIRC® | Centre for Incubation, Innovation, Research and Consultancy',
+  title: 'CIIRC® | Research is a Living System',
   description:
-    'Scientific and Industrial Research Organization (SIRO) recognized by DSIR, Ministry of Science & Technology, GoI. Joint initiative of Sri Sringeri Sharada Peetham & Jyothy Institute of Technology.',
+    'Centre for Incubation, Innovation, Research and Consultancy (CIIRC®). Scientific and Industrial Research Organization (SIRO) recognized by DSIR, Ministry of Science & Technology, GoI.',
   icons: {
     icon: 'https://ciirc.res.in/site/wp-content/uploads/2021/05/ciirc-favicon.png',
   },
@@ -46,8 +45,7 @@ export default function RootLayout({
           href="https://ciirc.res.in/site/wp-content/uploads/2021/05/ciirc-favicon.png"
         />
       </head>
-      <body style={{ backgroundColor: 'var(--bg-deep)', position: 'relative', minHeight: '100vh' }}>
-        <AtmosphericBackground />
+      <body style={{ backgroundColor: 'var(--paper)', position: 'relative', minHeight: '100vh', color: 'var(--ink)' }}>
         <div style={{ position: 'relative', zIndex: 1 }}>{children}</div>
       </body>
     </html>
