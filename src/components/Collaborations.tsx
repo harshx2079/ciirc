@@ -104,61 +104,89 @@ export const Collaborations: React.FC = () => {
                     key={`${partner.name}-${index}`}
                     className="ribbon-card"
                   >
-                    {partner.logoUrl ? (
-                      <div
-                        style={{
-                          backgroundColor: '#ffffff',
-                          padding: '3px 8px',
-                          borderRadius: 'var(--radius-sm)',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          height: '36px',
-                          minWidth: '68px',
-                          flexShrink: 0
-                        }}
-                      >
-                        <img
-                          src={partner.logoUrl}
-                          alt={partner.name}
+                    {/* Logo / Monogram Container (Sized Up) */}
+                    <div
+                      style={{
+                        height: '56px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        width: '100%'
+                      }}
+                    >
+                      {partner.logoUrl ? (
+                        <div
                           style={{
-                            maxHeight: '28px',
-                            maxWidth: '85px',
-                            objectFit: 'contain',
-                            display: 'block'
+                            backgroundColor: '#ffffff',
+                            padding: '6px 14px',
+                            borderRadius: 'var(--radius-md)',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            height: '52px',
+                            width: '148px',
+                            boxShadow: '0 2px 8px rgba(0, 0, 0, 0.18)'
                           }}
-                          onError={(e) => { e.currentTarget.style.display = 'none'; }}
-                        />
-                      </div>
-                    ) : (
-                      <div
-                        style={{
-                          width: '36px',
-                          height: '36px',
-                          borderRadius: 'var(--radius-sm)',
-                          backgroundColor: 'var(--surface-subtle)',
-                          border: '1px solid var(--border-subtle)',
-                          color: 'var(--primary-bright)',
-                          fontFamily: 'var(--font-mono)',
-                          fontWeight: 800,
-                          fontSize: '0.75rem',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          flexShrink: 0
-                        }}
-                      >
-                        {partner.initials}
-                      </div>
-                    )}
+                        >
+                          <img
+                            src={partner.logoUrl}
+                            alt={partner.name}
+                            style={{
+                              maxHeight: '40px',
+                              maxWidth: '124px',
+                              objectFit: 'contain',
+                              display: 'block'
+                            }}
+                            onError={(e) => { e.currentTarget.style.display = 'none'; }}
+                          />
+                        </div>
+                      ) : (
+                        <div
+                          style={{
+                            width: '52px',
+                            height: '52px',
+                            borderRadius: 'var(--radius-md)',
+                            backgroundColor: 'var(--surface-subtle)',
+                            border: '1px solid var(--border-subtle)',
+                            color: 'var(--primary-bright)',
+                            fontFamily: 'var(--font-mono)',
+                            fontWeight: 800,
+                            fontSize: '0.95rem',
+                            letterSpacing: '0.04em',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            boxShadow: '0 2px 8px rgba(0, 0, 0, 0.18)'
+                          }}
+                        >
+                          {partner.initials}
+                        </div>
+                      )}
+                    </div>
 
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+                    {/* Company / Organization Name & Category Below Logo */}
+                    <div
+                      style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        textAlign: 'center',
+                        gap: '6px',
+                        width: '100%'
+                      }}
+                    >
                       <span
                         style={{
-                          fontSize: 'var(--text-sm)',
+                          fontSize: '0.8rem',
                           fontWeight: 700,
                           color: 'var(--text-primary)',
-                          lineHeight: 1.2
+                          lineHeight: 1.35,
+                          minHeight: '2.7em',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          textAlign: 'center',
+                          width: '100%'
                         }}
                       >
                         {partner.name}
@@ -166,15 +194,14 @@ export const Collaborations: React.FC = () => {
                       <span
                         style={{
                           display: 'inline-flex',
-                          width: 'fit-content',
-                          fontSize: '0.66rem',
+                          alignItems: 'center',
+                          fontSize: '0.64rem',
                           fontFamily: 'var(--font-mono)',
                           fontWeight: 600,
                           color: badgeColor,
                           backgroundColor: badgeBg,
-                          padding: '1px 7px',
-                          borderRadius: 'var(--radius-full)',
-                          marginTop: '2px'
+                          padding: '2px 8px',
+                          borderRadius: 'var(--radius-full)'
                         }}
                       >
                         {partner.category}
