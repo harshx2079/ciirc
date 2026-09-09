@@ -398,12 +398,40 @@ export const ResearchField: React.FC<ResearchFieldProps> = ({
         p.x += p.vx + clusterOffsetX * 0.01;
         p.y += p.vy + clusterOffsetY * 0.01;
 
-        // Boundary wrap (when not converging)
-        if (currentConvergenceFactor < 0.2) {
-          if (p.x < -40) p.x = width + 30;
-          if (p.x > width + 40) p.x = -30;
-          if (p.y < -40) p.y = height + 30;
-          if (p.y > height + 40) p.y = -30;
+        // Strict Screen Edge Containment & Cushioning (prevent particles exiting viewport)
+        const edgeThreshold = 80;
+        if (p.x < edgeThreshold) {
+          const force = (edgeThreshold - p.x) / edgeThreshold;
+          p.vx += force * 0.9;
+        } else if (p.x > width - edgeThreshold) {
+          const force = (p.x - (width - edgeThreshold)) / edgeThreshold;
+          p.vx -= force * 0.9;
+        }
+
+        if (p.y < edgeThreshold) {
+          const force = (edgeThreshold - p.y) / edgeThreshold;
+          p.vy += force * 0.9;
+        } else if (p.y > height - edgeThreshold) {
+          const force = (p.y - (height - edgeThreshold)) / edgeThreshold;
+          p.vy -= force * 0.9;
+        }
+
+        // Hard boundary containment with damped elastic reflection
+        const screenMargin = 8;
+        if (p.x < screenMargin) {
+          p.x = screenMargin;
+          p.vx = Math.abs(p.vx) * 0.35;
+        } else if (p.x > width - screenMargin) {
+          p.x = width - screenMargin;
+          p.vx = -Math.abs(p.vx) * 0.35;
+        }
+
+        if (p.y < screenMargin) {
+          p.y = screenMargin;
+          p.vy = Math.abs(p.vy) * 0.35;
+        } else if (p.y > height - screenMargin) {
+          p.y = height - screenMargin;
+          p.vy = -Math.abs(p.vy) * 0.35;
         }
 
         // Velocity-responsive trails (Section 12)
