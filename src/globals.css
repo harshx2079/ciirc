@@ -617,6 +617,63 @@ button {
 }
 
 /* ==========================================================================
+   SCROLLING RIBBON LOOP (PARTNER & COLLABORATION MARQUEE)
+   ========================================================================== */
+
+.ribbon-wrapper {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  padding: 16px 0;
+  mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+}
+
+.ribbon-track {
+  display: flex;
+  width: max-content;
+  gap: 16px;
+  animation: ribbon-scroll 45s linear infinite;
+  will-change: transform;
+}
+
+.ribbon-track:hover {
+  animation-play-state: paused;
+}
+
+@keyframes ribbon-scroll {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.ribbon-card {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 20px;
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  flex-shrink: 0;
+  white-space: nowrap;
+  transition: transform var(--motion-normal) var(--ease-standard),
+              border-color var(--motion-normal) var(--ease-standard),
+              background-color var(--motion-normal) var(--ease-standard);
+  cursor: default;
+  user-select: none;
+}
+
+.ribbon-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(59, 140, 255, 0.35);
+  background-color: var(--surface-elevated);
+}
+
+/* ==========================================================================
    ACCESSIBILITY & REDUCED MOTION
    ========================================================================== */
 
@@ -645,9 +702,15 @@ button {
   }
 
   .card-lift:hover,
+  .ribbon-card:hover,
   .btn-tactile:hover,
   .btn-tactile:active,
   .group-arrow:hover .arrow-icon {
     transform: none !important;
+  }
+
+  .ribbon-track {
+    animation: none !important;
+    overflow-x: auto;
   }
 }

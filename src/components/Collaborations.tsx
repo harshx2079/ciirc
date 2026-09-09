@@ -38,99 +38,153 @@ export const Collaborations: React.FC = () => {
           </p>
         </div>
 
-        {/* Sophisticated Logo System with Reveal & Card Lift */}
+        {/* Animated Scrolling Ribbon Loop (All Companies Side by Side) */}
         <div
           ref={logosReveal.ref}
           className={`motion-reveal ${logosReveal.isRevealed ? 'is-revealed' : ''}`}
           style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(185px, 1fr))',
-            gap: '14px',
-            marginBottom: '44px'
+            marginBottom: '48px',
+            width: '100%'
           }}
         >
-          {STRATEGIC_COLLABORATIONS.map((partner) => (
-            <div
-              key={partner.name}
-              className="card-lift"
+          {/* Subtle contextual control indicator */}
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              marginBottom: '16px',
+              padding: '0 4px'
+            }}
+          >
+            <span
               style={{
-                backgroundColor: 'var(--surface)',
-                border: '1px solid var(--border)',
-                borderRadius: 'var(--radius-md)',
-                padding: '18px 14px',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'center',
-                textAlign: 'center',
-                minHeight: '120px'
+                fontFamily: 'var(--font-mono)',
+                fontSize: '0.72rem',
+                color: 'var(--text-muted)',
+                letterSpacing: '0.06em',
+                textTransform: 'uppercase'
               }}
             >
-              {partner.logoUrl ? (
-                <div
-                  style={{
-                    backgroundColor: '#ffffff',
-                    padding: '4px 8px',
-                    borderRadius: 'var(--radius-sm)',
-                    marginBottom: '10px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center'
-                  }}
-                >
-                  <img
-                    src={partner.logoUrl}
-                    alt={partner.name}
-                    style={{
-                      maxHeight: '36px',
-                      maxWidth: '110px',
-                      objectFit: 'contain'
-                    }}
-                    onError={(e) => { e.currentTarget.style.display = 'none'; }}
-                  />
-                </div>
-              ) : (
-                <div
-                  style={{
-                    width: '36px',
-                    height: '36px',
-                    borderRadius: 'var(--radius-sm)',
-                    backgroundColor: 'var(--surface-subtle)',
-                    color: 'var(--primary-bright)',
-                    fontFamily: 'var(--font-mono)',
-                    fontWeight: 700,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    marginBottom: '10px',
-                    fontSize: 'var(--text-xs)'
-                  }}
-                >
-                  {partner.initials}
-                </div>
-              )}
-
-              <div
-                style={{
-                  fontSize: '0.78rem',
-                  fontWeight: 600,
-                  color: 'var(--text-primary)',
-                  lineHeight: 1.3
-                }}
-              >
-                {partner.name}
-              </div>
+              14 STRATEGIC ALLIANCES &amp; RESEARCH CONSORTIA
+            </span>
+            <span
+              style={{
+                fontSize: '0.72rem',
+                color: 'var(--primary-bright)',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '6px'
+              }}
+            >
               <span
                 style={{
-                  fontSize: '0.66rem',
-                  color: 'var(--text-muted)',
-                  marginTop: '3px'
+                  width: '6px',
+                  height: '6px',
+                  borderRadius: 'var(--radius-full)',
+                  backgroundColor: 'var(--scientific)',
+                  display: 'inline-block'
                 }}
-              >
-                {partner.category}
-              </span>
+              />
+              Hover to pause inspection
+            </span>
+          </div>
+
+          {/* Ribbon Viewport with Gradient Fades */}
+          <div className="ribbon-wrapper">
+            <div className="ribbon-track">
+              {[...STRATEGIC_COLLABORATIONS, ...STRATEGIC_COLLABORATIONS].map((partner, index) => {
+                const isGov = partner.category.includes('Government');
+                const isAcademic = partner.category.includes('Academic');
+                const badgeColor = isGov ? 'var(--primary-bright)' : isAcademic ? 'var(--accent)' : 'var(--scientific)';
+                const badgeBg = isGov ? 'var(--primary-subtle)' : isAcademic ? 'var(--accent-subtle)' : 'var(--scientific-subtle)';
+
+                return (
+                  <div
+                    key={`${partner.name}-${index}`}
+                    className="ribbon-card"
+                  >
+                    {partner.logoUrl ? (
+                      <div
+                        style={{
+                          backgroundColor: '#ffffff',
+                          padding: '3px 8px',
+                          borderRadius: 'var(--radius-sm)',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          height: '36px',
+                          minWidth: '68px',
+                          flexShrink: 0
+                        }}
+                      >
+                        <img
+                          src={partner.logoUrl}
+                          alt={partner.name}
+                          style={{
+                            maxHeight: '28px',
+                            maxWidth: '85px',
+                            objectFit: 'contain',
+                            display: 'block'
+                          }}
+                          onError={(e) => { e.currentTarget.style.display = 'none'; }}
+                        />
+                      </div>
+                    ) : (
+                      <div
+                        style={{
+                          width: '36px',
+                          height: '36px',
+                          borderRadius: 'var(--radius-sm)',
+                          backgroundColor: 'var(--surface-subtle)',
+                          border: '1px solid var(--border-subtle)',
+                          color: 'var(--primary-bright)',
+                          fontFamily: 'var(--font-mono)',
+                          fontWeight: 800,
+                          fontSize: '0.75rem',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          flexShrink: 0
+                        }}
+                      >
+                        {partner.initials}
+                      </div>
+                    )}
+
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+                      <span
+                        style={{
+                          fontSize: 'var(--text-sm)',
+                          fontWeight: 700,
+                          color: 'var(--text-primary)',
+                          lineHeight: 1.2
+                        }}
+                      >
+                        {partner.name}
+                      </span>
+                      <span
+                        style={{
+                          display: 'inline-flex',
+                          width: 'fit-content',
+                          fontSize: '0.66rem',
+                          fontFamily: 'var(--font-mono)',
+                          fontWeight: 600,
+                          color: badgeColor,
+                          backgroundColor: badgeBg,
+                          padding: '1px 7px',
+                          borderRadius: 'var(--radius-full)',
+                          marginTop: '2px'
+                        }}
+                      >
+                        {partner.category}
+                      </span>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
-          ))}
+          </div>
         </div>
 
         {/* Faculty Fellowships Conferred */}
