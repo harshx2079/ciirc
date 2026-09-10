@@ -1,280 +1,308 @@
 'use client';
 
-import React, { useState } from 'react';
-import { LIVE_OPPORTUNITIES, RESEARCH_FELLOWSHIPS_WON } from '../data/ciircData';
-import { ArrowUpRight, Award, Calendar, FileText } from 'lucide-react';
+import React from 'react';
+import Image from 'next/image';
+import { ArrowUpRight } from 'lucide-react';
+import { AUTHENTIC_NEWS_POSTS } from '../data/ciircData';
 
 export const Opportunities: React.FC = () => {
-  const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
-
-  // Section 34: Featured story (~65%) + Secondary list (~35%)
-  const featured = LIVE_OPPORTUNITIES[0];
-  const secondaryList = LIVE_OPPORTUNITIES.slice(1);
+  const featured = AUTHENTIC_NEWS_POSTS.find((p) => p.isFeatured) || AUTHENTIC_NEWS_POSTS[0];
+  const secondary = AUTHENTIC_NEWS_POSTS.filter((p) => p.id !== featured.id);
 
   return (
     <section
-      id="opportunities"
-      aria-label="CIIRC Research Opportunities & News"
+      id="news"
+      aria-label="07 / LATEST"
       style={{
+        backgroundColor: '#F5F1E8', // Section 64 & 88: Warm ivory
+        padding: '170px 0',
         position: 'relative',
-        width: '100%',
-        minHeight: '100vh',
-        padding: '120px clamp(16px, 3vw, 42px)',
-        boxSizing: 'border-box',
-        backgroundColor: 'var(--paper)',
-        borderTop: '1px solid var(--line)',
         zIndex: 2,
         overflow: 'hidden'
       }}
     >
-      <div style={{ width: '100%', maxWidth: '1440px', margin: '0 auto', boxSizing: 'border-box' }}>
-        {/* Top Header */}
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'baseline',
-            paddingBottom: '32px',
-            borderBottom: '1px solid var(--line)',
-            marginBottom: '64px',
-            flexWrap: 'wrap',
-            gap: '16px'
-          }}
-        >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-            <span
-              style={{
-                fontFamily: 'var(--font-mono)',
-                fontSize: '0.8125rem',
-                fontWeight: 600,
-                color: 'var(--ultramarine)',
-                letterSpacing: '0.08em'
-              }}
-            >
-              [09 / NEWS & CALLS]
-            </span>
-            <h2
-              style={{
-                fontFamily: 'var(--font-display)',
-                fontSize: 'clamp(24px, 3.5vw, 42px)',
-                fontWeight: 700,
-                letterSpacing: '-0.04em',
-                color: 'var(--ink)'
-              }}
-            >
-              RESEARCH APPOINTMENTS & GAZETTE
-            </h2>
-          </div>
-
-          <span className="micro-label" style={{ display: 'none' }} id="opp-meta">
-            APPLICATION DESK OPEN · DSIR-SIRO
+      <div className="ciirc-container">
+        {/* Section Heading */}
+        <div style={{ marginBottom: '70px' }}>
+          <span
+            style={{
+              fontFamily: 'var(--font-mono)',
+              fontSize: '11px',
+              fontWeight: 650,
+              letterSpacing: '0.14em',
+              textTransform: 'uppercase',
+              color: '#3558C8',
+              display: 'inline-block',
+              marginBottom: '16px'
+            }}
+          >
+            07 / LATEST
           </span>
+          <h2
+            style={{
+              fontFamily: 'var(--font-sans)',
+              fontSize: 'clamp(44px, 4.8vw, 72px)',
+              lineHeight: 0.94,
+              letterSpacing: '-0.055em',
+              fontWeight: 600,
+              color: '#18242D',
+              margin: 0
+            }}
+          >
+            NEWS &amp; NOTIFICATIONS
+          </h2>
         </div>
 
-        {/* Section 34: 65% Featured + 35% Secondary List with ZERO horizontal overflow */}
+        {/* Section 64: Asymmetric editorial layout (Featured 62% + Secondary 38%, NO equal cards!) */}
         <div
+          className="news-editorial-grid"
           style={{
             display: 'grid',
-            gridTemplateColumns: 'minmax(0, 1.7fr) minmax(0, 1fr)',
-            gap: 'clamp(24px, 3vw, 48px)',
-            alignItems: 'start',
-            width: '100%',
-            boxSizing: 'border-box'
+            gridTemplateColumns: '62% 38%',
+            gap: '40px',
+            alignItems: 'start'
           }}
-          className="news-layout"
         >
-          {/* FEATURED STORY */}
-          <div
+          {/* Featured (62%, image height 520px) */}
+          <a
+            href={featured.link}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="featured-post-item"
             style={{
-              borderRight: '1px solid var(--line)',
-              paddingRight: 'clamp(20px, 3vw, 48px)',
+              textDecoration: 'none',
               display: 'flex',
               flexDirection: 'column',
               gap: '24px',
-              boxSizing: 'border-box',
-              width: '100%'
+              cursor: 'pointer'
             }}
-            className="featured-col"
           >
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
-              <span className="scientific-badge active">
-                FEATURED INSTITUTIONAL CALL
-              </span>
-              <span className="micro-label">{featured.date}</span>
-            </div>
-
             <div
+              className="featured-post-img-box"
               style={{
-                position: 'relative',
                 width: '100%',
-                height: '380px',
-                overflow: 'hidden',
-                border: '1px solid var(--ink)',
-                backgroundColor: 'var(--paper-2)'
+                height: '520px',
+                position: 'relative',
+                overflow: 'hidden'
               }}
             >
-              <img
-                src="https://images.unsplash.com/photo-1532094349884-543bc11b234d?auto=format&fit=crop&w=1200&q=85"
-                alt="CIIRC Translational Research Fellow Call"
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  objectFit: 'cover'
-                }}
+              <Image
+                src="/images/facilities/ciirc-cleanroom.jpg"
+                alt={featured.title}
+                fill
+                sizes="62vw"
+                style={{ objectFit: 'cover' }}
+                className="featured-img"
               />
+              <div
+                style={{
+                  position: 'absolute',
+                  top: '24px',
+                  left: '24px',
+                  backgroundColor: '#3558C8',
+                  color: '#FFFFFF',
+                  padding: '6px 14px',
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: '11px',
+                  fontWeight: 600,
+                  letterSpacing: '0.1em',
+                  textTransform: 'uppercase',
+                  borderRadius: '3px'
+                }}
+              >
+                {featured.category}
+              </div>
             </div>
-
-            <div className="micro-label" style={{ color: 'var(--ultramarine)' }}>
-              DEPARTMENT: {featured.department.toUpperCase()}
-            </div>
-
-            <h3
-              style={{
-                fontFamily: 'var(--font-display)',
-                fontSize: 'clamp(22px, 2.8vw, 36px)',
-                fontWeight: 700,
-                lineHeight: 1.18,
-                letterSpacing: '-0.03em',
-                color: 'var(--ink)'
-              }}
-            >
-              {featured.title}
-            </h3>
-
-            <p
-              style={{
-                fontFamily: 'var(--font-sans)',
-                fontSize: '0.9375rem',
-                lineHeight: 1.6,
-                color: 'var(--ink-soft)'
-              }}
-            >
-              Applications are invited from meritorious candidates with a Master's or Doctoral degree in relevant scientific branches to join active sponsored projects funded by DST, DRDO, DOS/ISRO, and bilateral consortia.
-            </p>
 
             <div>
+              <div
+                style={{
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: '12px',
+                  color: '#718087',
+                  marginBottom: '8px'
+                }}
+              >
+                {featured.date}
+              </div>
+              <h3
+                className="news-post-headline"
+                style={{
+                  fontFamily: 'var(--font-sans)',
+                  fontSize: '24px',
+                  lineHeight: 1.3,
+                  fontWeight: 650,
+                  color: '#18242D',
+                  letterSpacing: '-0.02em',
+                  marginBottom: '12px',
+                  transition: 'transform 350ms cubic-bezier(0.22, 1, 0.36, 1), color 350ms ease'
+                }}
+              >
+                {featured.title}
+              </h3>
+              <p
+                style={{
+                  fontFamily: 'var(--font-sans)',
+                  fontSize: '16px',
+                  lineHeight: 1.6,
+                  color: '#718087',
+                  marginBottom: '16px',
+                  margin: 0
+                }}
+              >
+                {featured.summary}
+              </p>
+              <div
+                className="news-read-action"
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: '11px',
+                  fontWeight: 650,
+                  letterSpacing: '0.1em',
+                  textTransform: 'uppercase',
+                  color: '#3558C8',
+                  marginTop: '12px'
+                }}
+              >
+                <span>Read Requirement</span>
+                <ArrowUpRight size={16} className="news-arrow-icon" />
+              </div>
+            </div>
+          </a>
+
+          {/* Secondary (38%, height 220px) */}
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '40px'
+            }}
+          >
+            {secondary.map((item) => (
               <a
-                href={featured.link}
+                key={item.id}
+                href={item.link}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="btn-rect-dark"
+                className="secondary-post-item"
+                style={{
+                  textDecoration: 'none',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '12px',
+                  paddingBottom: '32px',
+                  borderBottom: '1px solid rgba(24, 36, 45, 0.12)',
+                  cursor: 'pointer'
+                }}
               >
-                <span>Submit Formal Dossier</span>
-                <ArrowUpRight size={14} />
-              </a>
-            </div>
-          </div>
-
-          {/* VERTICAL LIST OF SMALLER STORIES */}
-          <div style={{ display: 'flex', flexDirection: 'column', width: '100%', boxSizing: 'border-box' }}>
-            <div className="micro-label" style={{ marginBottom: '20px' }}>
-              ADDITIONAL RESEARCH APPOINTMENTS
-            </div>
-
-            <div style={{ display: 'flex', flexDirection: 'column' }}>
-              {secondaryList.map((item, idx) => {
-                const isHovered = hoveredIdx === idx;
-
-                return (
-                  <div
-                    key={item.id}
-                    onMouseEnter={() => setHoveredIdx(idx)}
-                    onMouseLeave={() => setHoveredIdx(null)}
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <span
                     style={{
-                      padding: '20px 0',
-                      borderTop: '1px solid var(--line)',
-                      position: 'relative',
-                      cursor: 'pointer',
-                      transition: 'all 200ms ease'
+                      fontFamily: 'var(--font-mono)',
+                      fontSize: '11px',
+                      fontWeight: 600,
+                      color: '#3558C8',
+                      letterSpacing: '0.1em',
+                      textTransform: 'uppercase'
                     }}
                   >
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '8px', gap: '8px' }}>
-                      <span className="micro-label">{item.date}</span>
-                      <span
-                        style={{
-                          fontFamily: 'var(--font-mono)',
-                          fontSize: '0.625rem',
-                          color: item.status === 'Open Application' ? 'var(--ultramarine)' : 'var(--ink-muted)',
-                          fontWeight: 600,
-                          flexShrink: 0
-                        }}
-                      >
-                        {item.status.toUpperCase()}
-                      </span>
-                    </div>
-
-                    <h4
-                      style={{
-                        fontFamily: 'var(--font-display)',
-                        fontSize: '1rem',
-                        fontWeight: 600,
-                        lineHeight: 1.3,
-                        letterSpacing: '-0.02em',
-                        color: isHovered ? 'var(--ultramarine)' : 'var(--ink)',
-                        marginBottom: '8px',
-                        transition: 'color 180ms ease'
-                      }}
-                    >
-                      {item.title}
-                    </h4>
-
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <span style={{ fontFamily: 'var(--font-sans)', fontSize: '0.75rem', color: 'var(--ink-muted)' }}>
-                        {item.department}
-                      </span>
-                      <a
-                        href={item.link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        style={{ color: 'var(--ink)' }}
-                      >
-                        <ArrowUpRight size={14} />
-                      </a>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-
-            {/* Fellowships Won Ticker */}
-            <div
-              style={{
-                marginTop: '32px',
-                padding: '20px',
-                backgroundColor: 'var(--paper-2)',
-                border: '1px solid var(--line)'
-              }}
-            >
-              <div className="micro-label" style={{ marginBottom: '12px', color: 'var(--ultramarine)' }}>
-                COMPETITIVE FELLOWSHIPS SECURED
-              </div>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
-                {RESEARCH_FELLOWSHIPS_WON.slice(0, 6).map((fellowship) => (
-                  <span key={fellowship} className="scientific-badge">
-                    {fellowship}
+                    {item.category}
                   </span>
-                ))}
-              </div>
-            </div>
+                  <span
+                    style={{
+                      fontFamily: 'var(--font-mono)',
+                      fontSize: '11px',
+                      color: '#718087'
+                    }}
+                  >
+                    {item.date}
+                  </span>
+                </div>
+
+                <h4
+                  className="news-post-headline"
+                  style={{
+                    fontFamily: 'var(--font-sans)',
+                    fontSize: '18px',
+                    lineHeight: 1.35,
+                    fontWeight: 650,
+                    color: '#18242D',
+                    letterSpacing: '-0.02em',
+                    transition: 'transform 350ms cubic-bezier(0.22, 1, 0.36, 1), color 350ms ease',
+                    margin: 0
+                  }}
+                >
+                  {item.title}
+                </h4>
+
+                <p
+                  style={{
+                    fontFamily: 'var(--font-sans)',
+                    fontSize: '14px',
+                    lineHeight: 1.55,
+                    color: '#718087',
+                    margin: 0
+                  }}
+                >
+                  {item.summary}
+                </p>
+
+                <div
+                  className="news-read-action"
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '6px',
+                    fontFamily: 'var(--font-mono)',
+                    fontSize: '11px',
+                    fontWeight: 650,
+                    letterSpacing: '0.1em',
+                    textTransform: 'uppercase',
+                    color: '#3558C8',
+                    marginTop: '6px'
+                  }}
+                >
+                  <span>Explore Call</span>
+                  <ArrowUpRight size={14} className="news-arrow-icon" />
+                </div>
+              </a>
+            ))}
           </div>
         </div>
       </div>
 
       <style jsx>{`
-        @media (min-width: 1024px) {
-          #opp-meta {
-            display: inline-block !important;
-          }
+        /* Section 65 News Hover:
+           Image: scale(1) -> scale(1.025)
+           Headline: translateX(0) -> translateX(5px)
+           Arrow: translateX(0) -> translateX(5px)
+           Duration: 350ms */
+        .featured-post-item:hover :global(.featured-img) {
+          transform: scale(1.025);
+          transition: transform 350ms cubic-bezier(0.22, 1, 0.36, 1);
         }
-        @media (max-width: 1023px) {
-          .news-layout {
+
+        .featured-post-item:hover .news-post-headline,
+        .secondary-post-item:hover .news-post-headline {
+          transform: translateX(5px);
+          color: #3558C8 !important;
+        }
+
+        .featured-post-item:hover :global(.news-arrow-icon),
+        .secondary-post-item:hover :global(.news-arrow-icon) {
+          transform: translateX(5px);
+          transition: transform 350ms cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        @media (max-width: 1024px) {
+          .news-editorial-grid {
             grid-template-columns: 1fr !important;
           }
-          .featured-col {
-            border-right: none !important;
-            padding-right: 0 !important;
-            border-bottom: 1px solid var(--line);
-            padding-bottom: 40px;
+          .featured-post-img-box {
+            height: 360px !important;
           }
         }
       `}</style>

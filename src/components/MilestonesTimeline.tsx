@@ -1,377 +1,166 @@
 'use client';
 
-import React, { useRef, useState, useEffect, useCallback } from 'react';
-import { ArrowLeft, ArrowRight, Compass } from 'lucide-react';
-
-const EXTENDED_MILESTONES = [
-  {
-    year: '2017',
-    badge: 'AUTOMOTIVE INNOVATION',
-    title: '100% WCO Biodiesel Vehicle Pace Car',
-    desc: 'Successfully engineered vehicle running on 100% used cooking oil (WCO) biodiesel, serving as official pace car at the Asia Pacific Coffee-500 rally.',
-    category: 'Bioenergy & Tribology',
-    imgUrl: 'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=600&q=80'
-  },
-  {
-    year: '2018',
-    badge: 'NATIONAL HONOUR',
-    title: 'Bangalore Nano Most Innovative Product Display',
-    desc: 'Awarded at Bangalore India Nano summit for breakthrough innovative nanotechnology displays and translational materials developed in CIIRC laboratories.',
-    category: 'Nanotechnology',
-    imgUrl: 'https://images.unsplash.com/photo-1576086213369-97a306d36557?auto=format&fit=crop&w=600&q=80'
-  },
-  {
-    year: '2019',
-    badge: 'POLAR MILESTONE',
-    title: '4th Indian Scientific Expedition to the Arctic',
-    desc: 'Led the Indian scientific contingent to the North Pole (Arctic) for glacier mapping, proudly becoming first Indians to fly autonomous UAV drones in Arctic terrain.',
-    category: 'Avionics & Robotics',
-    imgUrl: 'https://images.unsplash.com/photo-1508614589041-895b88991e3e?auto=format&fit=crop&w=600&q=80'
-  },
-  {
-    year: '2019',
-    badge: 'SPACE TELEMETRY',
-    title: 'ISRO IRNSS (NavIC) Satellite Receiver',
-    desc: 'Commissioned on-campus dedicated ISRO NavIC satellite receiver station for atmospheric data collection and aerospace positioning telemetry.',
-    category: 'Space & Geospatial',
-    imgUrl: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=600&q=80'
-  },
-  {
-    year: '2020',
-    badge: 'TRANSLATIONAL AWARD',
-    title: 'National Nano Sparx Innovation Recognition',
-    desc: 'Conferred the acclaimed Nano Sparx award for translational research in functional nanomaterials and healthcare biosensors.',
-    category: 'Nanotechnology',
-    imgUrl: 'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?auto=format&fit=crop&w=600&q=80'
-  },
-  {
-    year: '2022',
-    badge: 'POLAR EXPEDITION',
-    title: 'Scientific Expedition to Antarctica (South Pole)',
-    desc: 'CIIRC faculty selected as part of elite international scientific expedition to the South Pole for ice shelf and climate instrumentation.',
-    category: 'Environmental & Sensors',
-    imgUrl: 'https://images.unsplash.com/photo-1517411032315-54ef2cb783bb?auto=format&fit=crop&w=600&q=80'
-  },
-  {
-    year: '2024-26',
-    badge: 'DEEP TECH TRANSLATION',
-    title: 'Next-Gen Multi-Scale Sensor & Hydrogen Consortia',
-    desc: 'Secured national multi-institutional consortia grants across clean hydrogen storage, advanced micro-electrochemical diagnostics, and societal water nanotech.',
-    category: 'Societal Impact',
-    imgUrl: 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=600&q=80'
-  }
-];
+import React, { useState, useEffect, useRef } from 'react';
+import { AUTHENTIC_ACHIEVEMENTS } from '../data/ciircData';
 
 export const MilestonesTimeline: React.FC = () => {
-  const containerRef = useRef<HTMLDivElement | null>(null);
-  const trackRef = useRef<HTMLDivElement | null>(null);
-  const [scrollProgress, setScrollProgress] = useState(0); // 0 to 1
-  const [maxTranslate, setMaxTranslate] = useState(0);
-
-  // Update track scrollable distance on mount / resize
-  const updateMetrics = useCallback(() => {
-    if (!trackRef.current) return;
-    const trackWidth = trackRef.current.scrollWidth;
-    const windowWidth = window.innerWidth;
-    const maxShift = Math.max(0, trackWidth - windowWidth + 84);
-    setMaxTranslate(maxShift);
-  }, []);
+  const [activeIdx, setActiveIdx] = useState(0);
+  const [isVisible, setIsVisible] = useState(false);
+  const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
-    updateMetrics();
-    window.addEventListener('resize', updateMetrics);
-    return () => window.removeEventListener('resize', updateMetrics);
-  }, [updateMetrics]);
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+        }
+      },
+      { threshold: 0.18 }
+    );
 
-  // Handle document scroll to advance progress
-  useEffect(() => {
-    const handleScroll = () => {
-      if (!containerRef.current) return;
-      const rect = containerRef.current.getBoundingClientRect();
-      const scrollableDistance = containerRef.current.offsetHeight - window.innerHeight;
-      if (scrollableDistance <= 0) return;
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
 
-      // When container hits top of viewport (rect.top <= 0), calculate progress
-      const progress = Math.max(0, Math.min(1, -rect.top / scrollableDistance));
-      setScrollProgress(progress);
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    handleScroll(); // Initial check
-    return () => window.removeEventListener('scroll', handleScroll);
+    return () => observer.disconnect();
   }, []);
-
-  // Navigate to specific milestone index
-  const goToMilestone = (index: number) => {
-    if (!containerRef.current) return;
-    const rect = containerRef.current.getBoundingClientRect();
-    const scrollableDistance = containerRef.current.offsetHeight - window.innerHeight;
-    const targetProgress = index / (EXTENDED_MILESTONES.length - 1);
-    const targetScrollY = window.scrollY + rect.top + targetProgress * scrollableDistance;
-    window.scrollTo({ top: targetScrollY, behavior: 'smooth' });
-  };
-
-  const currentIndex = Math.round(scrollProgress * (EXTENDED_MILESTONES.length - 1));
-
-  // Current translation in pixels
-  const currentShiftPx = scrollProgress * maxTranslate;
 
   return (
     <section
-      id="timeline"
-      ref={containerRef}
-      aria-label="CIIRC Historic Milestones Timeline"
+      id="achievements"
+      ref={sectionRef}
+      aria-label="05 / ACHIEVEMENTS"
       style={{
+        backgroundColor: '#F5F1E8', // Section 58 & 88: Warm ivory
+        padding: '170px 0',
         position: 'relative',
-        width: '100%',
-        height: '350vh', // Provides scroll runway to drive horizontal movement
-        backgroundColor: 'var(--paper)',
-        zIndex: 4
+        zIndex: 2,
+        overflow: 'hidden'
       }}
     >
-      {/* Pinned Viewport Container */}
-      <div
+      {/* Section 58: Thin diagonal trajectory line (bottom-left to top-right, 1px, rgba(24,36,45,.18)) */}
+      <svg
+        viewBox="0 0 1440 900"
+        preserveAspectRatio="none"
         style={{
-          position: 'sticky',
-          top: 0,
-          left: 0,
+          position: 'absolute',
+          inset: 0,
           width: '100%',
-          maxWidth: '100vw',
-          height: '100vh',
-          overflow: 'hidden',
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'space-between',
-          padding: '90px 0 40px 0',
-          boxSizing: 'border-box'
+          height: '100%',
+          pointerEvents: 'none',
+          zIndex: 0
         }}
       >
-        {/* Pinned Section Header */}
-        <div
-          style={{
-            padding: '0 clamp(16px, 3vw, 42px) 20px clamp(16px, 3vw, 42px)',
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            borderBottom: '1px solid var(--line)',
-            flexWrap: 'wrap',
-            gap: '16px'
-          }}
-        >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-            <span
-              style={{
-                fontFamily: 'var(--font-mono)',
-                fontSize: '0.8125rem',
-                fontWeight: 600,
-                color: 'var(--ultramarine)',
-                letterSpacing: '0.08em'
-              }}
-            >
-              [06 / HISTORIC TIMELINE]
-            </span>
-            <h2
-              style={{
-                fontFamily: 'var(--font-display)',
-                fontSize: 'clamp(20px, 3vw, 36px)',
-                fontWeight: 700,
-                letterSpacing: '-0.04em',
-                color: 'var(--ink)'
-              }}
-            >
-              CHRONOLOGY OF DISCOVERY (2017—2026)
-            </h2>
-          </div>
+        <line
+          x1="0"
+          y1="900"
+          x2="1440"
+          y2="0"
+          stroke="rgba(24, 36, 45, 0.18)"
+          strokeWidth="1"
+          strokeDasharray="4 6"
+          className={`trajectory-line ${isVisible ? 'drawn' : ''}`}
+        />
+      </svg>
 
-          {/* Interactive Milestone Navigation Controls */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            {/* Year selector pills */}
-            <div style={{ display: 'none', alignItems: 'center', gap: '6px' }} className="timeline-year-pills">
-              {EXTENDED_MILESTONES.map((m, idx) => {
-                const isActive = idx === currentIndex;
-                return (
-                  <button
-                    key={idx}
-                    type="button"
-                    onClick={() => goToMilestone(idx)}
-                    style={{
-                      fontFamily: 'var(--font-mono)',
-                      fontSize: '0.6875rem',
-                      fontWeight: 600,
-                      padding: '4px 8px',
-                      backgroundColor: isActive ? 'var(--ink)' : 'var(--paper-2)',
-                      color: isActive ? 'var(--white)' : 'var(--ink-soft)',
-                      border: '1px solid',
-                      borderColor: isActive ? 'var(--ink)' : 'var(--line)',
-                      cursor: 'pointer',
-                      transition: 'all 150ms ease'
-                    }}
-                  >
-                    {m.year}
-                  </button>
-                );
-              })}
-            </div>
-
-            {/* Prev / Next Buttons */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-              <button
-                type="button"
-                onClick={() => goToMilestone(Math.max(0, currentIndex - 1))}
-                disabled={currentIndex === 0}
-                aria-label="Previous Milestone"
-                style={{
-                  width: '32px',
-                  height: '32px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  backgroundColor: 'var(--paper-2)',
-                  border: '1px solid var(--line)',
-                  color: currentIndex === 0 ? 'var(--ink-muted)' : 'var(--ink)',
-                  cursor: currentIndex === 0 ? 'default' : 'pointer'
-                }}
-              >
-                <ArrowLeft size={14} />
-              </button>
-              <button
-                type="button"
-                onClick={() => goToMilestone(Math.min(EXTENDED_MILESTONES.length - 1, currentIndex + 1))}
-                disabled={currentIndex === EXTENDED_MILESTONES.length - 1}
-                aria-label="Next Milestone"
-                style={{
-                  width: '32px',
-                  height: '32px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  backgroundColor: 'var(--paper-2)',
-                  border: '1px solid var(--line)',
-                  color: currentIndex === EXTENDED_MILESTONES.length - 1 ? 'var(--ink-muted)' : 'var(--ink)',
-                  cursor: currentIndex === EXTENDED_MILESTONES.length - 1 ? 'default' : 'pointer'
-                }}
-              >
-                <ArrowRight size={14} />
-              </button>
-            </div>
-          </div>
-        </div>
-
-        {/* Dynamic ScaleX Progress Line (Section 31) */}
-        <div
-          style={{
-            position: 'relative',
-            width: '100%',
-            height: '2px',
-            backgroundColor: 'var(--line)',
-            margin: '16px 0'
-          }}
-        >
-          <div
+      <div className="ciirc-container" style={{ position: 'relative', zIndex: 1 }}>
+        {/* Section Heading */}
+        <div style={{ marginBottom: '80px' }}>
+          <span
             style={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              height: '100%',
-              width: '100%',
-              backgroundColor: 'var(--ultramarine)',
-              transformOrigin: 'left',
-              transform: `scaleX(${Math.max(0.04, scrollProgress)})`,
-              transition: 'transform 100ms ease-out'
-            }}
-          />
-        </div>
-
-        {/* Horizontal Track with Exact Measured Translation */}
-        <div
-          style={{
-            width: '100%',
-            overflow: 'hidden',
-            boxSizing: 'border-box'
-          }}
-        >
-          <div
-            ref={trackRef}
-            style={{
-              display: 'flex',
-              gap: 'clamp(32px, 5vw, 64px)',
-              paddingLeft: 'clamp(16px, 3vw, 42px)',
-              paddingRight: '120px',
-              width: 'max-content',
-              transform: `translateX(-${currentShiftPx}px)`,
-              transition: 'transform 100ms ease-out',
-              boxSizing: 'border-box',
-              willChange: 'transform'
+              fontFamily: 'var(--font-mono)',
+              fontSize: '11px',
+              fontWeight: 650,
+              letterSpacing: '0.14em',
+              textTransform: 'uppercase',
+              color: '#3558C8',
+              display: 'inline-block',
+              marginBottom: '16px'
             }}
           >
-            {EXTENDED_MILESTONES.map((item, idx) => {
-              const isCurrent = idx === currentIndex;
+            05 / ACHIEVEMENTS
+          </span>
+          <h2
+            style={{
+              fontFamily: 'var(--font-sans)',
+              fontSize: 'clamp(44px, 4.8vw, 72px)',
+              lineHeight: 0.94,
+              letterSpacing: '-0.055em',
+              fontWeight: 600,
+              color: '#18242D',
+              margin: 0
+            }}
+          >
+            SCIENTIFIC TRAJECTORY &amp; DISCOVERY
+          </h2>
+        </div>
+
+        {/* Desktop Trajectory Layout (Section 58 & 59) */}
+        <div className="achievements-grid-desktop">
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))',
+              gap: '40px'
+            }}
+          >
+            {AUTHENTIC_ACHIEVEMENTS.map((item, idx) => {
+              const isActive = activeIdx === idx;
+              const nodeColor = item.accent === 'blue' ? '#3558C8' : item.accent === 'teal' ? '#557C70' : '#C95D48';
 
               return (
                 <div
-                  key={idx}
+                  key={item.id}
+                  className={`milestone-item ${isVisible ? 'revealed' : ''}`}
+                  onMouseEnter={() => setActiveIdx(idx)}
                   style={{
-                    width: 'clamp(300px, 28vw, 420px)',
-                    flexShrink: 0,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    borderLeft: '2px solid',
-                    borderColor: isCurrent ? 'var(--ultramarine)' : 'var(--line)',
-                    paddingLeft: '28px',
-                    transition: 'border-color 200ms ease'
+                    padding: '32px',
+                    borderLeft: `2px solid ${isActive ? nodeColor : 'rgba(24, 36, 45, 0.12)'}`,
+                    backgroundColor: isActive ? 'rgba(255, 255, 255, 0.75)' : 'transparent',
+                    transition: 'all 220ms cubic-bezier(0.22, 1, 0.36, 1)',
+                    cursor: 'pointer'
                   }}
                 >
-                  {/* Year & Category */}
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '16px' }}>
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '12px',
+                      marginBottom: '14px'
+                    }}
+                  >
+                    {/* Node: 5px -> 8px (Section 59) */}
+                    <div
+                      style={{
+                        width: isActive ? '8px' : '5px',
+                        height: isActive ? '8px' : '5px',
+                        borderRadius: '50%',
+                        backgroundColor: nodeColor,
+                        transition: 'all 220ms ease'
+                      }}
+                    />
                     <span
                       style={{
                         fontFamily: 'var(--font-mono)',
-                        fontSize: 'clamp(32px, 3.8vw, 48px)',
-                        fontWeight: 700,
-                        letterSpacing: '-0.06em',
-                        color: isCurrent ? 'var(--ultramarine)' : 'var(--ink)',
-                        lineHeight: 1,
-                        transition: 'color 200ms ease'
+                        fontSize: '11px',
+                        fontWeight: 650,
+                        letterSpacing: '0.12em',
+                        textTransform: 'uppercase',
+                        color: nodeColor
                       }}
                     >
-                      {item.year}
+                      {item.category}
                     </span>
-                    <span className={`scientific-badge ${isCurrent ? 'active' : ''}`}>
-                      {item.badge}
-                    </span>
-                  </div>
-
-                  {/* Milestone Image */}
-                  <div
-                    style={{
-                      width: '100%',
-                      height: '180px',
-                      overflow: 'hidden',
-                      marginBottom: '16px',
-                      border: '1px solid var(--line)',
-                      backgroundColor: 'var(--paper-2)'
-                    }}
-                  >
-                    <img
-                      src={item.imgUrl}
-                      alt={item.title}
-                      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                      loading="lazy"
-                    />
-                  </div>
-
-                  <div className="micro-label" style={{ marginBottom: '6px', color: 'var(--ultramarine)' }}>
-                    {item.category}
                   </div>
 
                   <h3
                     style={{
-                      fontFamily: 'var(--font-display)',
-                      fontSize: '1.125rem',
-                      fontWeight: 700,
-                      letterSpacing: '-0.025em',
-                      lineHeight: 1.25,
-                      color: 'var(--ink)',
+                      fontFamily: 'var(--font-sans)',
+                      fontSize: '20px',
+                      lineHeight: 1.3,
+                      fontWeight: 650,
+                      letterSpacing: '-0.02em',
+                      color: '#18242D',
                       marginBottom: '10px'
                     }}
                   >
@@ -381,12 +170,13 @@ export const MilestonesTimeline: React.FC = () => {
                   <p
                     style={{
                       fontFamily: 'var(--font-sans)',
-                      fontSize: '0.8125rem',
-                      lineHeight: 1.5,
-                      color: 'var(--ink-soft)'
+                      fontSize: '15px',
+                      lineHeight: 1.6,
+                      color: '#718087',
+                      margin: 0
                     }}
                   >
-                    {item.desc}
+                    {item.description}
                   </p>
                 </div>
               );
@@ -394,34 +184,106 @@ export const MilestonesTimeline: React.FC = () => {
           </div>
         </div>
 
-        {/* Bottom Pinned Status Bar */}
-        <div
-          style={{
-            padding: '16px clamp(16px, 3vw, 42px) 0 clamp(16px, 3vw, 42px)',
-            borderTop: '1px solid var(--line)',
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            flexWrap: 'wrap',
-            gap: '12px'
-          }}
-        >
-          <span className="micro-label">
-            VERIFIED INSTITUTIONAL RECORDS 2017—2026 · CIIRC
-          </span>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--ultramarine)', fontWeight: 600 }}>
-              {Math.round(scrollProgress * 100)}%
-            </span>
-            <span className="micro-label">SCROLLED</span>
+        {/* Mobile Vertical Timeline (Section 75) */}
+        <div className="achievements-mobile-timeline">
+          <div className="timeline-vertical-line" />
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '32px', marginLeft: '36px' }}>
+            {AUTHENTIC_ACHIEVEMENTS.map((item) => (
+              <div key={item.id} style={{ position: 'relative' }}>
+                <div
+                  style={{
+                    position: 'absolute',
+                    left: '-40px',
+                    top: '6px',
+                    width: '8px',
+                    height: '8px',
+                    borderRadius: '50%',
+                    backgroundColor: '#3558C8'
+                  }}
+                />
+                <div
+                  style={{
+                    fontFamily: 'var(--font-mono)',
+                    fontSize: '10px',
+                    fontWeight: 650,
+                    color: '#3558C8',
+                    letterSpacing: '0.12em',
+                    textTransform: 'uppercase',
+                    marginBottom: '6px'
+                  }}
+                >
+                  {item.category}
+                </div>
+                <h4
+                  style={{
+                    fontFamily: 'var(--font-sans)',
+                    fontSize: '17px',
+                    fontWeight: 650,
+                    color: '#18242D',
+                    marginBottom: '6px'
+                  }}
+                >
+                  {item.title}
+                </h4>
+                <p
+                  style={{
+                    fontFamily: 'var(--font-sans)',
+                    fontSize: '14px',
+                    lineHeight: 1.5,
+                    color: '#718087',
+                    margin: 0
+                  }}
+                >
+                  {item.description}
+                </p>
+              </div>
+            ))}
           </div>
         </div>
       </div>
 
       <style jsx>{`
-        @media (min-width: 900px) {
-          .timeline-year-pills {
-            display: flex !important;
+        /* Section 59 Trajectory animation:
+           Text: opacity 0 -> 1, translateY 24px -> 0, No bouncing */
+        .milestone-item {
+          opacity: 0;
+          transform: translateY(24px);
+          transition: opacity 650ms cubic-bezier(0.22, 1, 0.36, 1), transform 650ms cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .milestone-item.revealed {
+          opacity: 1;
+          transform: translateY(0);
+        }
+
+        .trajectory-line {
+          transform-origin: bottom left;
+          transform: scaleX(0);
+          transition: transform 900ms cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .trajectory-line.drawn {
+          transform: scaleX(1);
+        }
+
+        .achievements-mobile-timeline {
+          display: none;
+        }
+
+        @media (max-width: 768px) {
+          .achievements-grid-desktop {
+            display: none !important;
+          }
+          .achievements-mobile-timeline {
+            display: block !important;
+            position: relative;
+            padding-left: 10px;
+          }
+          .timeline-vertical-line {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 10px;
+            width: 1px;
+            background-color: rgba(24, 36, 45, 0.18);
           }
         }
       `}</style>

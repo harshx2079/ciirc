@@ -1,376 +1,258 @@
 'use client';
 
-import React, { useState } from 'react';
-import { RESEARCH_VISTAS, ResearchVista } from '../data/ciircData';
-import { ResearchTopology } from './ResearchField';
-import { ExternalLink, Layers, ArrowRight } from 'lucide-react';
+import React, { useState, useRef } from 'react';
+import Image from 'next/image';
+import { ArrowUpRight } from 'lucide-react';
+import { AUTHENTIC_17_RESEARCH_AREAS, ResearchAreaItem } from '../data/ciircData';
 
-interface ResearchAtlasProps {
-  onTopologyChange?: (topology: ResearchTopology) => void;
-}
+export const ResearchAtlas: React.FC = () => {
+  const [hoveredItem, setHoveredItem] = useState<ResearchAreaItem>(AUTHENTIC_17_RESEARCH_AREAS[0]);
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const [mouseY, setMouseY] = useState<number>(0);
+  const sectionRef = useRef<HTMLElement>(null);
 
-// Map the 6 primary categories from authentic CIIRC data
-const ATLAS_CATEGORIES = [
-  {
-    id: 'nano',
-    name: 'Nanomaterials & SIF',
-    topology: 'materials' as ResearchTopology,
-    vistaIndex: '01',
-    vistaId: 'sophisticated-instrumentation-facility',
-    leadStat: '0.1 nm',
-    leadStatLabel: 'Characterization Resolution',
-    imgUrl: 'https://images.unsplash.com/photo-1576086213369-97a306d36557?auto=format&fit=crop&w=1200&q=85',
-    imgCaption: 'SIF Electron Microscopy Suite — Scanning atomic topography'
-  },
-  {
-    id: 'health',
-    name: 'Translational Health & Diagnostics',
-    topology: 'life' as ResearchTopology,
-    vistaIndex: '05',
-    vistaId: 'affordable-medical-devices-sensors',
-    leadStat: '< 5 min',
-    leadStatLabel: 'Point-of-Care Detection Speed',
-    imgUrl: 'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?auto=format&fit=crop&w=1200&q=85',
-    imgCaption: 'Microfluidic Diagnostic Chip — Conductive electrochemical biosensor'
-  },
-  {
-    id: 'avionics',
-    name: 'Polar Avionics & Extreme Robotics',
-    topology: 'engineering' as ResearchTopology,
-    vistaIndex: '11',
-    vistaId: 'autonomous-systems',
-    leadStat: '81° N',
-    leadStatLabel: 'Arctic Polar Glacial Deployment',
-    imgUrl: 'https://images.unsplash.com/photo-1508614589041-895b88991e3e?auto=format&fit=crop&w=1200&q=85',
-    imgCaption: 'Indian Arctic Glacial Mapping — Autonomous telemetry UAV payload'
-  },
-  {
-    id: 'space',
-    name: 'ISRO NavIC Satellite & Environment',
-    topology: 'earth' as ResearchTopology,
-    vistaIndex: '18',
-    vistaId: 'remote-sensing',
-    leadStat: 'L5 / S',
-    leadStatLabel: 'Satellite Ground Band Telemetry',
-    imgUrl: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1200&q=85',
-    imgCaption: 'On-Campus ISRO Satellite Receiver Ground Station — NavIC telemetry'
-  },
-  {
-    id: 'computational',
-    name: 'Multi-scale Physics Modeling',
-    topology: 'computing' as ResearchTopology,
-    vistaIndex: '14',
-    vistaId: 'computational-engineering',
-    leadStat: '10⁶',
-    leadStatLabel: 'Finite Element Mesh Nodes',
-    imgUrl: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1200&q=85',
-    imgCaption: 'Computational Fluid Dynamics — Aerodynamic thermal analysis'
-  },
-  {
-    id: 'incubation',
-    name: 'AIC-JIT Deep Tech Incubation',
-    topology: 'innovation' as ResearchTopology,
-    vistaIndex: '19',
-    vistaId: 'innovation-and-entrepreneurship-development-centre',
-    leadStat: '35+',
-    leadStatLabel: 'Commercialized Societal Products',
-    imgUrl: 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=1200&q=85',
-    imgCaption: 'Atal Incubation Centre — Translational product prototyping bench'
-  }
-];
-
-export const ResearchAtlas: React.FC<ResearchAtlasProps> = ({ onTopologyChange }) => {
-  const [selectedIdx, setSelectedIdx] = useState(0);
-  const [isTransitioning, setIsTransitioning] = useState(false);
-
-  const activeCategory = ATLAS_CATEGORIES[selectedIdx];
-  const activeVista: ResearchVista = RESEARCH_VISTAS.find(v => v.id === activeCategory.vistaId) || RESEARCH_VISTAS[0];
-
-  const handleSelect = (idx: number) => {
-    if (idx === selectedIdx) return;
-    setIsTransitioning(true);
-    setSelectedIdx(idx);
-    if (onTopologyChange) {
-      onTopologyChange(ATLAS_CATEGORIES[idx].topology);
+  const handleRowMouseEnter = (item: ResearchAreaItem, idx: number, e: React.MouseEvent<HTMLAnchorElement>) => {
+    setHoveredItem(item);
+    setHoveredIndex(idx);
+    const rect = e.currentTarget.getBoundingClientRect();
+    if (sectionRef.current) {
+      const secRect = sectionRef.current.getBoundingClientRect();
+      setMouseY(rect.top - secRect.top + rect.height / 2);
     }
-    setTimeout(() => {
-      setIsTransitioning(false);
-    }, 650);
   };
 
   return (
     <section
-      id="atlas"
-      aria-label="CIIRC Research Atlas"
+      id="research"
+      ref={sectionRef}
+      aria-label="02 / RESEARCH"
       style={{
+        backgroundColor: '#F5F1E8', // Section 45 & 88: Warm ivory
+        padding: '180px 0',
         position: 'relative',
-        width: '100%',
-        minHeight: '100vh',
-        padding: '120px 42px',
-        boxSizing: 'border-box',
-        backgroundColor: 'var(--paper)',
-        borderTop: '1px solid var(--line)',
-        zIndex: 2
+        zIndex: 2,
+        overflow: 'hidden'
       }}
     >
-      <div style={{ width: '100%', maxWidth: '1440px', margin: '0 auto', boxSizing: 'border-box' }}>
-        {/* Section Header */}
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'baseline',
-            paddingBottom: '32px',
-            borderBottom: '1px solid var(--line)',
-            marginBottom: '64px',
-            flexWrap: 'wrap',
-            gap: '16px'
-          }}
-        >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-            <span
-              style={{
-                fontFamily: 'var(--font-mono)',
-                fontSize: '0.8125rem',
-                fontWeight: 600,
-                color: 'var(--ultramarine)',
-                letterSpacing: '0.08em'
-              }}
-            >
-              [03 / ATLAS]
-            </span>
-            <h2
-              style={{
-                fontFamily: 'var(--font-display)',
-                fontSize: 'clamp(24px, 3.5vw, 44px)',
-                fontWeight: 700,
-                letterSpacing: '-0.04em',
-                color: 'var(--ink)'
-              }}
-            >
-              THE LIVING RESEARCH ATLAS
-            </h2>
-          </div>
-
-          <span className="micro-label" style={{ display: 'none' }} id="atlas-meta">
-            19 RESEARCH VISTAS · DSIR-SIRO RECOGNIZED LABS
-          </span>
-        </div>
-
-        {/* Section 22: Layout with ZERO horizontal overflow */}
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1.85fr)',
-            gap: 'clamp(28px, 4vw, 64px)',
-            alignItems: 'start',
-            width: '100%',
-            boxSizing: 'border-box'
-          }}
-          className="atlas-grid"
-        >
-        {/* LEFT COLUMN: 35% Large Category Names */}
-        <div style={{ display: 'flex', flexDirection: 'column' }}>
-          <div className="micro-label" style={{ marginBottom: '24px' }}>
-            SELECT DOMAIN AXIS:
-          </div>
-
-          <div style={{ display: 'flex', flexDirection: 'column' }}>
-            {ATLAS_CATEGORIES.map((cat, idx) => {
-              const isCurrent = idx === selectedIdx;
-
-              return (
-                <button
-                  key={cat.id}
-                  type="button"
-                  onClick={() => handleSelect(idx)}
-                  onMouseEnter={() => handleSelect(idx)}
-                  style={{
-                    padding: '24px 0',
-                    borderBottom: '1px solid var(--line)',
-                    textAlign: 'left',
-                    background: 'none',
-                    display: 'flex',
-                    alignItems: 'baseline',
-                    gap: '16px',
-                    transition: 'all 200ms ease'
-                  }}
-                >
-                  <span
-                    style={{
-                      fontFamily: 'var(--font-mono)',
-                      fontSize: '0.8125rem',
-                      fontWeight: 600,
-                      color: isCurrent ? 'var(--ultramarine)' : 'var(--ink-muted)'
-                    }}
-                  >
-                    [{cat.vistaIndex}]
-                  </span>
-
-                  <span
-                    style={{
-                      fontFamily: 'var(--font-display)',
-                      fontSize: isCurrent ? 'clamp(22px, 2.4vw, 32px)' : 'clamp(18px, 1.8vw, 24px)',
-                      fontWeight: isCurrent ? 700 : 500,
-                      letterSpacing: '-0.03em',
-                      color: isCurrent ? 'var(--ink)' : 'var(--ink-soft)',
-                      transition: 'all 200ms ease'
-                    }}
-                  >
-                    {cat.name}
-                  </span>
-                </button>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* RIGHT COLUMN: 65% Generative Visualization, Image with Section 23 distortion transition, Data */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
-          {/* Section 23: Image Transition with Vertical Distortion & Horizontal Displacement (650ms) */}
-          <div
+      <div className="ciirc-container" style={{ position: 'relative', zIndex: 1 }}>
+        {/* Section Header (Section 45) */}
+        <div style={{ marginBottom: '80px' }}>
+          <span
             style={{
-              position: 'relative',
-              width: '100%',
-              height: '420px',
-              overflow: 'hidden',
-              backgroundColor: 'var(--paper-2)',
-              border: '1px solid var(--line)'
+              fontFamily: 'var(--font-mono)',
+              fontSize: '11px',
+              fontWeight: 650,
+              letterSpacing: '0.14em',
+              textTransform: 'uppercase',
+              color: '#3558C8',
+              display: 'inline-block',
+              marginBottom: '16px'
             }}
           >
-            <img
-              src={activeCategory.imgUrl}
-              alt={activeCategory.imgCaption}
-              className={`atlas-image ${isTransitioning ? 'transitioning' : ''}`}
+            02 / RESEARCH
+          </span>
+          <h2
+            style={{
+              fontFamily: 'var(--font-sans)',
+              fontSize: 'clamp(44px, 4.8vw, 72px)',
+              lineHeight: 0.94,
+              letterSpacing: '-0.055em',
+              fontWeight: 600,
+              color: '#18242D',
+              margin: 0
+            }}
+          >
+            17 DIRECTIONS. ONE RESEARCH ECOSYSTEM.
+          </h2>
+        </div>
+
+        {/* Section 46: Full-Width Editorial Rows (NO cards!) */}
+        <div
+          className="editorial-research-list"
+          style={{
+            borderTop: '1px solid rgba(24, 36, 45, 0.12)',
+            position: 'relative'
+          }}
+        >
+          {AUTHENTIC_17_RESEARCH_AREAS.map((item, idx) => {
+            const isHovered = hoveredIndex === idx;
+
+            return (
+              <a
+                key={item.id}
+                href={item.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`research-editorial-row ${isHovered ? 'active' : ''}`}
+                onMouseEnter={(e) => handleRowMouseEnter(item, idx, e)}
+                onMouseLeave={() => setHoveredIndex(null)}
+                onClick={() => {
+                  setHoveredItem(item);
+                  setHoveredIndex(idx);
+                }}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  height: '82px',
+                  borderBottom: '1px solid rgba(24, 36, 45, 0.12)',
+                  textDecoration: 'none',
+                  backgroundColor: isHovered ? '#E8EDF1' : 'transparent', // Section 47: background #E8EDF1
+                  paddingInline: '16px',
+                  transition: 'background-color 220ms cubic-bezier(0.22, 1, 0.36, 1)'
+                }}
+              >
+                {/* 8% number (Section 46 & 47: color #3558C8 on hover) */}
+                <div
+                  style={{
+                    width: '8%',
+                    fontFamily: 'var(--font-mono)',
+                    fontSize: '13px',
+                    fontWeight: 600,
+                    color: isHovered ? '#3558C8' : '#718087',
+                    letterSpacing: '0.04em',
+                    transition: 'color 220ms ease'
+                  }}
+                >
+                  {item.number}
+                </div>
+
+                {/* 58% research name (Section 46 & 47: translateX(8px), color #3558C8 on hover) */}
+                <div
+                  style={{
+                    width: '58%',
+                    fontFamily: 'var(--font-sans)',
+                    fontSize: 'clamp(20px, 2.2vw, 28px)',
+                    fontWeight: 600,
+                    letterSpacing: '-0.03em',
+                    color: isHovered ? '#3558C8' : '#18242D',
+                    transform: isHovered ? 'translateX(8px)' : 'translateX(0)',
+                    transition: 'transform 220ms cubic-bezier(0.22, 1, 0.36, 1), color 220ms ease'
+                  }}
+                >
+                  {item.name}
+                </div>
+
+                {/* 24% secondary information (Section 46) */}
+                <div
+                  className="row-secondary-info"
+                  style={{
+                    width: '24%',
+                    fontFamily: 'var(--font-mono)',
+                    fontSize: '11px',
+                    color: '#718087',
+                    letterSpacing: '0.08em',
+                    textTransform: 'uppercase'
+                  }}
+                >
+                  {item.metadata}
+                </div>
+
+                {/* 10% arrow (Section 46 & 47: translateX(6px) on hover) */}
+                <div
+                  style={{
+                    width: '10%',
+                    display: 'flex',
+                    justifyContent: 'flex-end',
+                    transform: isHovered ? 'translateX(6px)' : 'translateX(0)',
+                    transition: 'transform 220ms cubic-bezier(0.22, 1, 0.36, 1)'
+                  }}
+                >
+                  <ArrowUpRight
+                    size={20}
+                    style={{
+                      color: isHovered ? '#3558C8' : 'rgba(24, 36, 45, 0.4)'
+                    }}
+                  />
+                </div>
+              </a>
+            );
+          })}
+        </div>
+
+        {/* Section 48: Research Preview on Hover
+            Dimensions: 320 x 210px, Position: right 7vw
+            Initial: opacity: 0, translateY(15px) scale(.97), clip-path: inset(100% 0 0 0)
+            Hover: opacity: 1, translateY(0) scale(1), clip-path: inset(0), 450ms */}
+        {hoveredIndex !== null && (
+          <div
+            className="research-hover-preview-box"
+            style={{
+              position: 'absolute',
+              right: '7vw',
+              top: `${mouseY}px`,
+              transform: 'translateY(-50%)',
+              width: '320px',
+              height: '210px',
+              pointerEvents: 'none',
+              zIndex: 30,
+              display: 'none'
+            }}
+          >
+            <div
+              className="preview-clip-wrapper"
               style={{
                 width: '100%',
                 height: '100%',
-                objectFit: 'cover'
-              }}
-            />
-
-            {/* In-image scientific telemetry overlay */}
-            <div
-              style={{
-                position: 'absolute',
-                bottom: 0,
-                left: 0,
-                width: '100%',
-                padding: '16px 24px',
-                background: 'linear-gradient(to top, rgba(16, 24, 32, 0.85) 0%, transparent 100%)',
-                color: 'var(--white)',
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'flex-end'
+                position: 'relative',
+                overflow: 'hidden'
               }}
             >
-              <div>
-                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.625rem', letterSpacing: '0.12em', color: 'var(--acid)' }}>
-                  PRIMARY TELEMETRY
-                </div>
-                <div style={{ fontFamily: 'var(--font-sans)', fontSize: '0.875rem', fontWeight: 500, color: 'var(--white)' }}>
-                  {activeCategory.imgCaption}
-                </div>
-              </div>
-
-              <div style={{ textAlign: 'right' }}>
-                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '1.5rem', fontWeight: 700, color: 'var(--white)' }}>
-                  {activeCategory.leadStat}
-                </div>
-                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.625rem', letterSpacing: '0.08em', color: 'rgba(255, 255, 255, 0.7)' }}>
-                  {activeCategory.leadStatLabel}
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Supporting Domain Typography & Specifications (No Cards, No Boxed UI) */}
-          <div style={{ borderTop: '1px solid var(--ink)', paddingTop: '24px' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '16px' }}>
-              <span className="scientific-badge ultramarine">
-                {activeVista.tag}
-              </span>
-              <a
-                href={activeVista.externalUrl}
-                target="_blank"
-                rel="noopener noreferrer"
+              <Image
+                src={hoveredItem.image}
+                alt={hoveredItem.name}
+                fill
+                sizes="320px"
+                style={{ objectFit: 'cover' }}
+              />
+              <div
                 style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '6px',
+                  position: 'absolute',
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  padding: '8px 12px',
+                  backgroundColor: 'rgba(24, 36, 45, 0.88)',
+                  color: '#F5F1E8',
                   fontFamily: 'var(--font-mono)',
-                  fontSize: '0.6875rem',
-                  letterSpacing: '0.06em',
-                  textTransform: 'uppercase',
-                  color: 'var(--ultramarine)'
+                  fontSize: '10px',
+                  letterSpacing: '0.08em',
+                  textTransform: 'uppercase'
                 }}
               >
-                <span>Institutional Dossier</span>
-                <ExternalLink size={12} />
-              </a>
-            </div>
-
-            <h3
-              style={{
-                fontFamily: 'var(--font-display)',
-                fontSize: 'clamp(24px, 3vw, 36px)',
-                fontWeight: 700,
-                letterSpacing: '-0.04em',
-                lineHeight: 1.15,
-                color: 'var(--ink)',
-                marginBottom: '16px'
-              }}
-            >
-              {activeVista.title}
-            </h3>
-
-            <p
-              style={{
-                fontFamily: 'var(--font-sans)',
-                fontSize: '1rem',
-                lineHeight: 1.6,
-                color: 'var(--ink-soft)',
-                marginBottom: '20px'
-              }}
-            >
-              {activeVista.detailedScope}
-            </p>
-
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
-              {activeVista.instrumentsOrFocus.map((inst) => (
-                <span key={inst} className="scientific-badge">
-                  {inst}
-                </span>
-              ))}
+                {hoveredItem.category} // DISCIPLINARY DOMAIN
+              </div>
             </div>
           </div>
-        </div>
-      </div>
+        )}
       </div>
 
       <style jsx>{`
-        /* Section 23: Vertical distortion + horizontal displacement transition (650ms) */
-        .atlas-image {
-          transition: transform 650ms cubic-bezier(0.16, 1, 0.3, 1), clip-path 650ms cubic-bezier(0.16, 1, 0.3, 1), filter 650ms ease;
-          transform: scale(1) translateX(0) translateY(0);
-          clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
-          filter: grayscale(0%);
-        }
-        .atlas-image.transitioning {
-          transform: scale(1.04) translateX(12px) translateY(-6px);
-          clip-path: polygon(0 4%, 100% 0, 100% 96%, 0 100%);
-          filter: grayscale(25%);
-        }
-
-        @media (min-width: 1024px) {
-          #atlas-meta {
-            display: inline-block !important;
+        /* Desktop Floating Preview (Section 48) */
+        @media (min-width: 1025px) {
+          .research-hover-preview-box {
+            display: block !important;
+          }
+          .preview-clip-wrapper {
+            animation: clipReveal 450ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
           }
         }
-        @media (max-width: 1023px) {
-          .atlas-grid {
-            grid-template-columns: 1fr !important;
-            gap: 40px !important;
+
+        @keyframes clipReveal {
+          0% {
+            opacity: 0;
+            transform: translateY(15px) scale(0.97);
+            clip-path: inset(100% 0 0 0);
+          }
+          100% {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+            clip-path: inset(0);
+          }
+        }
+
+        @media (max-width: 1024px) {
+          .row-secondary-info {
+            display: none !important;
           }
         }
       `}</style>

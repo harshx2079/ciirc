@@ -2,192 +2,257 @@
 
 import React from 'react';
 import { CIIRC_IDENTITY } from '../data/ciircData';
-import { ArrowUpRight } from 'lucide-react';
 
 export const Footer: React.FC = () => {
-  const currentYear = new Date().getFullYear();
-
-  const columns = [
-    {
-      title: 'RESEARCH AXES',
-      links: [
-        { label: 'Living Ecosystem', href: '#ecosystem' },
-        { label: 'Research Atlas (19 Vistas)', href: '#atlas' },
-        { label: 'Instrumentation Core (SIF)', href: '#facilities' },
-        { label: 'Empirical Impact Audit', href: '#impact' }
-      ]
-    },
-    {
-      title: 'INSTITUTION',
-      links: [
-        { label: 'DSIR-SIRO Recognition Charter', href: '#hero' },
-        { label: 'Historic Timeline (2017–2026)', href: '#timeline' },
-        { label: "Founder-Director Directive", href: '#people' },
-        { label: 'Kinetic Institutional Network', href: '#network' }
-      ]
-    },
-    {
-      title: 'ENGAGE & CALLS',
-      links: [
-        { label: 'Research Appointments & Gazette', href: '#opportunities' },
-        { label: 'Bilateral Consortia (CEFIPRA/LPI)', href: '#network' },
-        { label: 'AIC-JIT Incubation Hub', href: 'https://ciirc.res.in/incubation/' },
-        { label: `Direct Desk: ${CIIRC_IDENTITY.phone}`, href: `tel:${CIIRC_IDENTITY.phone}` }
-      ]
-    },
-    {
-      title: 'FOUNDING AUSPICES',
-      links: [
-        { label: 'Sri Sringeri Sharada Peetham', href: 'https://www.sringeri.net/' },
-        { label: 'Jyothy Institute of Technology', href: 'https://www.jyothyit.ac.in/' },
-        { label: 'Ministry of Science & Technology', href: 'https://dst.gov.in/' },
-        { label: 'Official Institutional Dossier', href: 'https://ciirc.res.in/' }
-      ]
-    }
-  ];
-
   return (
     <footer
+      id="footer"
+      aria-label="CIIRC Institutional Directory"
       style={{
-        backgroundColor: 'var(--ink)',
-        color: 'var(--paper)',
-        padding: '100px 42px 48px 42px',
-        boxSizing: 'border-box',
+        backgroundColor: '#18242D', // Section 68: Deep ink
+        color: '#F5F1E8',
+        padding: '90px 48px 40px',
+        borderTop: '1px solid rgba(255, 255, 255, 0.12)',
         position: 'relative',
-        zIndex: 10,
-        borderTop: '1px solid var(--ink)'
+        zIndex: 2
       }}
     >
-      <div style={{ maxWidth: '1360px', margin: '0 auto' }}>
-        {/* Top Identification Row */}
+      <div className="ciirc-container">
+        {/* Four Columns Layout (Section 68: RESEARCH / INSTITUTION / CONNECT / LEGAL) */}
         <div
+          className="footer-columns-grid"
           style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'flex-start',
-            flexWrap: 'wrap',
-            gap: '32px',
-            paddingBottom: '48px',
-            borderBottom: '1px solid rgba(255, 255, 255, 0.14)',
+            display: 'grid',
+            gridTemplateColumns: 'repeat(4, 1fr)',
+            gap: '48px',
             marginBottom: '64px'
           }}
         >
-          <div style={{ maxWidth: '640px' }}>
-            <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px', marginBottom: '8px' }}>
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '1.5rem', fontWeight: 700, letterSpacing: '0.06em' }}>
-                CIIRC<sup style={{ fontSize: '0.6em', color: 'var(--ultramarine)' }}>®</sup>
-              </span>
-              <span className="scientific-badge signal">
-                DSIR-SIRO RECOGNIZED
-              </span>
-            </div>
-
-            <div style={{ fontFamily: 'var(--font-sans)', fontSize: '0.875rem', color: 'rgba(255, 255, 255, 0.8)', lineHeight: 1.5, marginBottom: '12px' }}>
-              {CIIRC_IDENTITY.fullName}
-            </div>
-
-            <p style={{ fontFamily: 'var(--font-sans)', fontSize: '0.8125rem', color: 'rgba(255, 255, 255, 0.6)', lineHeight: 1.6 }}>
-              {CIIRC_IDENTITY.campusAddress}
-            </p>
-          </div>
-
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', alignItems: 'flex-start' }}>
-            <span className="micro-label" style={{ color: 'var(--acid)' }}>
-              PRIMARY ELECTRONIC INTAKE
-            </span>
-            <a
-              href={`mailto:${CIIRC_IDENTITY.email}`}
+          {/* Column 1: RESEARCH */}
+          <div>
+            <div
               style={{
                 fontFamily: 'var(--font-mono)',
-                fontSize: '1.125rem',
-                color: 'var(--white)',
-                borderBottom: '1px solid var(--ultramarine)',
-                paddingBottom: '2px',
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '6px'
+                fontSize: '11px',
+                fontWeight: 650,
+                letterSpacing: '0.14em',
+                textTransform: 'uppercase',
+                color: '#9AAFFF',
+                marginBottom: '20px'
               }}
             >
-              <span>{CIIRC_IDENTITY.email}</span>
-              <ArrowUpRight size={14} />
-            </a>
-          </div>
-        </div>
-
-        {/* 4-Column Navigation Matrix */}
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
-            gap: '40px',
-            marginBottom: '80px'
-          }}
-        >
-          {columns.map((col, idx) => (
-            <div key={idx} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-              <div
-                style={{
-                  fontFamily: 'var(--font-mono)',
-                  fontSize: '0.6875rem',
-                  fontWeight: 600,
-                  letterSpacing: '0.12em',
-                  color: 'rgba(255, 255, 255, 0.5)',
-                  textTransform: 'uppercase',
-                  borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
-                  paddingBottom: '8px'
-                }}
-              >
-                {col.title}
-              </div>
-
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                {col.links.map((link, lIdx) => (
+              RESEARCH
+            </div>
+            <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              {[
+                { label: 'Sophisticated Instrumentation (SIF)', href: '#instrumentation' },
+                { label: 'Nanoscience & Engineering', href: '#research' },
+                { label: 'Autonomous Systems & Drones', href: '#research' },
+                { label: 'Affordable Medical Devices', href: '#research' },
+                { label: 'Remote Sensing & GIS Telemetry', href: '#research' },
+                { label: 'Energy & Clean Storage', href: '#research' },
+                { label: 'Biopolymers & Biocomposites', href: '#research' }
+              ].map((link) => (
+                <li key={link.label}>
                   <a
-                    key={lIdx}
                     href={link.href}
                     style={{
                       fontFamily: 'var(--font-sans)',
-                      fontSize: '0.8125rem',
-                      color: 'rgba(255, 255, 255, 0.75)',
+                      fontSize: '14px',
+                      color: 'rgba(245, 241, 232, 0.75)',
                       transition: 'color 180ms ease'
                     }}
-                    onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--acid)')}
-                    onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(255, 255, 255, 0.75)')}
+                    className="footer-nav-link"
                   >
                     {link.label}
                   </a>
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Bottom Legal Baseline */}
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            flexWrap: 'wrap',
-            gap: '16px',
-            paddingTop: '32px',
-            borderTop: '1px solid rgba(255, 255, 255, 0.1)',
-            fontFamily: 'var(--font-mono)',
-            fontSize: '0.6875rem',
-            color: 'rgba(255, 255, 255, 0.5)'
-          }}
-        >
-          <div>
-            © {currentYear} CIIRC®. All scientific protocols, patents, and publications reserved.
+                </li>
+              ))}
+            </ul>
           </div>
 
-          <div style={{ display: 'flex', gap: '20px' }}>
-            <span>AUTONOMOUS SIRO</span>
-            <span>·</span>
-            <span>RESEARCH IS A LIVING SYSTEM</span>
+          {/* Column 2: INSTITUTION */}
+          <div>
+            <div
+              style={{
+                fontFamily: 'var(--font-mono)',
+                fontSize: '11px',
+                fontWeight: 650,
+                letterSpacing: '0.14em',
+                textTransform: 'uppercase',
+                color: '#9AAFFF',
+                marginBottom: '20px'
+              }}
+            >
+              INSTITUTION
+            </div>
+            <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              {[
+                { label: 'About CIIRC® Convergence', href: '#about' },
+                { label: '50,000+ Sq. Ft. Facility', href: '#facilities' },
+                { label: 'Founder-Director Directive', href: '#director' },
+                { label: 'Doctoral Faculty & Fellows', href: '#people' },
+                { label: 'Arctic & Space Milestones', href: '#achievements' },
+                { label: 'Atal Incubation Centre (AIC-JIT)', href: 'https://ciirc.res.in' },
+                { label: 'DSIR–SIRO Recognition', href: '#hero' }
+              ].map((link) => (
+                <li key={link.label}>
+                  <a
+                    href={link.href}
+                    style={{
+                      fontFamily: 'var(--font-sans)',
+                      fontSize: '14px',
+                      color: 'rgba(245, 241, 232, 0.75)',
+                      transition: 'color 180ms ease'
+                    }}
+                    className="footer-nav-link"
+                  >
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Column 3: CONNECT */}
+          <div>
+            <div
+              style={{
+                fontFamily: 'var(--font-mono)',
+                fontSize: '11px',
+                fontWeight: 650,
+                letterSpacing: '0.14em',
+                textTransform: 'uppercase',
+                color: '#9AAFFF',
+                marginBottom: '20px'
+              }}
+            >
+              CONNECT
+            </div>
+            <p
+              style={{
+                fontFamily: 'var(--font-sans)',
+                fontSize: '14px',
+                lineHeight: 1.6,
+                color: 'rgba(245, 241, 232, 0.75)',
+                marginBottom: '16px'
+              }}
+            >
+              {CIIRC_IDENTITY.location}
+            </p>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+              <a
+                href={`mailto:${CIIRC_IDENTITY.email}`}
+                style={{
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: '12px',
+                  color: '#9AAFFF',
+                  textDecoration: 'none'
+                }}
+              >
+                {CIIRC_IDENTITY.email}
+              </a>
+              <span
+                style={{
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: '12px',
+                  color: 'rgba(245, 241, 232, 0.6)'
+                }}
+              >
+                Tel: {CIIRC_IDENTITY.phone}
+              </span>
+            </div>
+          </div>
+
+          {/* Column 4: LEGAL */}
+          <div>
+            <div
+              style={{
+                fontFamily: 'var(--font-mono)',
+                fontSize: '11px',
+                fontWeight: 650,
+                letterSpacing: '0.14em',
+                textTransform: 'uppercase',
+                color: '#9AAFFF',
+                marginBottom: '20px'
+              }}
+            >
+              LEGAL
+            </div>
+            <p
+              style={{
+                fontFamily: 'var(--font-sans)',
+                fontSize: '13px',
+                lineHeight: 1.6,
+                color: 'rgba(245, 241, 232, 0.65)',
+                marginBottom: '16px'
+              }}
+            >
+              Scientific and Industrial Research Organization (SIRO) recognized by DSIR, Ministry of Science &amp; Technology, Government of India (Reg. No. 11/592/2013-TU-V).
+            </p>
+            <p
+              style={{
+                fontFamily: 'var(--font-sans)',
+                fontSize: '13px',
+                lineHeight: 1.6,
+                color: 'rgba(245, 241, 232, 0.65)'
+              }}
+            >
+              {CIIRC_IDENTITY.founders}.
+            </p>
+          </div>
+        </div>
+
+        {/* Baseline Bar */}
+        <div
+          style={{
+            borderTop: '1px solid rgba(255, 255, 255, 0.08)',
+            paddingTop: '28px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            flexWrap: 'wrap',
+            gap: '16px'
+          }}
+        >
+          <div
+            style={{
+              fontFamily: 'var(--font-sans)',
+              fontSize: '13px',
+              color: 'rgba(245, 241, 232, 0.5)'
+            }}
+          >
+            © {new Date().getFullYear()} CIIRC®. All rights reserved. Scientific Editorial &amp; Kinetic Research Edition.
+          </div>
+          <div
+            style={{
+              fontFamily: 'var(--font-mono)',
+              fontSize: '11px',
+              color: '#9AAFFF',
+              letterSpacing: '0.08em'
+            }}
+          >
+            DSIR–SIRO // BENGALURU, INDIA
           </div>
         </div>
       </div>
+
+      <style jsx>{`
+        .footer-nav-link:hover {
+          color: #9AAFFF !important;
+        }
+        @media (max-width: 900px) {
+          .footer-columns-grid {
+            grid-template-columns: repeat(2, 1fr) !important;
+            gap: 36px !important;
+          }
+        }
+        @media (max-width: 480px) {
+          .footer-columns-grid {
+            grid-template-columns: 1fr !important;
+          }
+        }
+      `}</style>
     </footer>
   );
 };

@@ -1,170 +1,97 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
-import { ArrowUpRight, Mail, Phone, MapPin } from 'lucide-react';
-import { CIIRC_IDENTITY } from '../data/ciircData';
+import React from 'react';
+import { ArrowRight, Mail } from 'lucide-react';
+import { KineticTopology } from './KineticTopology';
 
-interface CTASectionProps {
-  onConvergenceChange?: (converging: boolean) => void;
-}
-
-export const CTASection: React.FC<CTASectionProps> = ({ onConvergenceChange }) => {
-  const sectionRef = useRef<HTMLDivElement | null>(null);
-  const [converged, setConverged] = useState(false);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        const isVisible = entry.isIntersecting;
-        setConverged(isVisible);
-        if (onConvergenceChange) {
-          onConvergenceChange(isVisible);
-        }
-      },
-      { threshold: 0.3 }
-    );
-
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
-    }
-
-    return () => observer.disconnect();
-  }, [onConvergenceChange]);
-
+export const CTASection: React.FC = () => {
   return (
     <section
-      id="convergence"
-      ref={sectionRef}
-      aria-label="CIIRC Final Convergence & Engagement"
+      id="cta-section"
+      aria-label="Final Convergence"
       style={{
+        backgroundColor: '#F5F1E8', // Section 66 & 88: Warm ivory
+        minHeight: '620px',
         position: 'relative',
-        width: '100%',
-        minHeight: '100vh',
-        height: '100svh',
-        padding: '120px 42px 60px 42px',
-        boxSizing: 'border-box',
-        backgroundColor: 'var(--paper)',
-        borderTop: '1px solid var(--ink)',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'space-between',
-        zIndex: 2
+        zIndex: 2,
+        paddingTop: '130px',
+        paddingBottom: '140px',
+        overflow: 'hidden'
       }}
     >
-      {/* Top Technical Metadata */}
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'baseline',
-          borderBottom: '1px solid var(--line)',
-          paddingBottom: '20px'
-        }}
-      >
-        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-          <span
+      <div className="ciirc-container" style={{ position: 'relative', minHeight: '440px' }}>
+        {/* Section 66: Headline RESEARCH WITH PURPOSE.
+            Font: 80-110px, Color: #18242D, Highlight: PURPOSE. #3558C8 */}
+        <div style={{ maxWidth: '820px', marginBottom: '44px' }}>
+          <h2
             style={{
-              fontFamily: 'var(--font-mono)',
-              fontSize: '0.8125rem',
-              fontWeight: 600,
-              color: 'var(--ultramarine)',
-              letterSpacing: '0.08em'
+              fontFamily: 'var(--font-sans)',
+              fontSize: 'clamp(60px, 7.5vw, 108px)',
+              lineHeight: 0.90,
+              letterSpacing: '-0.065em',
+              fontWeight: 650,
+              color: '#18242D',
+              margin: 0
             }}
           >
-            [10 / CONVERGENCE]
-          </span>
-          <span className="micro-label">SYNTHESIS OF MULTIDISCIPLINARY SCIENCE</span>
+            RESEARCH WITH <span style={{ color: '#3558C8' }}>PURPOSE.</span>
+          </h2>
+          <p
+            style={{
+              fontFamily: 'var(--font-sans)',
+              fontSize: '18px',
+              lineHeight: 1.65,
+              color: '#718087',
+              marginTop: '24px',
+              maxWidth: '540px',
+              margin: '24px 0 0 0'
+            }}
+          >
+            Partner with CIIRC® across doctoral research, sponsored defense and aerospace contracts, incubation of translational intellectual property, or advanced material characterization.
+          </p>
         </div>
 
-        <span className="scientific-badge active">
-          {converged ? 'FIELD CONVERGING INTO STILLNESS' : 'SCROLL TO COMPLETE SYNTHESIS'}
-        </span>
-      </div>
-
-      {/* Section 35: Entire Viewport Headline "LET'S BUILD WHAT COMES NEXT." */}
-      <div style={{ maxWidth: '1200px', margin: 'auto 0' }}>
-        <h2
-          style={{
-            fontFamily: 'var(--font-display)',
-            fontSize: 'clamp(52px, 9vw, 132px)',
-            fontWeight: 800,
-            lineHeight: 0.88,
-            letterSpacing: '-0.065em',
-            color: 'var(--ink)'
-          }}
-        >
-          LET'S BUILD<br />
-          <span style={{ color: 'var(--ultramarine)' }}>WHAT COMES NEXT.</span>
-        </h2>
-
-        <p
-          style={{
-            fontFamily: 'var(--font-sans)',
-            fontSize: 'clamp(1rem, 1.35vw, 1.35rem)',
-            lineHeight: 1.5,
-            color: 'var(--ink-soft)',
-            marginTop: '32px',
-            maxWidth: '640px',
-            letterSpacing: '-0.01em'
-          }}
-        >
-          Partner with CIIRC researchers across sponsored discovery, specialized characterization access, doctoral research programs, or translational deep tech commercialization.
-        </p>
-
-        {/* Rectangular Action Triggers */}
+        {/* Action Group */}
         <div
           style={{
             display: 'flex',
             alignItems: 'center',
             gap: '16px',
-            marginTop: '36px',
-            flexWrap: 'wrap'
+            flexWrap: 'wrap',
+            zIndex: 10
           }}
         >
           <a
-            href={`mailto:${CIIRC_IDENTITY.email}`}
-            className="btn-rect-dark"
+            href="mailto:info@ciirc.jyothyit.ac.in"
+            className="btn-hero-primary"
+            style={{ textDecoration: 'none' }}
           >
-            <span>Initiate Research Dialogue</span>
-            <ArrowUpRight size={14} />
+            <Mail size={16} />
+            <span>Initiate Collaboration</span>
+            <ArrowRight size={16} />
           </a>
           <a
-            href="tel:080-50985588"
-            className="btn-rect-outline"
+            href="#research"
+            className="btn-hero-secondary"
+            style={{ textDecoration: 'none' }}
           >
-            <span>Direct Desk: {CIIRC_IDENTITY.phone}</span>
+            <span>Explore 17 Directions</span>
           </a>
         </div>
+
+        {/* Section 67: Final Kinetic Topology Callback (Scale 320px, right 8vw, bottom 60px, opacity .45) */}
+        <KineticTopology isFinalCallback={true} />
       </div>
 
-      {/* Section 36: The Final 2 Seconds Indicator */}
-      <div
-        style={{
-          borderTop: '1px solid var(--line)',
-          paddingTop: '24px',
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          flexWrap: 'wrap',
-          gap: '16px'
-        }}
-      >
-        <div style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
-          <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.875rem', fontWeight: 700, color: 'var(--ink)', letterSpacing: '0.04em' }}>
-            CIIRC®
-          </div>
-          <span className="micro-label">
-            {CIIRC_IDENTITY.recognition}
-          </span>
-        </div>
-
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <span style={{ width: '6px', height: '6px', backgroundColor: 'var(--acid-dark)', display: 'inline-block' }} />
-          <span className="micro-label">
-            SYSTEM EQUILIBRIUM REACHED
-          </span>
-        </div>
-      </div>
+      <style jsx>{`
+        @media (max-width: 1024px) {
+          #cta-section {
+            padding-top: 80px !important;
+            padding-bottom: 80px !important;
+            min-height: auto !important;
+          }
+        }
+      `}</style>
     </section>
   );
 };

@@ -1,397 +1,367 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { ResearchTopology } from './ResearchField';
-import { ArrowUpRight } from 'lucide-react';
+import React, { useState } from 'react';
+import { AUTHENTIC_17_RESEARCH_AREAS, ResearchAreaItem } from '../data/ciircData';
 
-interface ResearchEcosystemProps {
-  onTopologyChange?: (topology: ResearchTopology) => void;
-}
+export const ResearchEcosystem: React.FC = () => {
+  const [activeArea, setActiveArea] = useState<ResearchAreaItem>(AUTHENTIC_17_RESEARCH_AREAS[0]);
 
-interface DomainItem {
-  index: string;
-  name: string;
-  topology: ResearchTopology;
-  discipline: string;
-  scope: string;
-  focus: string[];
-}
+  // Render the generative scientific visualization according to the active discipline
+  const renderVisualField = () => {
+    const cat = activeArea.name.toLowerCase();
 
-const DOMAINS: DomainItem[] = [
-  {
-    index: '01',
-    name: 'MATERIALS & NANOTECHNOLOGY',
-    topology: 'materials',
-    discipline: 'CRYSTALLINE & NANOSTRUCTURAL',
-    scope: 'Synthesis of 0D, 1D, and 2D nanomaterials, MXenes, quantum dots, and superhydrophobic interfaces.',
-    focus: ['Quantum Dots', 'Graphene & MXenes', 'Surface Physics', 'Characterization']
-  },
-  {
-    index: '02',
-    name: 'LIFE SCIENCES & HEALTHCARE',
-    topology: 'life',
-    discipline: 'BRANCHING BIOMEDICAL',
-    scope: 'Translational oncology therapeutics, point-of-care microfluidic biosensors, and botanical bioactive molecules.',
-    focus: ['Electrochemical Biosensors', 'Cellular Oncology', 'Bioactive Actives', 'Food Tech']
-  },
-  {
-    index: '03',
-    name: 'ADVANCED ENGINEERING',
-    topology: 'engineering',
-    discipline: 'GEOMETRIC TRAJECTORIES & AVIONICS',
-    scope: 'Autonomous aerial platforms flown in polar Arctic glaciers, high-temperature tribology, and geopolymer structures.',
-    focus: ['Polar Glacial UAVs', 'Tribology', 'Flight Dynamics', 'Geopolymers']
-  },
-  {
-    index: '04',
-    name: 'EARTH & ENVIRONMENT',
-    topology: 'earth',
-    discipline: 'FLUID & TOPOGRAPHIC DYNAMICS',
-    scope: 'ISRO NavIC satellite telemetry ground station, CO2 carbon capture adsorption, and nano-filtration water recovery.',
-    focus: ['ISRO NavIC Telemetry', 'Carbon Capture (CCS)', 'Water Nano-Membranes', 'Glacier GIS']
-  },
-  {
-    index: '05',
-    name: 'COMPUTING & SYSTEMS',
-    topology: 'computing',
-    discipline: 'DISCRETE COMPUTATIONAL GRIDS',
-    scope: 'Multi-scale finite element physics simulation, computational fluid dynamics, and embedded sensor architectures.',
-    focus: ['CFD Simulation', 'Finite Element FEA', 'Sensor Fusion', 'Predictive Modeling']
-  },
-  {
-    index: '06',
-    name: 'INNOVATION & VENTURES',
-    topology: 'innovation',
-    discipline: 'HIGHLY INTERCONNECTED TRANSLATION',
-    scope: 'Atal Incubation Centre (AIC-JIT) translating laboratory discoveries into commercial licenses and social impact products.',
-    focus: ['Seed Incubation', '35+ Societal Products', 'IP & Patent Filing', 'Enterprise']
-  }
-];
-
-export const ResearchEcosystem: React.FC<ResearchEcosystemProps> = ({ onTopologyChange }) => {
-  const [activeDomain, setActiveDomain] = useState<string>('01');
-  const [scrollShift, setScrollShift] = useState(0);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const el = document.getElementById('ecosystem');
-      if (!el) return;
-      const rect = el.getBoundingClientRect();
-      const viewportHeight = window.innerHeight;
-      if (rect.top < viewportHeight && rect.bottom > 0) {
-        // Progress through ecosystem
-        const progress = Math.max(-1, Math.min(1, (viewportHeight / 2 - rect.top) / (rect.height / 2)));
-        setScrollShift(progress);
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  const handleDomainHover = (domain: DomainItem) => {
-    setActiveDomain(domain.index);
-    if (onTopologyChange) {
-      onTopologyChange(domain.topology);
+    if (cat.includes('water')) {
+      // Flowing contour wave field
+      return (
+        <svg viewBox="0 0 400 400" width="100%" height="100%">
+          <path d="M 20 120 Q 120 70 200 120 T 380 120" fill="none" stroke="var(--teal)" strokeWidth="1.5" opacity="0.6" />
+          <path d="M 20 160 Q 120 110 200 160 T 380 160" fill="none" stroke="var(--teal)" strokeWidth="1.5" opacity="0.8" />
+          <path d="M 20 200 Q 120 150 200 200 T 380 200" fill="none" stroke="var(--forest)" strokeWidth="1.8" />
+          <path d="M 20 240 Q 120 190 200 240 T 380 240" fill="none" stroke="var(--teal)" strokeWidth="1.5" opacity="0.8" />
+          <path d="M 20 280 Q 120 230 200 280 T 380 280" fill="none" stroke="var(--teal)" strokeWidth="1.5" opacity="0.6" />
+          <text x="30" y="360" fontFamily="var(--font-mono)" fontSize="10" fill="var(--forest-soft)">
+            HYDRO-KINETIC MEMBRANE FLOW
+          </text>
+        </svg>
+      );
     }
-  };
 
-  // Section 17 scroll typography transformation:
-  // WE moves slightly left.
-  // RESEARCH moves upward.
-  // ACROSS moves right.
-  // BOUNDARIES. moves downward.
-  // Max movement: 60-100px
-  const shiftWE = -scrollShift * 40;
-  const shiftRESEARCH = -scrollShift * 35;
-  const shiftACROSS = scrollShift * 40;
-  const shiftBOUNDARIES = scrollShift * 35;
+    if (cat.includes('energy')) {
+      // Radial concentric field
+      return (
+        <svg viewBox="0 0 400 400" width="100%" height="100%">
+          {[30, 60, 90, 120, 150].map((r, idx) => (
+            <circle
+              key={r}
+              cx="200"
+              cy="200"
+              r={r}
+              fill="none"
+              stroke={idx % 2 === 0 ? 'var(--teal)' : 'var(--forest)'}
+              strokeWidth="1.2"
+              strokeDasharray={idx % 2 === 0 ? '4 3' : 'none'}
+              opacity={0.3 + idx * 0.12}
+            />
+          ))}
+          <line x1="200" y1="30" x2="200" y2="370" stroke="var(--line-strong)" strokeWidth="0.8" />
+          <line x1="30" y1="200" x2="370" y2="200" stroke="var(--line-strong)" strokeWidth="0.8" />
+          <text x="30" y="360" fontFamily="var(--font-mono)" fontSize="10" fill="var(--forest-soft)">
+            ELECTROCHEMICAL STORAGE POTENTIAL
+          </text>
+        </svg>
+      );
+    }
+
+    if (cat.includes('remote sensing')) {
+      // Topographic isoline field
+      return (
+        <svg viewBox="0 0 400 400" width="100%" height="100%">
+          <path d="M 50 180 C 80 120, 160 110, 220 150 S 330 210, 360 180" fill="none" stroke="var(--forest)" strokeWidth="1.2" opacity="0.5" />
+          <path d="M 70 190 C 100 140, 170 130, 215 170 S 310 230, 340 190" fill="none" stroke="var(--teal)" strokeWidth="1.5" opacity="0.75" />
+          <path d="M 90 200 C 120 160, 180 150, 210 190 S 290 250, 320 200" fill="none" stroke="var(--cobalt)" strokeWidth="1.8" />
+          <circle cx="210" cy="190" r="4" fill="var(--teal)" />
+          <text x="30" y="360" fontFamily="var(--font-mono)" fontSize="10" fill="var(--forest-soft)">
+            GEOSPATIAL ISOLINE · ISRO IRNSS
+          </text>
+        </svg>
+      );
+    }
+
+    if (activeArea.category === 'Materials') {
+      // Crystalline dense lattice pattern
+      return (
+        <svg viewBox="0 0 400 400" width="100%" height="100%">
+          {[80, 140, 200, 260, 320].map((x) =>
+            [80, 140, 200, 260, 320].map((y) => (
+              <g key={`${x}-${y}`}>
+                <circle cx={x} cy={y} r="3" fill="var(--forest)" opacity="0.6" />
+                <rect x={x - 8} y={y - 8} width="16" height="16" fill="none" stroke="var(--cobalt)" strokeWidth="0.6" opacity="0.3" />
+              </g>
+            ))
+          )}
+          <line x1="80" y1="80" x2="320" y2="320" stroke="var(--teal)" strokeWidth="1" opacity="0.5" />
+          <line x1="320" y1="80" x2="80" y2="320" stroke="var(--teal)" strokeWidth="1" opacity="0.5" />
+          <text x="30" y="360" fontFamily="var(--font-mono)" fontSize="10" fill="var(--forest-soft)">
+            CRYSTALLINE LATTICE · NANO-INTERFACE
+          </text>
+        </svg>
+      );
+    }
+
+    if (activeArea.category === 'Biology') {
+      // Branching dendritic forms
+      return (
+        <svg viewBox="0 0 400 400" width="100%" height="100%">
+          <path d="M 200 340 L 200 220" stroke="var(--forest)" strokeWidth="2.5" />
+          <path d="M 200 220 L 140 140" stroke="var(--teal)" strokeWidth="2" />
+          <path d="M 200 220 L 260 140" stroke="var(--teal)" strokeWidth="2" />
+          <path d="M 140 140 L 100 80" stroke="var(--forest-soft)" strokeWidth="1.2" />
+          <path d="M 140 140 L 160 70" stroke="var(--forest-soft)" strokeWidth="1.2" />
+          <path d="M 260 140 L 240 70" stroke="var(--forest-soft)" strokeWidth="1.2" />
+          <path d="M 260 140 L 300 80" stroke="var(--forest-soft)" strokeWidth="1.2" />
+          <circle cx="100" cy="80" r="4" fill="var(--teal)" />
+          <circle cx="160" cy="70" r="4" fill="var(--lime)" />
+          <circle cx="240" cy="70" r="4" fill="var(--lime)" />
+          <circle cx="300" cy="80" r="4" fill="var(--teal)" />
+          <text x="30" y="360" fontFamily="var(--font-mono)" fontSize="10" fill="var(--forest-soft)">
+            DENDRITIC BIO-CELLULAR PATHWAY
+          </text>
+        </svg>
+      );
+    }
+
+    if (activeArea.category === 'Computing') {
+      // Ordered node matrix
+      return (
+        <svg viewBox="0 0 400 400" width="100%" height="100%">
+          {[60, 130, 200, 270, 340].map((x, i) =>
+            [60, 130, 200, 270, 340].map((y, j) => (
+              <g key={`comp-${x}-${y}`}>
+                <circle cx={x} cy={y} r="2.5" fill={(i + j) % 2 === 0 ? 'var(--cobalt)' : 'var(--forest)'} />
+                {(i + j) % 3 === 0 && (
+                  <line x1={x} y1={y} x2={x + 70} y2={y} stroke="var(--line-strong)" strokeWidth="0.8" />
+                )}
+              </g>
+            ))
+          )}
+          <rect x="110" y="110" width="180" height="180" fill="none" stroke="var(--teal)" strokeWidth="1" strokeDasharray="5 3" />
+          <text x="30" y="360" fontFamily="var(--font-mono)" fontSize="10" fill="var(--forest-soft)">
+            MULTI-SCALE COMPUTATIONAL MATRIX
+          </text>
+        </svg>
+      );
+    }
+
+    // Default / Engineering: Straight structural geometry
+    return (
+      <svg viewBox="0 0 400 400" width="100%" height="100%">
+        <line x1="50" y1="50" x2="350" y2="50" stroke="var(--forest)" strokeWidth="1.5" />
+        <line x1="50" y1="50" x2="50" y2="350" stroke="var(--forest)" strokeWidth="1.5" />
+        <line x1="50" y1="200" x2="350" y2="200" stroke="var(--teal)" strokeWidth="1.5" />
+        <line x1="200" y1="50" x2="200" y2="350" stroke="var(--teal)" strokeWidth="1.5" />
+        <polygon points="50,50 350,50 200,350" fill="none" stroke="var(--cobalt)" strokeWidth="1" strokeDasharray="4 2" />
+        <circle cx="200" cy="200" r="5" fill="var(--teal)" />
+        <text x="30" y="360" fontFamily="var(--font-mono)" fontSize="10" fill="var(--forest-soft)">
+          PRECISION STRUCTURAL GEOMETRY
+        </text>
+      </svg>
+    );
+  };
 
   return (
     <section
-      id="ecosystem"
-      aria-label="CIIRC Research Ecosystem"
+      id="research"
       style={{
         position: 'relative',
-        width: '100%',
-        minHeight: '100vh',
-        padding: '120px 42px 140px 42px',
-        boxSizing: 'border-box',
+        backgroundColor: 'var(--paper-blue)',
+        minHeight: '950px',
+        padding: '120px 0',
         borderTop: '1px solid var(--line)',
-        backgroundColor: 'var(--paper)',
-        zIndex: 2
+        borderBottom: '1px solid var(--line)'
       }}
     >
-      {/* Floating Spatial Technical Labels (Section 21) */}
-      <div
-        aria-hidden="true"
-        style={{
-          position: 'absolute',
-          top: '40px',
-          right: '42px',
-          fontFamily: 'var(--font-mono)',
-          fontSize: '0.6875rem',
-          letterSpacing: '0.14em',
-          color: 'var(--ink-muted)',
-          pointerEvents: 'none'
-        }}
-      >
-        MATERIALS · │ ·──── NANO · POLAR UAV · │ ·──── 81° N
-      </div>
-
-      <div
-        aria-hidden="true"
-        style={{
-          position: 'absolute',
-          bottom: '40px',
-          left: '42px',
-          fontFamily: 'var(--font-mono)',
-          fontSize: '0.6875rem',
-          letterSpacing: '0.14em',
-          color: 'var(--ink-muted)',
-          pointerEvents: 'none'
-        }}
-      >
-        MXENE CATALYST · │ ·──── 2D · ISRO NavIC · │ ·──── TELEMETRY
-      </div>
-
-      {/* Section 16 & 17: Spatial Typography Transformation */}
-      {/* Editorial composition: WE top-left, RESEARCH center, ACROSS right, BOUNDARIES bottom-left */}
-      <div
-        style={{
-          position: 'relative',
-          width: '100%',
-          maxWidth: '1320px',
-          margin: '0 auto 100px auto',
-          minHeight: '260px',
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'space-between'
-        }}
-      >
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-          {/* WE */}
-          <span
+      <div className="atlas-container">
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: '40% 60%',
+            gap: '48px',
+            alignItems: 'start'
+          }}
+          className="research-grid"
+        >
+          {/* LEFT 40%: Huge Editorial Headline + Active Generative Visual Field */}
+          <div
             style={{
-              fontFamily: 'var(--font-display)',
-              fontSize: 'clamp(56px, 8vw, 110px)',
-              fontWeight: 800,
-              lineHeight: 0.85,
-              letterSpacing: '-0.06em',
-              color: 'var(--ink)',
-              transform: `translateX(${shiftWE}px)`,
-              transition: 'transform 100ms ease-out'
+              position: 'sticky',
+              top: '110px',
+              display: 'flex',
+              flexDirection: 'column'
             }}
           >
-            WE
-          </span>
+            <div className="mono-meta" style={{ marginBottom: '16px', color: 'var(--teal)' }}>
+              SECTION 02 // RESEARCH ATLAS
+            </div>
 
-          {/* ACROSS */}
-          <span
-            style={{
-              fontFamily: 'var(--font-display)',
-              fontSize: 'clamp(56px, 8vw, 110px)',
-              fontWeight: 800,
-              lineHeight: 0.85,
-              letterSpacing: '-0.06em',
-              color: 'var(--ink-soft)',
-              transform: `translateX(${shiftACROSS}px)`,
-              transition: 'transform 100ms ease-out'
-            }}
-          >
-            ACROSS
-          </span>
-        </div>
-
-        {/* RESEARCH */}
-        <div style={{ textAlign: 'center', margin: '20px 0' }}>
-          <span
-            style={{
-              fontFamily: 'var(--font-display)',
-              fontSize: 'clamp(64px, 10vw, 140px)',
-              fontWeight: 800,
-              lineHeight: 0.85,
-              letterSpacing: '-0.07em',
-              color: 'var(--ultramarine)',
-              display: 'inline-block',
-              transform: `translateY(${shiftRESEARCH}px)`,
-              transition: 'transform 100ms ease-out'
-            }}
-          >
-            RESEARCH
-          </span>
-        </div>
-
-        <div style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'flex-end' }}>
-          {/* BOUNDARIES. */}
-          <span
-            style={{
-              fontFamily: 'var(--font-display)',
-              fontSize: 'clamp(56px, 8vw, 110px)',
-              fontWeight: 800,
-              lineHeight: 0.85,
-              letterSpacing: '-0.06em',
-              color: 'var(--ink)',
-              transform: `translateY(${shiftBOUNDARIES}px)`,
-              transition: 'transform 100ms ease-out'
-            }}
-          >
-            BOUNDARIES.
-          </span>
-        </div>
-      </div>
-
-      {/* Section 18, 19, 20: Research Categories as Typographic Objects (Not cards!) */}
-      <div
-        style={{
-          width: '100%',
-          maxWidth: '1320px',
-          margin: '0 auto',
-          borderTop: '1px solid var(--ink)'
-        }}
-      >
-        {DOMAINS.map((domain) => {
-          const isSelected = activeDomain === domain.index;
-
-          return (
+            {/* Huge 180px '17' Typography */}
             <div
-              key={domain.index}
-              onMouseEnter={() => handleDomainHover(domain)}
               style={{
-                position: 'relative',
-                padding: '36px 0',
-                borderBottom: '1px solid var(--line)',
-                cursor: 'pointer',
-                transition: 'background-color 250ms ease'
+                fontSize: 'clamp(110px, 14vw, 180px)',
+                fontWeight: 800,
+                lineHeight: 0.8,
+                letterSpacing: '-0.06em',
+                color: 'var(--forest)',
+                marginBottom: '14px'
               }}
             >
-              <div
-                style={{
-                  display: 'grid',
-                  gridTemplateColumns: '80px 1fr auto',
-                  alignItems: 'baseline',
-                  gap: '24px'
-                }}
-                className="domain-row"
-              >
-                {/* 01, 02... */}
+              17
+            </div>
+
+            <h2
+              style={{
+                fontSize: 'clamp(32px, 3.8vw, 48px)',
+                fontWeight: 700,
+                lineHeight: 0.95,
+                letterSpacing: '-0.04em',
+                color: 'var(--forest)',
+                textTransform: 'uppercase',
+                marginBottom: '12px'
+              }}
+            >
+              RESEARCH
+              <br />
+              DIRECTIONS.
+            </h2>
+
+            <p
+              className="mono-meta"
+              style={{
+                fontSize: '12px',
+                color: 'var(--forest-soft)',
+                letterSpacing: '0.12em',
+                marginBottom: '36px'
+              }}
+            >
+              ONE CONNECTED RESEARCH ECOSYSTEM.
+            </p>
+
+            {/* Dynamic Generative Visual Field (reacts in 800ms) */}
+            <div
+              style={{
+                width: '100%',
+                maxWidth: '360px',
+                aspectRatio: '1 / 1',
+                backgroundColor: 'rgba(247, 248, 243, 0.65)',
+                border: '1px solid var(--line-strong)',
+                padding: '24px',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'space-between',
+                transition: 'all 800ms cubic-bezier(0.16, 1, 0.3, 1)'
+              }}
+            >
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <span className="mono-meta" style={{ fontSize: '9.5px' }}>
+                  ACTIVE: {activeArea.number} // {activeArea.category}
+                </span>
                 <span
                   style={{
-                    fontFamily: 'var(--font-mono)',
-                    fontSize: '1rem',
-                    fontWeight: 600,
-                    color: isSelected ? 'var(--ultramarine)' : 'var(--ink-muted)',
-                    transition: 'color 200ms ease'
+                    width: '6px',
+                    height: '6px',
+                    borderRadius: '50%',
+                    backgroundColor: 'var(--teal)'
                   }}
-                >
-                  [{domain.index}]
-                </span>
+                />
+              </div>
 
-                {/* Large Typographic Name */}
-                <div>
-                  <h3
-                    style={{
-                      fontFamily: 'var(--font-display)',
-                      fontSize: 'clamp(28px, 3.8vw, 54px)',
-                      fontWeight: 700,
-                      letterSpacing: '-0.04em',
-                      lineHeight: 1.05,
-                      color: isSelected ? 'var(--ink)' : 'var(--ink-soft)',
-                      transition: 'color 200ms ease'
-                    }}
-                  >
-                    {domain.name}
-                  </h3>
+              <div style={{ width: '100%', height: '240px' }}>
+                {renderVisualField()}
+              </div>
 
-                  {isSelected && (
-                    <div
-                      style={{
-                        marginTop: '16px',
-                        maxWidth: '720px',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        gap: '12px'
-                      }}
-                    >
-                      <div
-                        style={{
-                          fontFamily: 'var(--font-mono)',
-                          fontSize: '0.6875rem',
-                          letterSpacing: '0.1em',
-                          color: 'var(--ultramarine)',
-                          textTransform: 'uppercase'
-                        }}
-                      >
-                        TOPOLOGY MUTATION: {domain.discipline}
-                      </div>
-                      <p
-                        style={{
-                          fontFamily: 'var(--font-sans)',
-                          fontSize: '0.9375rem',
-                          lineHeight: 1.5,
-                          color: 'var(--ink-soft)'
-                        }}
-                      >
-                        {domain.scope}
-                      </p>
-                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginTop: '4px' }}>
-                        {domain.focus.map((f) => (
-                          <span key={f} className="scientific-badge">
-                            {f}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                </div>
-
-                {/* Indicator / Topology Callout */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-                  <span
-                    style={{
-                      fontFamily: 'var(--font-mono)',
-                      fontSize: '0.6875rem',
-                      letterSpacing: '0.08em',
-                      textTransform: 'uppercase',
-                      color: isSelected ? 'var(--ultramarine)' : 'var(--ink-muted)',
-                      display: 'none'
-                    }}
-                    className="topology-label"
-                  >
-                    {domain.topology} field
-                  </span>
-                  <div
-                    style={{
-                      width: '36px',
-                      height: '36px',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      border: '1px solid',
-                      borderColor: isSelected ? 'var(--ultramarine)' : 'var(--line)',
-                      backgroundColor: isSelected ? 'var(--ultramarine)' : 'transparent',
-                      color: isSelected ? 'var(--white)' : 'var(--ink)',
-                      transition: 'all 200ms ease'
-                    }}
-                  >
-                    <ArrowUpRight size={16} />
-                  </div>
-                </div>
+              <div
+                style={{
+                  fontSize: '12.5px',
+                  color: 'var(--forest-soft)',
+                  lineHeight: 1.45,
+                  borderTop: '1px solid var(--line)',
+                  paddingTop: '10px'
+                }}
+              >
+                {activeArea.description}
               </div>
             </div>
-          );
-        })}
+          </div>
+
+          {/* RIGHT 60%: Giant Interactive Research Matrix (17 Rows) */}
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              borderTop: '1px solid var(--line)'
+            }}
+          >
+            {AUTHENTIC_17_RESEARCH_AREAS.map((item) => {
+              const isSelected = activeArea.id === item.id;
+              return (
+                <div
+                  key={item.id}
+                  onMouseEnter={() => setActiveArea(item)}
+                  style={{
+                    minHeight: '76px',
+                    display: 'grid',
+                    gridTemplateColumns: '70px 1fr 140px 40px',
+                    alignItems: 'center',
+                    padding: '0 16px',
+                    borderBottom: '1px solid var(--line)',
+                    backgroundColor: isSelected ? 'var(--paper)' : 'transparent',
+                    cursor: 'pointer',
+                    transition: 'all 220ms cubic-bezier(0.16, 1, 0.3, 1)',
+                    transform: isSelected ? 'translateY(-2px)' : 'none'
+                  }}
+                >
+                  {/* Number */}
+                  <span
+                    className="mono-meta"
+                    style={{
+                      fontSize: '14px',
+                      fontWeight: 600,
+                      color: isSelected ? 'var(--teal)' : 'var(--muted)',
+                      transition: 'color 180ms ease'
+                    }}
+                  >
+                    {item.number}
+                  </span>
+
+                  {/* Research Title */}
+                  <span
+                    style={{
+                      fontSize: '17px',
+                      fontWeight: isSelected ? 650 : 500,
+                      letterSpacing: '-0.02em',
+                      color: isSelected ? 'var(--forest)' : 'var(--forest-soft)',
+                      transform: isSelected ? 'translateX(10px)' : 'translateX(0)',
+                      transition: 'transform 220ms ease, color 180ms ease'
+                    }}
+                  >
+                    {item.name}
+                  </span>
+
+                  {/* Discipline / Field Type */}
+                  <span
+                    className="mono-meta"
+                    style={{
+                      fontSize: '10px',
+                      color: 'var(--muted)',
+                      textAlign: 'right'
+                    }}
+                  >
+                    {item.category}
+                  </span>
+
+                  {/* Arrow Indicator */}
+                  <span
+                    style={{
+                      textAlign: 'right',
+                      fontSize: '16px',
+                      color: isSelected ? 'var(--teal)' : 'var(--muted)',
+                      transform: isSelected ? 'rotate(-45deg)' : 'none',
+                      transition: 'transform 220ms ease, color 180ms ease'
+                    }}
+                  >
+                    →
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
       </div>
 
       <style jsx>{`
-        @media (min-width: 1024px) {
-          .topology-label {
-            display: inline-block !important;
-          }
-        }
-        @media (max-width: 767px) {
-          .domain-row {
-            grid-template-columns: 48px 1fr !important;
+        @media (max-width: 1024px) {
+          .research-grid {
+            grid-template-columns: 1fr !important;
+            gap: 40px !important;
           }
         }
       `}</style>

@@ -1,250 +1,367 @@
 'use client';
 
-import React, { useState, useRef, useEffect } from 'react';
-import { Microscope, ArrowUpRight } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import Image from 'next/image';
+import { ArrowUpRight } from 'lucide-react';
+import { AUTHENTIC_INSTRUMENTS, InstrumentItem } from '../data/ciircData';
 
 export const InstrumentationFacility: React.FC = () => {
-  const containerRef = useRef<HTMLDivElement | null>(null);
-  const [scrollProgress, setScrollProgress] = useState(0); // 0 to 1
-  const [mousePos, setMousePos] = useState<{ x: number; y: number; inside: boolean }>({ x: 0, y: 0, inside: false });
+  const [activeInst, setActiveInst] = useState<InstrumentItem>(AUTHENTIC_INSTRUMENTS[0]);
+  const [isFacilityVisible, setIsFacilityVisible] = useState(false);
+  const facilityRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const handleScroll = () => {
-      if (!containerRef.current) return;
-      const rect = containerRef.current.getBoundingClientRect();
-      const vh = window.innerHeight;
-      if (rect.top < vh && rect.bottom > 0) {
-        const p = Math.max(0, Math.min(1, (vh - rect.top) / (vh + rect.height * 0.5)));
-        setScrollProgress(p);
-      }
-    };
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsFacilityVisible(true);
+        }
+      },
+      { threshold: 0.18 }
+    );
 
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
+    if (facilityRef.current) {
+      observer.observe(facilityRef.current);
+    }
+
+    return () => observer.disconnect();
   }, []);
 
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    setMousePos({ x, y, inside: true });
-  };
-
-  const handleMouseLeave = () => {
-    setMousePos(prev => ({ ...prev, inside: false }));
-  };
-
-  // Section 24: As user scrolls into it, scale 1.12 -> 1.0
-  const currentScale = 1.12 - scrollProgress * 0.12;
-
-  // Section 26: cursor subtly offsets image-position (max 10px)
-  const offsetX = mousePos.inside ? ((mousePos.x / (window.innerWidth * 0.72)) - 0.5) * 20 : 0;
-  const offsetY = mousePos.inside ? ((mousePos.y / (window.innerHeight * 0.65)) - 0.5) * 20 : 0;
-
   return (
-    <section
-      id="facilities"
-      ref={containerRef}
-      aria-label="CIIRC Sophisticated Instrumentation Facility"
-      style={{
-        position: 'relative',
-        width: '100%',
-        minHeight: '110vh',
-        padding: '120px 42px 140px 42px',
-        boxSizing: 'border-box',
-        backgroundColor: 'var(--paper)',
-        borderTop: '1px solid var(--line)',
-        overflow: 'hidden',
-        zIndex: 2
-      }}
-    >
-      {/* Top Metadata */}
-      <div
+    <>
+      {/* =========================================================================
+          03 / FACILITIES (Sections 49–52, 88: Background #E8EDF1 Cool blue-gray)
+          ========================================================================= */}
+      <section
+        id="facilities"
+        aria-label="03 / FACILITIES"
         style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'baseline',
-          marginBottom: '40px',
-          borderBottom: '1px solid var(--line)',
-          paddingBottom: '24px'
+          backgroundColor: '#E8EDF1', // Section 49 & 88: Cool blue-gray
+          padding: '170px 0',
+          position: 'relative',
+          zIndex: 2,
+          overflow: 'hidden'
         }}
       >
-        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+        <div className="ciirc-container" style={{ marginBottom: '50px' }}>
           <span
             style={{
               fontFamily: 'var(--font-mono)',
-              fontSize: '0.8125rem',
-              fontWeight: 600,
-              color: 'var(--ultramarine)',
-              letterSpacing: '0.08em'
+              fontSize: '11px',
+              fontWeight: 650,
+              letterSpacing: '0.14em',
+              textTransform: 'uppercase',
+              color: '#557C70', // Mineral #557C70
+              display: 'inline-block',
+              marginBottom: '16px'
             }}
           >
-            [04 / ARCHITECTURE & INFRASTRUCTURE]
+            03 / FACILITIES
           </span>
-          <span className="micro-label">SIF ANALYTICAL CORE · 50,000 SQ. FT.</span>
-        </div>
-
-        <span className="scientific-badge ultramarine">
-          DSIR-SIRO RECOGNIZED LABS
-        </span>
-      </div>
-
-      {/* Section 24 & 25: Asymmetric Photographic Canvas & Collision Headline */}
-      <div
-        style={{
-          position: 'relative',
-          width: '100%',
-          minHeight: '75vh',
-          display: 'flex',
-          flexDirection: 'column'
-        }}
-      >
-        {/* Section 25: Collision Headline "RESEARCH IS BUILT HERE." */}
-        {/* Partially overlapping the image, contrast-aware */}
-        <div
-          style={{
-            position: 'relative',
-            zIndex: 10,
-            pointerEvents: 'none',
-            marginBottom: '-6vw'
-          }}
-        >
           <h2
             style={{
-              fontFamily: 'var(--font-display)',
-              fontSize: 'clamp(52px, 8.5vw, 126px)',
-              fontWeight: 800,
-              lineHeight: 0.88,
-              letterSpacing: '-0.06em',
-              color: 'var(--ink)',
-              maxWidth: '900px'
+              fontFamily: 'var(--font-sans)',
+              fontSize: 'clamp(38px, 4.4vw, 68px)',
+              lineHeight: 0.96,
+              letterSpacing: '-0.055em',
+              fontWeight: 600,
+              color: '#18242D',
+              margin: 0
             }}
           >
-            RESEARCH IS<br />
-            <span style={{ color: 'var(--ultramarine)' }}>BUILT HERE.</span>
+            50,000+ SQ. FT. OF RESEARCH INFRASTRUCTURE.
           </h2>
         </div>
 
-        {/* Section 24: Enormous Photograph 72vw width, 65vh height, placed asymmetrically */}
+        {/* Section 50 & 51: Facility Stage with Oversized Typography Overlap */}
         <div
-          onMouseMove={handleMouseMove}
-          onMouseLeave={handleMouseLeave}
+          ref={facilityRef}
+          className="facility-stage"
           style={{
             position: 'relative',
-            width: '72vw',
-            height: '65vh',
-            minHeight: '480px',
-            marginLeft: 'auto', // Asymmetric right placement
-            overflow: 'hidden',
-            cursor: 'crosshair',
-            border: '1px solid var(--ink)',
-            backgroundColor: 'var(--paper-2)'
+            width: '100%',
+            minHeight: '620px'
           }}
-          className="facility-image-wrapper"
         >
-          <img
-            src="https://images.unsplash.com/photo-1581093588401-fbb62a02f120?auto=format&fit=crop&w=1600&q=85"
-            alt="CIIRC Sophisticated Instrumentation Facility"
-            style={{
-              width: '100%',
-              height: '100%',
-              objectFit: 'cover',
-              transform: `scale(${currentScale * (mousePos.inside ? 1.015 : 1.0)}) translate(${offsetX}px, ${offsetY}px)`,
-              transition: 'transform 300ms cubic-bezier(0.16, 1, 0.3, 1)'
-            }}
-          />
-
-          {/* Section 26: VIEW FACILITY -> label near cursor inside image */}
-          {mousePos.inside && (
-            <div
-              style={{
-                position: 'absolute',
-                top: `${mousePos.y + 12}px`,
-                left: `${mousePos.x + 16}px`,
-                backgroundColor: 'var(--ink)',
-                color: 'var(--paper)',
-                fontFamily: 'var(--font-mono)',
-                fontSize: '0.6875rem',
-                letterSpacing: '0.08em',
-                padding: '6px 12px',
-                pointerEvents: 'none',
-                zIndex: 20,
-                display: 'flex',
-                alignItems: 'center',
-                gap: '6px',
-                border: '1px solid var(--line-light)'
-              }}
-            >
-              <span>VIEW FACILITY</span>
-              <ArrowUpRight size={12} style={{ color: 'var(--acid)' }} />
-            </div>
-          )}
-
-          {/* Authentic Laboratory Overlay Badges */}
+          {/* Facility Image: width 64vw, height 620px, left 0, no cards, no heavy shadow (Section 50 & 52) */}
           <div
+            className={`facility-image-box ${isFacilityVisible ? 'revealed' : ''}`}
             style={{
-              position: 'absolute',
-              bottom: '24px',
-              left: '24px',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '6px',
-              background: 'rgba(16, 24, 32, 0.88)',
-              padding: '16px 20px',
-              color: 'var(--white)',
-              maxWidth: '380px'
+              position: 'relative',
+              width: '64vw',
+              height: '620px',
+              overflow: 'hidden'
             }}
           >
-            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6875rem', letterSpacing: '0.1em', color: 'var(--acid)' }}>
-              SOPHISTICATED INSTRUMENTATION FACILITY (SIF)
-            </div>
-            <div style={{ fontFamily: 'var(--font-sans)', fontSize: '0.8125rem', color: 'rgba(255, 255, 255, 0.85)' }}>
-              Housing SEM, XRD, GC, FT-IR Spectrophotometer, DSC/TGA & BET Surface Area Analyzer.
-            </div>
+            <Image
+              src="/images/facilities/ciirc-lab-main.jpg"
+              alt="CIIRC Laboratory Infrastructure"
+              fill
+              sizes="64vw"
+              style={{ objectFit: 'cover' }}
+              className="facility-img"
+            />
           </div>
-        </div>
 
-        {/* Supporting Editorial Column */}
-        <div
-          style={{
-            marginTop: '40px',
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-            gap: '32px',
-            borderTop: '1px solid var(--line)',
-            paddingTop: '32px'
-          }}
-        >
-          <div>
-            <div className="micro-label">CENTRALIZED CORE FACILITY</div>
-            <p style={{ fontFamily: 'var(--font-sans)', fontSize: '0.9375rem', color: 'var(--ink-soft)', marginTop: '8px' }}>
-              Open-access characterization suite providing high-resolution analytical services to scholars, academic institutions, and industrial clients across South India.
-            </p>
-          </div>
-          <div>
-            <div className="micro-label">SPECIALIZED INCUBATION BEDS</div>
-            <p style={{ fontFamily: 'var(--font-sans)', fontSize: '0.9375rem', color: 'var(--ink-soft)', marginTop: '8px' }}>
-              Dedicated cleanrooms and pilot testing bays for advanced materials, microfluidic healthcare sensors, and autonomous drone payloads.
-            </p>
-          </div>
-          <div>
-            <div className="micro-label">TRANSLATIONAL VERIFICATION</div>
-            <p style={{ fontFamily: 'var(--font-sans)', fontSize: '0.9375rem', color: 'var(--ink-soft)', marginTop: '8px' }}>
-              Strict calibration standards compliant with international protocols and national accreditation bodies.
+          {/* Section 51: Oversized 50,000+ partially outside image */}
+          <div
+            className="facility-typography-overlap"
+            style={{
+              position: 'absolute',
+              left: '60vw',
+              top: '120px',
+              width: '36vw',
+              zIndex: 10
+            }}
+          >
+            <div
+              style={{
+                fontFamily: 'var(--font-sans)',
+                fontSize: 'clamp(80px, 11vw, 170px)',
+                lineHeight: 0.85,
+                fontWeight: 650,
+                letterSpacing: '-0.065em',
+                color: '#18242D' // Section 51: Large 50,000+ #18242D
+              }}
+            >
+              50,000+
+            </div>
+            <div
+              style={{
+                fontFamily: 'var(--font-mono)',
+                fontSize: '13px',
+                fontWeight: 650,
+                letterSpacing: '0.14em',
+                textTransform: 'uppercase',
+                color: '#557C70', // Section 51: #557C70
+                marginTop: '16px'
+              }}
+            >
+              RESEARCH INFRASTRUCTURE
+            </div>
+            <p
+              style={{
+                fontFamily: 'var(--font-sans)',
+                fontSize: '16px',
+                lineHeight: 1.62,
+                color: '#3E4D55',
+                marginTop: '20px',
+                maxWidth: '440px'
+              }}
+            >
+              Housing the central Sophisticated Instrumentation Facility (SIF), incubation labs, and dedicated clean characterization bays for internal scholars and national defense/space projects.
             </p>
           </div>
         </div>
-      </div>
+      </section>
+
+      {/* =========================================================================
+          INSTRUMENTATION (Section 53, 88: Background #F5F1E8 Warm ivory)
+          ========================================================================= */}
+      <section
+        id="instrumentation"
+        aria-label="Precision Instrumentation"
+        style={{
+          backgroundColor: '#F5F1E8', // Section 53 & 88: Warm ivory
+          padding: '170px 0',
+          position: 'relative',
+          zIndex: 2,
+          borderTop: '1px solid rgba(24, 36, 45, 0.10)'
+        }}
+      >
+        <div className="ciirc-container">
+          <div style={{ marginBottom: '70px', maxWidth: '820px' }}>
+            <span
+              style={{
+                fontFamily: 'var(--font-mono)',
+                fontSize: '11px',
+                fontWeight: 650,
+                letterSpacing: '0.14em',
+                textTransform: 'uppercase',
+                color: '#3558C8',
+                display: 'inline-block',
+                marginBottom: '16px'
+              }}
+            >
+              SOPHISTICATED INSTRUMENTATION FACILITY
+            </span>
+            <h2
+              style={{
+                fontFamily: 'var(--font-sans)',
+                fontSize: 'clamp(42px, 4.5vw, 68px)',
+                lineHeight: 0.96,
+                letterSpacing: '-0.05em',
+                fontWeight: 600,
+                color: '#18242D',
+                margin: 0
+              }}
+            >
+              PRECISION AT THE MICRO SCALE.
+            </h2>
+          </div>
+
+          {/* Typographic List: SEM, XRD, GC, FT-IR, DSC, TGA, BET (70px rows, Section 53) */}
+          <div
+            className="instruments-container"
+            style={{
+              display: 'grid',
+              gridTemplateColumns: '1.2fr 0.8fr',
+              gap: '64px',
+              alignItems: 'start'
+            }}
+          >
+            <div style={{ borderTop: '1px solid rgba(24, 36, 45, 0.12)' }}>
+              {AUTHENTIC_INSTRUMENTS.map((inst) => {
+                const isActive = activeInst.id === inst.id;
+                return (
+                  <div
+                    key={inst.id}
+                    onMouseEnter={() => setActiveInst(inst)}
+                    onClick={() => setActiveInst(inst)}
+                    style={{
+                      height: '70px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      borderBottom: '1px solid rgba(24, 36, 45, 0.12)',
+                      cursor: 'pointer',
+                      color: isActive ? '#3558C8' : '#18242D',
+                      transition: 'color 180ms ease'
+                    }}
+                  >
+                    <div style={{ display: 'flex', alignItems: 'baseline', gap: '24px' }}>
+                      <span
+                        style={{
+                          fontFamily: 'var(--font-sans)',
+                          fontSize: 'clamp(20px, 2vw, 24px)',
+                          fontWeight: 650,
+                          letterSpacing: '-0.02em',
+                          color: isActive ? '#3558C8' : '#18242D'
+                        }}
+                      >
+                        {inst.code}
+                      </span>
+                      <span
+                        style={{
+                          fontFamily: 'var(--font-mono)',
+                          fontSize: '11px',
+                          color: '#718087',
+                          letterSpacing: '0.06em',
+                          textTransform: 'uppercase'
+                        }}
+                      >
+                        {inst.role}
+                      </span>
+                    </div>
+                    <ArrowUpRight
+                      size={18}
+                      style={{
+                        color: isActive ? '#3558C8' : 'rgba(24, 36, 45, 0.3)',
+                        transform: isActive ? 'translateX(0)' : 'translateX(-6px)',
+                        transition: 'all 180ms ease'
+                      }}
+                    />
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Sticky Photographic Reveal on Hover */}
+            <div
+              className="inst-preview-panel"
+              style={{
+                position: 'sticky',
+                top: '120px'
+              }}
+            >
+              <div
+                style={{
+                  width: '100%',
+                  height: '380px',
+                  position: 'relative',
+                  overflow: 'hidden'
+                }}
+              >
+                <Image
+                  key={activeInst.id}
+                  src={activeInst.image}
+                  alt={activeInst.fullName}
+                  fill
+                  sizes="400px"
+                  style={{ objectFit: 'cover' }}
+                  className="inst-fade-img"
+                />
+              </div>
+              <div style={{ marginTop: '20px' }}>
+                <div
+                  style={{
+                    fontFamily: 'var(--font-sans)',
+                    fontSize: '18px',
+                    fontWeight: 650,
+                    color: '#18242D',
+                    marginBottom: '6px'
+                  }}
+                >
+                  {activeInst.fullName}
+                </div>
+                <div
+                  style={{
+                    fontFamily: 'var(--font-sans)',
+                    fontSize: '14px',
+                    lineHeight: 1.55,
+                    color: '#718087'
+                  }}
+                >
+                  {activeInst.specs}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
       <style jsx>{`
-        @media (max-width: 1023px) {
-          .facility-image-wrapper {
+        /* Section 52 Facility Image Animation:
+           Initial: scale(1.08), clip-path: inset(0 0 12% 0) ->
+           Final: scale(1), clip-path: inset(0), Duration: 1000ms */
+        .facility-image-box {
+          clip-path: inset(0 0 12% 0);
+          transform: scale(1.08);
+          transition: clip-path 1000ms cubic-bezier(0.22, 1, 0.36, 1), transform 1000ms cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .facility-image-box.revealed {
+          clip-path: inset(0);
+          transform: scale(1);
+        }
+
+        .inst-fade-img {
+          animation: fadeIn 350ms ease forwards;
+        }
+        @keyframes fadeIn {
+          0% { opacity: 0; transform: translateY(12px); }
+          100% { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 1024px) {
+          .facility-image-box {
             width: 100% !important;
-            height: 50vh !important;
-            margin-left: 0 !important;
+            height: 420px !important;
+          }
+          .facility-typography-overlap {
+            position: relative !important;
+            left: 0 !important;
+            top: 0 !important;
+            width: 100% !important;
+            margin-top: -30px;
+          }
+          .instruments-container {
+            grid-template-columns: 1fr !important;
+          }
+          .inst-preview-panel {
+            display: none !important;
           }
         }
       `}</style>
-    </section>
+    </>
   );
 };

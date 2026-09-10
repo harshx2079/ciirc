@@ -1,299 +1,210 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
-import { CIIRC_STATS } from '../data/ciircData';
+import React from 'react';
 
-interface ImpactStatsProps {
-  onImpactVisibilityChange?: (visible: boolean) => void;
-}
-
-// Scientific mechanical counter steps: 5 -> 50 -> 500 -> 5,000 -> 50,000+
-const ANIMATED_TARGETS = [
-  {
-    target: '50,000+',
-    steps: ['5', '50', '500', '5,000', '50,000+'],
-    label: 'SQUARE FEET LABS',
-    sublabel: 'Dedicated research infrastructure housing 19 vistas'
-  },
-  {
-    target: '27',
-    steps: ['2', '12', '19', '24', '27'],
-    label: 'DOCTORAL INVESTIGATORS',
-    sublabel: 'Alumni of IISc, IITs, NITs, Central & Foreign Universities'
-  },
-  {
-    target: '50+',
-    steps: ['5', '18', '29', '42', '50+'],
-    label: 'FUNDED PROJECTS',
-    sublabel: 'DST, DRDO, DOS/ISRO, DBT, EU & Indo-French CEFIPRA',
-    isHighlight: true
-  },
-  {
-    target: '300+',
-    steps: ['30', '95', '180', '260', '300+'],
-    label: 'PEER-REVIEWED PAPERS',
-    sublabel: 'Scopus, Web of Science, Elsevier, Springer & Wiley'
-  },
-  {
-    target: '35+',
-    steps: ['3', '11', '22', '31', '35+'],
-    label: 'SOCIETAL PRODUCTS & PATENTS',
-    sublabel: 'Developed with clinical, societal & environmental impact',
-    isHighlight: true
-  }
-];
-
-export const ImpactStats: React.FC<ImpactStatsProps> = ({ onImpactVisibilityChange }) => {
-  const sectionRef = useRef<HTMLDivElement | null>(null);
-  const [inView, setInView] = useState(false);
-  const [stepIndex, setStepIndex] = useState(0); // 0 to 4
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        const isVisible = entry.isIntersecting;
-        setInView(isVisible);
-        if (onImpactVisibilityChange) {
-          onImpactVisibilityChange(isVisible);
-        }
-      },
-      { threshold: 0.25 }
-    );
-
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
-    }
-
-    return () => observer.disconnect();
-  }, [onImpactVisibilityChange]);
-
-  // Section 29: Mechanical scientific measurement counter
-  // 5 -> 50 -> 500 -> 5,000 -> 50,000+ over 900ms then lock
-  useEffect(() => {
-    if (!inView) {
-      setStepIndex(0);
-      return;
-    }
-
-    const interval = setInterval(() => {
-      setStepIndex((prev) => {
-        if (prev < 4) return prev + 1;
-        clearInterval(interval);
-        return 4;
-      });
-    }, 180); // 5 steps * 180ms = 900ms
-
-    return () => clearInterval(interval);
-  }, [inView]);
-
+export const ImpactStats: React.FC = () => {
   return (
     <section
       id="impact"
-      ref={sectionRef}
-      aria-label="CIIRC Impact & Empirical Scale"
+      aria-label="Impact Metrics"
       style={{
+        backgroundColor: '#18242D', // Section 55 & 88: Deep ink (only dark section)
+        color: '#F5F1E8',
+        minHeight: '760px',
         position: 'relative',
-        width: '100%',
-        minHeight: '100vh',
-        backgroundColor: 'var(--ultramarine)', // Full-screen cobalt shock (Section 27)
-        color: 'var(--white)',
-        padding: '120px 42px 140px 42px',
-        boxSizing: 'border-box',
-        zIndex: 5,
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'space-between'
+        zIndex: 2,
+        padding: '120px 0',
+        overflow: 'hidden'
       }}
     >
-      {/* Top Header Row */}
       <div
+        className="ciirc-container"
         style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'baseline',
-          borderBottom: '1px solid rgba(255, 255, 255, 0.2)',
-          paddingBottom: '24px',
-          marginBottom: '64px'
+          position: 'relative',
+          minHeight: '600px'
         }}
       >
-        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+        {/* Section Label */}
+        <div style={{ position: 'absolute', left: '7vw', top: '20px' }}>
           <span
             style={{
               fontFamily: 'var(--font-mono)',
-              fontSize: '0.8125rem',
+              fontSize: '11px',
+              fontWeight: 650,
+              letterSpacing: '0.14em',
+              textTransform: 'uppercase',
+              color: '#9AAFFF'
+            }}
+          >
+            RESEARCH IMPACT &amp; SCALE
+          </span>
+        </div>
+
+        {/* Section 56: Asymmetric Coordinates
+            Primary: 50,000+ at x: 7vw, y: 140px
+            Secondary:
+            300+ -> x: 57vw / y: 180px (color #9AAFFF)
+            35+  -> x: 77vw / y: 390px (color #E07A64 - one coral)
+            50   -> x: 53vw / y: 560px (color #80A99E) */}
+
+        {/* Metric 1: 50,000+ SQ. FT. (x: 7vw, y: 140px, color #F5F1E8) */}
+        <div
+          className="impact-metric metric-primary"
+          style={{
+            position: 'absolute',
+            left: '7vw',
+            top: '110px'
+          }}
+        >
+          <div
+            style={{
+              fontFamily: 'var(--font-sans)',
+              fontSize: 'clamp(80px, 11vw, 170px)',
+              lineHeight: 0.85,
+              fontWeight: 650,
+              letterSpacing: '-0.065em',
+              color: '#F5F1E8'
+            }}
+          >
+            50,000+
+          </div>
+          <div
+            style={{
+              fontFamily: 'var(--font-mono)',
+              fontSize: '12px',
               fontWeight: 600,
-              color: 'var(--acid)',
-              letterSpacing: '0.08em'
+              letterSpacing: '0.14em',
+              textTransform: 'uppercase',
+              color: '#9AAFFF',
+              marginTop: '14px'
             }}
           >
-            [05 / EMPIRICAL IMPACT]
-          </span>
-          <span
-            style={{
-              fontFamily: 'var(--font-mono)',
-              fontSize: '0.75rem',
-              letterSpacing: '0.1em',
-              color: 'rgba(255, 255, 255, 0.7)'
-            }}
-          >
-            VERIFIED INSTITUTIONAL AUDIT
-          </span>
+            SQ. FT. RESEARCH INFRASTRUCTURE
+          </div>
         </div>
 
-        {/* Tiny Coral Event Marker (Section 27) */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <span
+        {/* Metric 2: 300+ PUBLICATIONS (x: 57vw, y: 180px, color #9AAFFF) */}
+        <div
+          className="impact-metric metric-publications"
+          style={{
+            position: 'absolute',
+            left: '57vw',
+            top: '160px'
+          }}
+        >
+          <div
             style={{
-              width: '8px',
-              height: '8px',
-              backgroundColor: 'var(--signal)',
-              display: 'inline-block'
-            }}
-          />
-          <span
-            style={{
-              fontFamily: 'var(--font-mono)',
-              fontSize: '0.6875rem',
-              letterSpacing: '0.08em',
-              color: 'rgba(255, 255, 255, 0.85)'
+              fontFamily: 'var(--font-sans)',
+              fontSize: 'clamp(54px, 6.5vw, 96px)',
+              lineHeight: 0.9,
+              fontWeight: 650,
+              letterSpacing: '-0.05em',
+              color: '#9AAFFF' // Section 57: #9AAFFF
             }}
           >
-            DSIR-SIRO BENCHMARK
-          </span>
+            300+
+          </div>
+          <div
+            style={{
+              fontFamily: 'var(--font-mono)',
+              fontSize: '11px',
+              fontWeight: 600,
+              letterSpacing: '0.12em',
+              textTransform: 'uppercase',
+              color: '#F5F1E8',
+              marginTop: '8px'
+            }}
+          >
+            INDEXED PUBLICATIONS
+          </div>
         </div>
-      </div>
 
-      {/* Main Section Headline */}
-      <div style={{ marginBottom: '80px', maxWidth: '1000px' }}>
-        <h2
+        {/* Metric 3: 35+ PRODUCTS (x: 77vw, y: 390px, color #E07A64 - Section 57 One coral!) */}
+        <div
+          className="impact-metric metric-products"
           style={{
-            fontFamily: 'var(--font-display)',
-            fontSize: 'clamp(44px, 7vw, 96px)',
-            fontWeight: 800,
-            lineHeight: 0.92,
-            letterSpacing: '-0.05em',
-            color: 'var(--white)'
+            position: 'absolute',
+            left: '75vw',
+            top: '370px'
           }}
         >
-          MEASURED IN DISCOVERIES,<br />
-          <span style={{ color: 'var(--acid)' }}>DELIVERED FOR SOCIETY.</span>
-        </h2>
-      </div>
+          <div
+            style={{
+              fontFamily: 'var(--font-sans)',
+              fontSize: 'clamp(54px, 6.5vw, 96px)',
+              lineHeight: 0.9,
+              fontWeight: 650,
+              letterSpacing: '-0.05em',
+              color: '#E07A64' // Section 57: #E07A64
+            }}
+          >
+            35+
+          </div>
+          <div
+            style={{
+              fontFamily: 'var(--font-mono)',
+              fontSize: '11px',
+              fontWeight: 600,
+              letterSpacing: '0.12em',
+              textTransform: 'uppercase',
+              color: '#F5F1E8',
+              marginTop: '8px'
+            }}
+          >
+            SOCIETAL PRODUCTS
+          </div>
+        </div>
 
-      {/* Large Numbers Grid: Section 27, 28, 29 */}
-      {/* NO CARDS. NO SHADOWS. NO GRADIENTS. */}
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
-          gap: '48px',
-          borderTop: '1px solid rgba(255, 255, 255, 0.2)',
-          paddingTop: '48px'
-        }}
-        className="impact-stats-grid"
-      >
-        {ANIMATED_TARGETS.map((stat, idx) => {
-          const displayedValue = inView ? stat.steps[stepIndex] : stat.steps[0];
-
-          return (
-            <div
-              key={idx}
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                borderLeft: idx > 0 ? '1px solid rgba(255, 255, 255, 0.15)' : 'none',
-                paddingLeft: idx > 0 ? '24px' : '0'
-              }}
-              className="impact-stat-item"
-            >
-              {/* Mechanical Scientific Measurement Counter */}
-              <div
-                style={{
-                  fontFamily: 'var(--font-mono)',
-                  fontSize: 'clamp(42px, 5.5vw, 82px)',
-                  fontWeight: 700,
-                  lineHeight: 0.9,
-                  letterSpacing: '-0.05em',
-                  color: stat.isHighlight ? 'var(--acid)' : 'var(--white)',
-                  marginBottom: '16px'
-                }}
-              >
-                {displayedValue}
-              </div>
-
-              <div
-                style={{
-                  fontFamily: 'var(--font-mono)',
-                  fontSize: '0.75rem',
-                  fontWeight: 600,
-                  letterSpacing: '0.08em',
-                  color: 'var(--white)',
-                  textTransform: 'uppercase',
-                  marginBottom: '8px'
-                }}
-              >
-                {stat.label}
-              </div>
-
-              <p
-                style={{
-                  fontFamily: 'var(--font-sans)',
-                  fontSize: '0.8125rem',
-                  lineHeight: 1.4,
-                  color: 'rgba(255, 255, 255, 0.7)',
-                  maxWidth: '280px'
-                }}
-              >
-                {stat.sublabel}
-              </p>
-            </div>
-          );
-        })}
-      </div>
-
-      {/* Bottom Citation */}
-      <div
-        style={{
-          marginTop: '64px',
-          paddingTop: '24px',
-          borderTop: '1px solid rgba(255, 255, 255, 0.2)',
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          flexWrap: 'wrap',
-          gap: '16px'
-        }}
-      >
-        <span
+        {/* Metric 4: 50 FUNDED PROJECTS (x: 53vw, y: 560px, color #80A99E) */}
+        <div
+          className="impact-metric metric-projects"
           style={{
-            fontFamily: 'var(--font-mono)',
-            fontSize: '0.6875rem',
-            letterSpacing: '0.06em',
-            color: 'rgba(255, 255, 255, 0.6)'
+            position: 'absolute',
+            left: '53vw',
+            top: '520px'
           }}
         >
-          SOURCES: MINISTRY OF SCIENCE & TECHNOLOGY (DST) · DRDO · DOS/ISRO · DBT GOVT. OF INDIA
-        </span>
-
-        <span
-          style={{
-            fontFamily: 'var(--font-mono)',
-            fontSize: '0.6875rem',
-            color: 'var(--acid)',
-            letterSpacing: '0.06em'
-          }}
-        >
-          SIRO CERTIFICATION NO. 11/592/2013-TU-V
-        </span>
+          <div
+            style={{
+              fontFamily: 'var(--font-sans)',
+              fontSize: 'clamp(54px, 6.5vw, 96px)',
+              lineHeight: 0.9,
+              fontWeight: 650,
+              letterSpacing: '-0.05em',
+              color: '#80A99E' // Section 57: #80A99E
+            }}
+          >
+            50
+          </div>
+          <div
+            style={{
+              fontFamily: 'var(--font-mono)',
+              fontSize: '11px',
+              fontWeight: 600,
+              letterSpacing: '0.12em',
+              textTransform: 'uppercase',
+              color: '#F5F1E8',
+              marginTop: '8px'
+            }}
+          >
+            FUNDED PROJECTS
+          </div>
+        </div>
       </div>
 
       <style jsx>{`
-        @media (max-width: 767px) {
-          .impact-stat-item {
-            border-left: none !important;
-            padding-left: 0 !important;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.15);
-            padding-bottom: 24px;
+        @media (max-width: 1024px) {
+          .ciirc-container {
+            min-height: auto !important;
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 48px !important;
+            padding-inline: 24px !important;
+          }
+          .impact-metric {
+            position: relative !important;
+            left: 0 !important;
+            top: 0 !important;
           }
         }
       `}</style>

@@ -1,21 +1,15 @@
 import type { Metadata } from 'next';
-import { Inter, Plus_Jakarta_Sans, Space_Grotesk } from 'next/font/google';
+import { Plus_Jakarta_Sans, JetBrains_Mono } from 'next/font/google';
 import '../globals.css';
-
-const inter = Inter({
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-sans',
-});
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   subsets: ['latin'],
   weight: ['400', '500', '600', '700', '800'],
   display: 'swap',
-  variable: '--font-display',
+  variable: '--font-sans',
 });
 
-const spaceGrotesk = Space_Grotesk({
+const jetbrainsMono = JetBrains_Mono({
   subsets: ['latin'],
   weight: ['400', '500', '600', '700'],
   display: 'swap',
@@ -23,9 +17,9 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
-  title: 'CIIRC® | Research is a Living System',
+  title: 'CIIRC® | Centre for Incubation, Innovation, Research and Consultancy',
   description:
-    'Centre for Incubation, Innovation, Research and Consultancy (CIIRC®). Scientific and Industrial Research Organization (SIRO) recognized by DSIR, Ministry of Science & Technology, GoI.',
+    'CIIRC® is an autonomous research institution recognized by DSIR-SIRO, Ministry of Science & Technology, Government of India. Joint Initiative of Sri Sringeri Sharada Peetham, Sringeri and Jyothy Institute of Technology (JIT).',
   icons: {
     icon: 'https://ciirc.res.in/site/wp-content/uploads/2021/05/ciirc-favicon.png',
   },
@@ -37,7 +31,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${inter.variable} ${plusJakartaSans.variable} ${spaceGrotesk.variable}`}>
+    <html lang="en" className={`${plusJakartaSans.variable} ${jetbrainsMono.variable}`}>
       <head>
         <link
           rel="icon"
@@ -45,7 +39,7 @@ export default function RootLayout({
           href="https://ciirc.res.in/site/wp-content/uploads/2021/05/ciirc-favicon.png"
         />
       </head>
-      <body style={{ backgroundColor: 'var(--paper)', position: 'relative', minHeight: '100vh', color: 'var(--ink)' }}>
+      <body style={{ backgroundColor: 'var(--paper)', color: 'var(--forest)', position: 'relative', minHeight: '100vh' }}>
         <div style={{ position: 'relative', zIndex: 1 }}>{children}</div>
       </body>
     </html>

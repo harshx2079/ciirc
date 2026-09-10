@@ -1,27 +1,42 @@
 'use client';
 
-import React, { useState } from 'react';
-import { Menu, X, ArrowUpRight } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import Image from 'next/image';
 
-interface NavItem {
-  id: string;
-  label: string;
-  href: string;
+interface HeaderProps {
+  onNavClick?: (id: string) => void;
 }
 
-const NAV_ITEMS: NavItem[] = [
-  { id: 'ecosystem', label: 'Ecosystem', href: '#ecosystem' },
-  { id: 'atlas', label: 'Research Atlas', href: '#atlas' },
-  { id: 'facilities', label: 'Facilities', href: '#facilities' },
-  { id: 'impact', label: 'Impact', href: '#impact' },
-  { id: 'timeline', label: 'Timeline', href: '#timeline' },
-  { id: 'network', label: 'Collaborations', href: '#network' },
-  { id: 'people', label: 'Leadership', href: '#people' }
-];
-
-export const Header: React.FC = () => {
+export const Header: React.FC<HeaderProps> = ({ onNavClick }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [logoError, setLogoError] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const navLinks = [
+    { label: 'About', href: '#about' },
+    { label: 'Research', href: '#research' },
+    { label: 'Facilities', href: '#facilities' },
+    { label: 'People', href: '#people' },
+    { label: 'Funding', href: '#funding' },
+    { label: 'Impact', href: '#impact' },
+    { label: 'Achievements', href: '#achievements' }
+  ];
+
+  const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    e.preventDefault();
+    setMobileMenuOpen(false);
+    const target = document.querySelector(href);
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
   return (
     <header
@@ -29,238 +44,217 @@ export const Header: React.FC = () => {
         position: 'fixed',
         top: 0,
         left: 0,
-        width: '100%',
-        height: '78px',
-        backgroundColor: 'rgba(243, 240, 232, 0.96)',
-        backdropFilter: 'blur(12px)',
-        WebkitBackdropFilter: 'blur(12px)',
-        borderBottom: '1px solid var(--line)',
-        zIndex: 100,
-        display: 'flex',
-        alignItems: 'center',
-        boxSizing: 'border-box',
-        overflow: 'hidden'
+        right: 0,
+        height: '72px',
+        zIndex: 1000,
+        backgroundColor: 'rgba(247, 248, 243, 0.88)',
+        backdropFilter: 'blur(18px)',
+        WebkitBackdropFilter: 'blur(18px)',
+        borderBottom: '1px solid rgba(16, 37, 31, 0.10)',
+        transition: 'border-color 0.3s ease, background-color 0.3s ease'
       }}
     >
       <div
+        className="atlas-container"
         style={{
-          width: '100%',
-          maxWidth: '1520px',
-          margin: '0 auto',
-          padding: '0 clamp(16px, 3vw, 42px)',
+          height: '100%',
           display: 'flex',
           alignItems: 'center',
-          justifyContent: 'space-between',
-          boxSizing: 'border-box'
+          justifyContent: 'space-between'
         }}
       >
-        {/* Left: Authentic CIIRC Logo from ciirc.res.in + Typography */}
+        {/* Left: Authentic CIIRC Navbar Logo */}
         <a
           href="#"
           style={{
             display: 'flex',
             alignItems: 'center',
             gap: '12px',
-            textDecoration: 'none',
-            flexShrink: 0
+            textDecoration: 'none'
           }}
         >
-          {/* Official CIIRC Logo Image */}
-          {!logoError && (
-            <img
-              src="https://ciirc.res.in/wp-content/uploads/2022/02/designAsset-3.png"
-              alt="CIIRC Logo"
-              onError={() => setLogoError(true)}
-              style={{
-                height: '42px',
-                width: 'auto',
-                objectFit: 'contain',
-                display: 'block'
-              }}
-            />
-          )}
-
           <div
             style={{
+              position: 'relative',
+              width: '142px',
+              height: '46px',
               display: 'flex',
-              flexDirection: 'column',
-              lineHeight: 1.15
+              alignItems: 'center'
             }}
           >
-            <div style={{ display: 'flex', alignItems: 'baseline', gap: '6px' }}>
-              <span
-                style={{
-                  fontFamily: 'var(--font-mono)',
-                  fontSize: '1rem',
-                  fontWeight: 700,
-                  letterSpacing: '0.06em',
-                  color: 'var(--ink)'
-                }}
-              >
-                CIIRC<sup style={{ fontSize: '0.6em', color: 'var(--ultramarine)' }}>®</sup>
-              </span>
-              <span
-                style={{
-                  fontFamily: 'var(--font-mono)',
-                  fontSize: '0.5625rem',
-                  letterSpacing: '0.1em',
-                  color: 'var(--ink-muted)',
-                  textTransform: 'uppercase'
-                }}
-              >
-                DSIR-SIRO
-              </span>
-            </div>
-            <span
+            <Image
+              src="/images/ciirc-logo.png"
+              alt="CIIRC® - Centre for Incubation, Innovation, Research and Consultancy"
+              width={142}
+              height={46}
               style={{
-                fontFamily: 'var(--font-sans)',
-                fontSize: '0.625rem',
-                color: 'var(--ink-soft)',
-                letterSpacing: '-0.01em',
-                maxWidth: '220px',
-                whiteSpace: 'nowrap',
-                overflow: 'hidden',
-                textOverflow: 'ellipsis'
+                objectFit: 'contain',
+                height: 'auto',
+                maxHeight: '46px',
+                width: 'auto'
               }}
-              className="header-sublabel"
-            >
-              Centre for Incubation, Innovation, Research & Consultancy
-            </span>
+              priority
+            />
           </div>
         </a>
 
-        {/* Right-Side Cluster: Navigation + CTA (Do NOT center nav) */}
-        <div
+        {/* Center / Right Nav Items (Desktop) */}
+        <nav
           style={{
             display: 'flex',
             alignItems: 'center',
-            gap: 'clamp(12px, 1.8vw, 24px)',
-            flexShrink: 0
+            gap: '32px'
           }}
+          className="desktop-nav"
         >
-          {/* Desktop Navigation Cluster */}
-          <nav
-            aria-label="Main Navigation"
-            style={{
-              display: 'none',
-              alignItems: 'center',
-              gap: 'clamp(10px, 1.4vw, 20px)'
-            }}
-            className="desktop-nav"
-          >
-            {NAV_ITEMS.map((item) => (
-              <a
-                key={item.id}
-                href={item.href}
-                style={{
-                  fontFamily: 'var(--font-mono)',
-                  fontSize: '0.71875rem',
-                  fontWeight: 500,
-                  letterSpacing: '0.04em',
-                  textTransform: 'uppercase',
-                  color: 'var(--ink-soft)',
-                  whiteSpace: 'nowrap',
-                  transition: 'color 180ms ease'
-                }}
-                onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--ultramarine)')}
-                onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--ink-soft)')}
-              >
-                {item.label}
-              </a>
-            ))}
-          </nav>
+          {navLinks.map((link) => (
+            <a
+              key={link.label}
+              href={link.href}
+              onClick={(e) => handleLinkClick(e, link.href)}
+              className="nav-link-cobalt"
+            >
+              {link.label}
+            </a>
+          ))}
+        </nav>
 
-          {/* CTA: Small rectangular button */}
+        {/* Right CTA Button & Mobile Toggle */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
           <a
-            href="#opportunities"
-            className="btn-rect-dark"
-            style={{
-              padding: '7px 14px',
-              fontSize: '0.6875rem',
-              whiteSpace: 'nowrap'
-            }}
+            href="#research"
+            onClick={(e) => handleLinkClick(e, '#research')}
+            className="btn-forest-outline desktop-cta"
           >
-            <span>Engage Lab</span>
-            <ArrowUpRight size={13} />
+            <span>Explore CIIRC</span>
+            <span className="btn-arrow">→</span>
           </a>
 
           {/* Mobile Hamburger Toggle */}
           <button
-            type="button"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            aria-label="Toggle navigation menu"
+            className="mobile-menu-btn"
             style={{
               display: 'none',
-              padding: '6px',
-              color: 'var(--ink)'
+              width: '40px',
+              height: '40px',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              alignItems: 'center',
+              gap: '6px',
+              background: 'transparent',
+              border: 'none',
+              cursor: 'pointer'
             }}
-            className="mobile-toggle"
-            aria-label="Toggle navigation menu"
           >
-            {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+            <span
+              style={{
+                width: '22px',
+                height: '1.5px',
+                backgroundColor: 'var(--forest)',
+                transition: 'transform 0.3s ease',
+                transform: mobileMenuOpen ? 'rotate(45deg) translate(5px, 5px)' : 'none'
+              }}
+            />
+            <span
+              style={{
+                width: '22px',
+                height: '1.5px',
+                backgroundColor: 'var(--forest)',
+                transition: 'opacity 0.3s ease',
+                opacity: mobileMenuOpen ? 0 : 1
+              }}
+            />
+            <span
+              style={{
+                width: '22px',
+                height: '1.5px',
+                backgroundColor: 'var(--forest)',
+                transition: 'transform 0.3s ease',
+                transform: mobileMenuOpen ? 'rotate(-45deg) translate(5px, -5px)' : 'none'
+              }}
+            />
           </button>
         </div>
       </div>
 
-      <style jsx>{`
-        @media (min-width: 1080px) {
-          .desktop-nav {
-            display: flex !important;
-          }
-          .mobile-toggle {
-            display: none !important;
-          }
-        }
-        @media (max-width: 1079px) {
-          .desktop-nav {
-            display: none !important;
-          }
-          .mobile-toggle {
-            display: flex !important;
-          }
-          .header-sublabel {
-            display: none !important;
-          }
-        }
-      `}</style>
-
-      {/* Mobile Drawer */}
-      {mobileMenuOpen && (
-        <div
-          style={{
-            position: 'fixed',
-            top: '78px',
-            left: 0,
-            width: '100%',
-            backgroundColor: 'var(--paper)',
-            borderBottom: '1px solid var(--line)',
-            padding: '24px 32px',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '16px',
-            zIndex: 99
-          }}
-        >
-          {NAV_ITEMS.map((item) => (
+      {/* Full-Viewport Mobile Drawer */}
+      <div
+        style={{
+          position: 'fixed',
+          top: '72px',
+          left: 0,
+          right: 0,
+          bottom: 0,
+          height: 'calc(100vh - 72px)',
+          backgroundColor: 'var(--paper)',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'space-between',
+          padding: '40px 24px',
+          transform: mobileMenuOpen ? 'translateX(0)' : 'translateX(100%)',
+          transition: 'transform 500ms cubic-bezier(0.16, 1, 0.3, 1)',
+          zIndex: 999,
+          overflowY: 'auto'
+        }}
+      >
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+          <span className="mono-meta" style={{ color: 'var(--teal)' }}>
+            NAVIGATION DIRECTORY
+          </span>
+          {navLinks.map((link) => (
             <a
-              key={item.id}
-              href={item.href}
-              onClick={() => setMobileMenuOpen(false)}
+              key={link.label}
+              href={link.href}
+              onClick={(e) => handleLinkClick(e, link.href)}
               style={{
-                fontFamily: 'var(--font-mono)',
-                fontSize: '0.875rem',
-                fontWeight: 600,
-                letterSpacing: '0.04em',
-                textTransform: 'uppercase',
-                color: 'var(--ink)',
-                padding: '8px 0',
-                borderBottom: '1px solid var(--line)'
+                fontSize: '36px',
+                fontWeight: 650,
+                letterSpacing: '-0.04em',
+                color: 'var(--forest)',
+                textDecoration: 'none'
               }}
             >
-              {item.label}
+              {link.label}
             </a>
           ))}
         </div>
-      )}
+
+        <div
+          style={{
+            borderTop: '1px solid var(--line)',
+            paddingTop: '24px',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '12px'
+          }}
+        >
+          <span className="mono-meta">
+            CIIRC® BENGALURU — DSIR–SIRO
+          </span>
+          <a
+            href="#research"
+            onClick={(e) => handleLinkClick(e, '#research')}
+            className="btn-forest-solid"
+            style={{ textAlign: 'center', justifyContent: 'center' }}
+          >
+            Explore Research Matrix →
+          </a>
+        </div>
+      </div>
+
+      <style jsx>{`
+        @media (max-width: 900px) {
+          .desktop-nav,
+          .desktop-cta {
+            display: none !important;
+          }
+          .mobile-menu-btn {
+            display: flex !important;
+          }
+        }
+      `}</style>
     </header>
   );
 };

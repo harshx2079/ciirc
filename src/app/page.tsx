@@ -1,86 +1,75 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Header } from '../components/Header';
 import { Hero } from '../components/Hero';
 import { ResearchEcosystem } from '../components/ResearchEcosystem';
-import { ResearchAtlas } from '../components/ResearchAtlas';
-import { InstrumentationFacility } from '../components/InstrumentationFacility';
-import { ImpactStats } from '../components/ImpactStats';
-import { MilestonesTimeline } from '../components/MilestonesTimeline';
-import { Collaborations } from '../components/Collaborations';
-import { DirectorMessage } from '../components/DirectorMessage';
-import { Opportunities } from '../components/Opportunities';
-import { CTASection } from '../components/CTASection';
-import { Footer } from '../components/Footer';
-import { ResearchField, ResearchTopology } from '../components/ResearchField';
+import { InstrumentationSection } from '../components/InstrumentationSection';
+import { InfrastructureSection } from '../components/InfrastructureSection';
+import { PeopleNumbers } from '../components/PeopleNumbers';
+import { FundingFlow } from '../components/FundingFlow';
+import { ImpactNarrative } from '../components/ImpactNarrative';
+import { AchievementsMap } from '../components/AchievementsMap';
+import { CollaborationConstellation } from '../components/CollaborationConstellation';
+import { DirectorStory } from '../components/DirectorStory';
+import { FinalCTA } from '../components/FinalCTA';
+import { FooterAtlas } from '../components/FooterAtlas';
+import { CustomCursor } from '../components/CustomCursor';
 
 export default function Home() {
-  const [currentTopology, setCurrentTopology] = useState<ResearchTopology>('default');
-  const [isConverging, setIsConverging] = useState<boolean>(false);
-  const [isImpactVisible, setIsImpactVisible] = useState<boolean>(false);
-  const [scrollProgress, setScrollProgress] = useState<number>(0);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
-      if (scrollHeight > 0) {
-        const progress = Math.max(0, Math.min(1, window.scrollY / scrollHeight));
-        setScrollProgress(progress);
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', position: 'relative' }}>
-      {/* AUTHORITATIVE GENERATIVE RESEARCH FIELD (Section 07-15) */}
-      <ResearchField
-        topology={currentTopology}
-        isConverging={isConverging}
-        isImpactVisible={isImpactVisible}
-        scrollProgress={scrollProgress}
-      />
+    <div
+      style={{
+        minHeight: '100vh',
+        display: 'flex',
+        flexDirection: 'column',
+        position: 'relative',
+        backgroundColor: 'var(--paper)'
+      }}
+    >
+      {/* Subtle 8px Custom Cursor */}
+      <CustomCursor />
 
-      {/* 01 HEADER: Fixed 78px, Left 42px Logo, Right-side Cluster, Rectangular CTA (Section 04) */}
+      {/* 01 HEADER: Fixed 72px, Typographic CIIRC®, Cobalt underline hover, Outlined Forest CTA */}
       <Header />
 
       <main style={{ flex: 1, position: 'relative', zIndex: 1 }}>
-        {/* 02 HERO: 100svh Asymmetric Viewport, Mask Reveal, Central Attractor (Section 03, 05, 06) */}
+        {/* 02 HERO: 100svh Asymmetric Split + Staggered Masked Headline + Procedural Research Field Visual */}
         <Hero />
 
-        {/* 03 RESEARCH ECOSYSTEM: "WE RESEARCH ACROSS BOUNDARIES", Spatial Drift, Category Topology Triggers (Section 16-21) */}
-        <ResearchEcosystem onTopologyChange={setCurrentTopology} />
+        {/* 03 SECTION 02: "THE RESEARCH ECOSYSTEM" (--paper-blue, 17 Directions Matrix + Dynamic Generative Map) */}
+        <ResearchEcosystem />
 
-        {/* 04 THE RESEARCH ATLAS: 35%/65% Split, Distortion Displacement Image Transitions (Section 22-23) */}
-        <ResearchAtlas onTopologyChange={setCurrentTopology} />
+        {/* 04 SECTION 03: "RESEARCH INSTRUMENT" (--paper, "PRECISION AT EVERY SCALE" + SEM/XRD/GC/FT-IR/DSC/TGA/BET) */}
+        <InstrumentationSection />
 
-        {/* 05 FACILITIES: 72vw x 65vh Photo, Scale 1.12 -> 1.0, Collision Headline, Cursor Badge (Section 24-26) */}
-        <InstrumentationFacility />
+        {/* 05 SECTION 04: "50,000+ SQ. FT." (--paper-warm, Massive 220-300px Typography + Lab Photo Parallax) */}
+        <InfrastructureSection />
 
-        {/* 06 IMPACT SHOCK: Full-Screen Cobalt #3155FF, Mechanical Measurement Counters (Section 27-29) */}
-        <ImpactStats onImpactVisibilityChange={setIsImpactVisible} />
+        {/* 06 SECTION 05: "PEOPLE" (--paper, Giant "27 DOCTORATES", "13 MASTERS", "20 PG RESEARCH FELLOWS") */}
+        <PeopleNumbers />
 
-        {/* 07 TIMELINE: Horizontal 300vw Pinned Trajectory (2017-2026) (Section 30-31) */}
-        <MilestonesTimeline />
+        {/* 07 SECTION 06: "RESEARCH FUNDING" (--paper-warm, 50 Funded Projects + Progressive Research Flow Diagram) */}
+        <FundingFlow />
 
-        {/* 08 COLLABORATIONS: Kinetic Institutional Network (No Logo Grid) (Section 32) */}
-        <Collaborations />
+        {/* 08 SECTION 07: "IMPACT" (--forest, "RESEARCH THAT LEAVES THE LAB" + Travelling Line Metric Activation) */}
+        <ImpactNarrative />
 
-        {/* 09 DIRECTOR MESSAGE: 46vw x 70vh Portrait, Parallax Drift, Overlapping Quote (Section 33) */}
-        <DirectorMessage />
+        {/* 09 SECTION 08: "ACHIEVEMENTS" (--paper, Giant Scientific Expedition Map + Waypoint Trajectory) */}
+        <AchievementsMap />
 
-        {/* 10 NEWS & CALLS: 65% Featured Story + 35% Secondary List (Section 34) */}
-        <Opportunities />
+        {/* 10 SECTION 09: "COLLABORATION" (--paper-blue, 5 Distinct Geometric Domains Around CIIRC Central Node) */}
+        <CollaborationConstellation />
 
-        {/* 11 FINAL CTA & CONVERGENCE: "LET'S BUILD WHAT COMES NEXT", Particle Convergence into CIIRC Mark (Section 35-36) */}
-        <CTASection onConvergenceChange={setIsConverging} />
+        {/* 11 SECTION 10: "DIRECTOR / HUMAN STORY" (--paper-green, Authentic Portrait + Verified Philosophy) */}
+        <DirectorStory />
+
+        {/* 12 SECTION 11: "FINAL CTA" (--paper, "BUILD WHAT COMES NEXT" + Distilled Sparse Research Field) */}
+        <FinalCTA />
       </main>
 
-      {/* 12 FOOTER: Deep Ink Baseline Grounding */}
-      <Footer />
+      {/* 13 SECTION 12: FOOTER (--forest, Editorial 4-Column Directory + DSIR-SIRO Authentic Details) */}
+      <FooterAtlas />
     </div>
   );
 }

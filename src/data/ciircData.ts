@@ -1,465 +1,394 @@
-export interface ResearchVista {
+export interface ResearchAreaItem {
   id: string;
-  indexNumber: string;
-  title: string;
-  category: 'Materials & Nano' | 'Engineering' | 'Life & Health' | 'Computing & Systems' | 'Earth & Environment' | 'Innovation';
-  tag: string;
-  summary: string;
-  detailedScope: string;
-  instrumentsOrFocus: string[];
-  externalUrl: string;
-  colorScheme: 'cobalt' | 'teal' | 'amber';
-}
-
-export interface StatItem {
-  id: string;
-  value: string;
-  label: string;
-  sublabel: string;
-  isHighlight?: boolean;
-}
-
-export interface MilestoneItem {
-  year: string;
-  title: string;
+  number: string;
+  name: string;
+  category: 'Materials' | 'Biology' | 'Engineering' | 'Environment' | 'Computing' | 'Innovation';
+  metadata: string;
+  image: string;
   description: string;
-  badge: string;
-  isArcticOrPolar?: boolean;
+  url: string;
+}
+
+export interface InstrumentItem {
+  id: string;
+  code: string;
+  fullName: string;
+  specs: string;
+  image: string;
+  role: string;
+}
+
+export interface AuthenticAchievement {
+  id: string;
+  title: string;
+  category: string;
+  description: string;
+  accent: 'blue' | 'teal' | 'coral';
 }
 
 export interface PartnerItem {
   name: string;
-  category: 'Government / Funding' | 'International Academic' | 'Industry & Enterprise';
-  logoUrl?: string;
-  initials: string;
-}
-
-export interface OpportunityItem {
-  id: string;
-  title: string;
-  date: string;
-  department: string;
-  status: 'Open Application' | 'Archived Record';
-  link: string;
+  type: string;
+  region: string;
 }
 
 export const CIIRC_IDENTITY = {
   name: "CIIRC®",
   fullName: "Centre for Incubation, Innovation, Research and Consultancy",
-  recognition: "Scientific and Industrial Research Organization (SIRO) Recognized by DSIR, Ministry of Science & Technology, Government of India",
+  recognition: "DSIR–SIRO Recognized Autonomous Research Institution",
+  ministry: "Ministry of Science & Technology, Government of India",
   founders: "Joint Initiative of Sri Sringeri Sharada Peetham, Sringeri and Jyothy Institute of Technology (JIT)",
-  vision: "To be a Center of Excellence for Developing New Technologies, Incubation and Innovation",
-  mission: "Pioneering Product Development",
-  facilityArea: "50,000 sq.ft.",
+  facilityArea: "50,000+ Sq. Ft.",
   email: "info@ciirc.jyothyit.ac.in",
   phone: "080-50985588",
-  campusAddress: "Jyothy Institute of Technology Campus, Tataguni, Kanakapura Main Road, Bengaluru - 560082, Karnataka, India",
+  location: "Tataguni, Kanakapura Main Road, Bengaluru 560082, Karnataka, India",
   director: {
     name: "Dr. Krishna Venkatesh",
     role: "Founder-Director, CIIRC®",
-    qualifications: "GATE Scholar • IISc Bengaluru Alumnus • Ph.D. in Nanoengineering",
-    bio: "Over 25 years of research, academic, and administrative leadership. Member of the Vision Group on Nanotechnology (GoK), Steering Committee Member at TÜV Rheinland Germany, former Executive Council Member of Visvesvaraya Technological University (VTU), and Member of Karnataka Knowledge Commission for Unmanned Systems Technology.",
-    quote: "From times immemorial, teaching and research have been an indispensable activity and, today, is becoming increasingly multidisciplinary in nature. Globalization and technological convergence require a new class of scholars equipped with multiple perspectives, sharp creative skills, and willingness to adapt to new and changing conditions for the benefit of mankind."
+    qualifications: "IISc Bengaluru Alumnus • Ph.D. in Nanoengineering • GATE Scholar",
+    quote: "Bringing science, engineering, business orientation, skill development, innovation, incubation and research onto one platform to generate technologies with profound societal consequence."
   }
 };
 
-export const CIIRC_STATS: StatItem[] = [
+export const AUTHENTIC_17_RESEARCH_AREAS: ResearchAreaItem[] = [
   {
-    id: "facility",
-    value: "50,000+",
-    label: "Sq. Ft. Dedicated Labs",
-    sublabel: "State-of-the-art facility housing 18+ research vistas"
+    id: "affordable-medical-devices",
+    number: "01",
+    name: "Affordable Medical Devices",
+    category: "Biology",
+    metadata: "Translational Healthcare · Clinical Diagnostics",
+    image: "/images/instruments/sem.jpg",
+    description: "Low-cost point-of-care microfluidic diagnostic devices, non-invasive metabolic screening tools, and societal health solutions.",
+    url: "https://ciirc.res.in/service/affordable-medical-devices-sensors/"
   },
   {
-    id: "doctorates",
-    value: "27",
-    label: "Doctoral Researchers",
-    sublabel: "Alumni of IISc, IITs, NITs, Central & Foreign Universities"
+    id: "sensors-and-inks",
+    number: "02",
+    name: "Sensors & Inks",
+    category: "Materials",
+    metadata: "Conductive Inks · Flexible Biosensors",
+    image: "/images/instruments/xrd.jpg",
+    description: "Formulation of conductive graphene/metal nanoparticle inks for printed electronics, flexible biosensor strips, and wearable telemetry.",
+    url: "https://ciirc.res.in/service/affordable-medical-devices-sensors/"
   },
   {
-    id: "masters",
-    value: "13",
-    label: "Master's Researchers",
-    sublabel: "Specialized investigators across multidisciplinary domains"
-  },
-  {
-    id: "fellows",
-    value: "20+",
-    label: "PG Research Fellows",
-    sublabel: "Engaged in bilateral & nationally funded programs"
-  },
-  {
-    id: "projects",
-    value: "50+",
-    label: "Funded Projects",
-    sublabel: "DST, DRDO, DOS/ISRO, DBT, EU & Indo-French CEFIPRA",
-    isHighlight: true
-  },
-  {
-    id: "publications",
-    value: "300+",
-    label: "Indexed Publications",
-    sublabel: "Scopus, Web of Science, Elsevier, Springer & Wiley"
-  },
-  {
-    id: "products",
-    value: "35+",
-    label: "Societal Products",
-    sublabel: "Developed with societal, clinical & environmental impact",
-    isHighlight: true
-  }
-];
-
-export const RESEARCH_VISTAS: ResearchVista[] = [
-  {
-    id: "sophisticated-instrumentation-facility",
-    indexNumber: "01",
-    title: "Sophisticated Instrumentation Facility (SIF)",
-    category: "Materials & Nano",
-    tag: "Central Characterization Hub",
-    summary: "Centralized analytical infrastructure housing high-end characterization instruments accessible to internal scholars, external academia, and industry.",
-    detailedScope: "Provides high-resolution microstructural, crystallographic, spectroscopic, and thermal characterization. The facility supports advanced material synthesis, quality validation, and external testing consultancy.",
-    instrumentsOrFocus: ["Scanning Electron Microscope (SEM)", "X-Ray Diffraction (XRD)", "Gas Chromatography (GC)", "FT-IR Spectrophotometer", "DSC & TGA", "BET Surface Area Analyzer"],
-    externalUrl: "https://ciirc.res.in/service/sophisticated-instrumentation-facility/",
-    colorScheme: "cobalt"
-  },
-  {
-    id: "nanosciences-and-engineering",
-    indexNumber: "02",
-    title: "Nanosciences and Engineering",
-    category: "Materials & Nano",
-    tag: "Advanced Nanomaterials",
-    summary: "Synthesis, characterization, and device fabrication of 0D, 1D, and 2D nanomaterials for energy, sensors, and structural coatings.",
-    detailedScope: "Investigates atomic-scale properties, quantum dot architectures, graphene composites, and nanostructured catalysts. Recognized nationally through the Bangalore Nano and Nano Sparx innovation awards.",
-    instrumentsOrFocus: ["Quantum Dots", "Graphene & MXenes", "Nanostructured Thin Films", "Heterojunction Devices"],
-    externalUrl: "https://ciirc.res.in/service/nanosciences-and-engineering/",
-    colorScheme: "cobalt"
-  },
-  {
-    id: "surfaces-and-interfaces",
-    indexNumber: "03",
-    title: "Surfaces & Interfaces",
-    category: "Materials & Nano",
-    tag: "Surface Physics & Coatings",
-    summary: "Study of physical and chemical boundary phenomena, high-performance protective coatings, and tribological interfaces.",
-    detailedScope: "Explores wetting kinetics, anti-corrosion barriers, self-cleaning superhydrophobic coatings, and functional interface modifications for aerospace and industrial components.",
-    instrumentsOrFocus: ["Contact Angle Goniometry", "Thin Film Sputtering", "Corrosion Analysis", "Interfacial Thermodynamics"],
-    externalUrl: "https://ciirc.res.in/service/surfaces-interfaces/",
-    colorScheme: "cobalt"
-  },
-  {
-    id: "biopolymers-and-biocomposites",
-    indexNumber: "04",
-    title: "Biopolymers & Biocomposites",
-    category: "Materials & Nano",
-    tag: "Sustainable Materials",
-    summary: "Formulation of biodegradable polymers, natural fiber reinforced composites, and eco-friendly packaging alternatives.",
-    detailedScope: "Focuses on circular material solutions, agricultural waste valorization into reinforcing fibers, bio-resins, and high-strength lightweight composite structures.",
-    instrumentsOrFocus: ["Cellulose Nanofibers", "Polylactic Acid (PLA) Blends", "Mechanical Testing", "Biodegradability Assays"],
-    externalUrl: "https://ciirc.res.in/service/biopolymers-and-biocomposites/",
-    colorScheme: "teal"
-  },
-  {
-    id: "affordable-medical-devices-sensors",
-    indexNumber: "05",
-    title: "Affordable Medical Devices, Sensors & Inks",
-    category: "Life & Health",
-    tag: "Clinical & Point-of-Care",
-    summary: "Translational health technologies, point-of-care microfluidic biosensors, and conductive diagnostic inks.",
-    detailedScope: "Develops low-cost diagnostic solutions targeting widespread societal healthcare challenges, non-invasive metabolic monitoring, and screen-printed flexible electrode systems.",
-    instrumentsOrFocus: ["Electrochemical Biosensors", "Conductive Functional Inks", "Point-of-Care Strips", "Microfluidic Cartridges"],
-    externalUrl: "https://ciirc.res.in/service/affordable-medical-devices-sensors/",
-    colorScheme: "teal"
-  },
-  {
-    id: "cell-and-molecular-biology",
-    indexNumber: "06",
-    title: "Cell & Molecular Biology",
-    category: "Life & Health",
-    tag: "Biomedical & Oncology",
-    summary: "Mechanisms of disease progression, oncology biomarkers, molecular pharmacology, and targeted therapeutics.",
-    detailedScope: "Conducts cellular cytotoxicity assays, gene expression profiling, screening of novel anti-cancer compounds, and investigation of cell signaling cascades.",
-    instrumentsOrFocus: ["Fluorescence Microscopy", "Mammalian Cell Culture", "RT-PCR", "Protein Electrophoresis"],
-    externalUrl: "https://ciirc.res.in/service/cell-and-molecular-biology/",
-    colorScheme: "teal"
-  },
-  {
-    id: "nano-biotechnology",
-    indexNumber: "07",
-    title: "Nano Biotechnology",
-    category: "Life & Health",
-    tag: "Enzyme & Nanodelivery",
-    summary: "Intersection of nanotechnology with biological systems, enzyme immobilization, and targeted nanoscale delivery vehicles.",
-    detailedScope: "Engineering biocatalytic nano-assemblies for industrial synthesis, stabilization of bioactive molecules, and targeted carrier systems for drug delivery.",
-    instrumentsOrFocus: ["Enzyme Kinetics", "Liposomal Nanocarriers", "Bioconjugation Chemistry", "Thermal Stability Assays"],
-    externalUrl: "https://ciirc.res.in/service/nano-biotechnology/",
-    colorScheme: "teal"
-  },
-  {
-    id: "food-technology",
-    indexNumber: "08",
-    title: "Food Technology",
-    category: "Life & Health",
-    tag: "Food Safety & Quality",
-    summary: "Scientific evaluation of food safety, nutritional profiling, bioactive retention, and natural preservative formulations.",
-    detailedScope: "Focuses on rapid contaminant screening, shelf-life extension using natural botanical antimicrobials, and post-harvest quality enhancement.",
-    instrumentsOrFocus: ["Nutrient Profiling", "Microbial Load Testing", "Natural Extracts", "Quality Assurance Metrics"],
-    externalUrl: "https://ciirc.res.in/service/food-technology/",
-    colorScheme: "teal"
-  },
-  {
-    id: "plant-and-microbial-technology",
-    indexNumber: "09",
-    title: "Plant & Microbial Technology",
-    category: "Life & Health",
-    tag: "Agri-Biotech & Botanical",
-    summary: "Exploration of botanical actives, microbial bio-inoculants, secondary metabolites, and agricultural biotechnology.",
-    detailedScope: "Bridges classical Ayurvedic botanical insights with modern analytical phytochemistry, discovering plant secondary metabolites with therapeutic and pest-repellent applications.",
-    instrumentsOrFocus: ["Phytochemical Isolation", "Microbial Fermentation", "Plant Tissue Culture", "Bio-Fertilizer Formulations"],
-    externalUrl: "https://ciirc.res.in/service/plant-and-microbial-technology/",
-    colorScheme: "teal"
-  },
-  {
-    id: "ancient-indian-science-and-technology",
-    indexNumber: "10",
-    title: "Ancient Indian Science & Technology",
-    category: "Life & Health",
-    tag: "Heritage S&T Validation",
-    summary: "Rigorous scientific investigation and contemporary material validation of ancient Indian scientific treatises and practices.",
-    detailedScope: "Applying modern analytical instrumentation (SEM, XRD, spectroscopy) to study traditional metallurgic processes (such as Wootz steel), rasashastra formulations, and holistic agricultural practices.",
-    instrumentsOrFocus: ["Archaeo-metallurgy", "Traditional Formulation Chemistry", "Ethnobotanical Studies", "Comparative Scientific Metrics"],
-    externalUrl: "https://ciirc.res.in/service/ancient-indian-science-and-technology/",
-    colorScheme: "amber"
+    id: "ancient-indian-st",
+    number: "03",
+    name: "Ancient Indian S&T",
+    category: "Innovation",
+    metadata: "Heritage Metallurgy · Validation Science",
+    image: "/images/instruments/ftir.jpg",
+    description: "Rigorous scientific investigation and modern analytical validation (SEM, XRD) of ancient Indian metallurgical treatises and botanical formulations.",
+    url: "https://ciirc.res.in/service/ancient-indian-science-and-technology/"
   },
   {
     id: "autonomous-systems",
-    indexNumber: "11",
-    title: "Autonomous Systems & Drones",
+    number: "04",
+    name: "Autonomous Systems",
     category: "Engineering",
-    tag: "Aerospace & Polar Robotics",
-    summary: "Unmanned aerial vehicles (UAVs), telemetry, flight control algorithms, and extreme-environment robotic platforms.",
-    detailedScope: "Pioneered Indian drone mapping in polar glaciers during the 4th Indian Arctic Expedition. Focuses on robust flight dynamics, payload stabilization, and long-range environmental mapping.",
-    instrumentsOrFocus: ["Autonomous Flight Controllers", "Polar Glacial UAVs", "Computer Vision Payloads", "Telemetry Ground Stations"],
-    externalUrl: "https://ciirc.res.in/service/autonomous-systems/",
-    colorScheme: "cobalt"
+    metadata: "UAVs · Polar Robotics · Telemetry",
+    image: "/images/facilities/ciirc-lab-main.jpg",
+    description: "Pioneering Indian autonomous drone platforms for extreme Arctic glacier mapping, flight stabilization, and precision aerial survey.",
+    url: "https://ciirc.res.in/service/autonomous-systems/"
   },
   {
-    id: "thermal-engineering-tribology",
-    indexNumber: "12",
-    title: "Thermal Engineering & Tribology",
-    category: "Engineering",
-    tag: "Heat Transfer & Friction",
-    summary: "Advanced heat transfer optimization, hydrodynamic lubrication, friction reduction, and wear-resistant systems.",
-    detailedScope: "Addresses thermal management in high-performance electronics, engine friction mechanics, development of nano-lubricants, and energy-efficient cooling solutions.",
-    instrumentsOrFocus: ["Pin-on-Disc Tribometer", "Thermal Conductivity Meter", "Nano-Lubricant Blends", "Heat Pipe Systems"],
-    externalUrl: "https://ciirc.res.in/service/thermal-engineering-tribology/",
-    colorScheme: "cobalt"
+    id: "biocomposites-biopolymers",
+    number: "05",
+    name: "Biocomposites & Biopolymers",
+    category: "Materials",
+    metadata: "Sustainable Resins · Natural Fiber Composites",
+    image: "/images/instruments/dsc.jpg",
+    description: "Biodegradable agricultural waste valorization into natural fiber composites, bio-resins, and high-tensile sustainable polymers.",
+    url: "https://ciirc.res.in/service/biopolymers-and-biocomposites/"
   },
   {
-    id: "construction-technology",
-    indexNumber: "13",
-    title: "Construction Technology",
-    category: "Engineering",
-    tag: "Structural & Geopolymers",
-    summary: "Sustainable construction composites, low-carbon geopolymer cements, and structural engineering materials.",
-    detailedScope: "Develops eco-concrete incorporating industrial byproducts, testing structural durability under extreme stress, and advancing lightweight modular infrastructure.",
-    instrumentsOrFocus: ["Compression Testing Systems", "Geopolymer Synthesis", "Non-Destructive Testing", "Durability Analysis"],
-    externalUrl: "https://ciirc.res.in/service/construction-technology/",
-    colorScheme: "cobalt"
+    id: "cell-molecular-biology",
+    number: "06",
+    name: "Cell & Molecular Biology",
+    category: "Biology",
+    metadata: "Oncology Biomarkers · Molecular Screening",
+    image: "/images/instruments/sem.jpg",
+    description: "Investigating mechanisms of disease progression, mammalian cytotoxicity assays, anticancer botanical screening, and gene expression.",
+    url: "https://ciirc.res.in/service/cell-and-molecular-biology/"
   },
   {
     id: "computational-engineering",
-    indexNumber: "14",
-    title: "Computational Engineering & Modeling",
-    category: "Computing & Systems",
-    tag: "Simulation & High-Performance Computing",
-    summary: "Multi-scale computational physics, finite element analysis (FEA), computational fluid dynamics (CFD), and algorithm design.",
-    detailedScope: "Powers predictive engineering through numeric simulation, modeling complex aerodynamic flows, thermal dissipation, and molecular dynamics across interdisciplinary projects.",
-    instrumentsOrFocus: ["Finite Element Analysis", "Computational Fluid Dynamics", "Molecular Dynamics Simulation", "High-Performance Clusters"],
-    externalUrl: "https://ciirc.res.in/service/computational-engineering/",
-    colorScheme: "cobalt"
+    number: "07",
+    name: "Computational Engineering",
+    category: "Computing",
+    metadata: "FEA · CFD · Multi-Scale Simulation",
+    image: "/images/facilities/ciirc-cleanroom.jpg",
+    description: "Predictive numeric simulations, aerodynamic flow modeling, thermal dissipation mechanics, and molecular dynamics clusters.",
+    url: "https://ciirc.res.in/service/computational-engineering/"
   },
   {
     id: "energy",
-    indexNumber: "15",
-    title: "Energy & Clean Storage",
-    category: "Earth & Environment",
-    tag: "Batteries & Supercapacitors",
-    summary: "Electrochemical energy storage, battery materials, supercapacitors, and alternative energy generation systems.",
-    detailedScope: "Synthesizing nanostructured electroactive materials for next-generation lithium, sodium, and hybrid energy storage devices with enhanced cycle stability and power density.",
-    instrumentsOrFocus: ["Battery Cycler & Potentiostat", "Supercapacitor Assemblies", "Coin Cell Fabrication", "Electrochemical Impedance"],
-    externalUrl: "https://ciirc.res.in/service/energy/",
-    colorScheme: "teal"
+    number: "08",
+    name: "Energy",
+    category: "Environment",
+    metadata: "Battery Materials · Supercapacitors",
+    image: "/images/instruments/tga.jpg",
+    description: "Next-generation nanostructured electrodes for high-capacity lithium and sodium ion cells, electrochemical storage, and supercapacitors.",
+    url: "https://ciirc.res.in/service/energy/"
   },
   {
     id: "environment",
-    indexNumber: "16",
-    title: "Environmental Remediation & CCS",
-    category: "Earth & Environment",
-    tag: "Carbon Capture & Ecology",
-    summary: "Carbon dioxide capture and storage (CCS), air quality monitoring, and ecological pollution remediation.",
-    detailedScope: "Focuses on commercializable solid adsorbents for CO2 capture from industrial flue gases, catalytic breakdown of hazardous pollutants, and ecological impact mitigation.",
-    instrumentsOrFocus: ["CO2 Adsorption Rig", "Flue Gas Analyzers", "Catalytic Degradation Systems", "Air Quality Monitoring"],
-    externalUrl: "https://ciirc.res.in/service/environment/",
-    colorScheme: "teal"
+    number: "09",
+    name: "Environment",
+    category: "Environment",
+    metadata: "Carbon Capture (CCS) · Air Quality",
+    image: "/images/instruments/bet.jpg",
+    description: "Solid adsorbents for industrial flue gas CO2 capture and storage (CCS), hazardous effluent degradation, and atmospheric monitoring.",
+    url: "https://ciirc.res.in/service/environment/"
   },
   {
-    id: "water",
-    indexNumber: "17",
-    title: "Water Purification & Management",
-    category: "Earth & Environment",
-    tag: "Filtration & Heavy Metals",
-    summary: "Advanced water treatment membranes, nano-adsorbents for heavy metal removal, and wastewater recycling.",
-    detailedScope: "Engineers cost-effective functional ceramic and polymer filtration matrices capable of removing arsenic, fluoride, and organic dye effluents from contaminated sources.",
-    instrumentsOrFocus: ["Membrane Separation Units", "Heavy Metal Testing", "Batch Adsorption Columns", "Water Quality Indexing"],
-    externalUrl: "https://ciirc.res.in/service/water/",
-    colorScheme: "teal"
+    id: "food-technology",
+    number: "10",
+    name: "Food Technology",
+    category: "Biology",
+    metadata: "Food Safety · Bioactive Formulations",
+    image: "/images/instruments/gc.jpg",
+    description: "Screening of botanical antimicrobials for shelf-life extension, rapid pathogen testing kits, and bioactive nutritional profiling.",
+    url: "https://ciirc.res.in/service/food-technology/"
+  },
+  {
+    id: "nanobiotechnology",
+    number: "11",
+    name: "Nanobiotechnology",
+    category: "Biology",
+    metadata: "Targeted Delivery · Enzyme Immobilization",
+    image: "/images/instruments/sem.jpg",
+    description: "Biocatalytic nano-assemblies for industrial synthesis, liposomal nanocarriers, and targeted biochemical delivery vectors.",
+    url: "https://ciirc.res.in/service/nano-biotechnology/"
+  },
+  {
+    id: "nanoscience-engineering",
+    number: "12",
+    name: "Nanoscience & Engineering",
+    category: "Materials",
+    metadata: "Quantum Dots · 2D Graphene · MXenes",
+    image: "/images/instruments/xrd.jpg",
+    description: "Synthesis and characterization of 0D, 1D, and 2D nanomaterials for energy devices, heterojunction sensors, and functional thin films.",
+    url: "https://ciirc.res.in/service/nanosciences-and-engineering/"
+  },
+  {
+    id: "plant-microbial-technology",
+    number: "13",
+    name: "Plant & Microbial Technology",
+    category: "Biology",
+    metadata: "Botanical Actives · Microbial Inoculants",
+    image: "/images/instruments/ftir.jpg",
+    description: "Extraction of secondary therapeutic metabolites, microbial bio-fertilizers, and plant tissue culture for sustainable agriculture.",
+    url: "https://ciirc.res.in/service/plant-and-microbial-technology/"
   },
   {
     id: "remote-sensing",
-    indexNumber: "18",
-    title: "Remote Sensing & Geospatial S&T",
-    category: "Earth & Environment",
-    tag: "Satellite Telemetry & GIS",
-    summary: "Multidisciplinary satellite data telemetry, GIS environmental modeling, glacial monitoring, and terrain analysis.",
-    detailedScope: "Hosts the dedicated ISRO IRNSS navigation satellite receiver station. Conducts high-resolution satellite image processing for terrain mapping and glacial movement studies in the Himalayas and Arctic.",
-    instrumentsOrFocus: ["ISRO IRNSS Satellite Receiver", "Geographic Information Systems (GIS)", "Multi-spectral Image Analysis", "Glacier Telemetry"],
-    externalUrl: "https://ciirc.res.in/service/remote-sensing/",
-    colorScheme: "cobalt"
+    number: "14",
+    name: "Remote Sensing",
+    category: "Engineering",
+    metadata: "ISRO IRNSS Telemetry · Glacial GIS",
+    image: "/images/facilities/ciirc-lab-secondary.jpg",
+    description: "Hosting on-campus ISRO IRNSS navigation ground station, multi-spectral satellite processing for Himalayan and Arctic glacier tracking.",
+    url: "https://ciirc.res.in/service/remote-sensing/"
   },
   {
-    id: "innovation-and-entrepreneurship-development-centre",
-    indexNumber: "19",
-    title: "Innovation & Incubation (IEDC / AIC-JIT)",
-    category: "Innovation",
-    tag: "Enterprise & Tech Transfer",
-    summary: "Nurturing student and faculty enterprise, seed incubation, patent filing, and commercial product translation.",
-    detailedScope: "Leverages the Atal Incubation Centre (AIC - JIT Foundation) on campus to translate lab inventions into market-viable products, startups, and commercial licenses.",
-    instrumentsOrFocus: ["AIC-JIT Incubation Hub", "IP & Patent Desk", "Seed Prototyping Workshop", "Venture Mentorship"],
-    externalUrl: "https://ciirc.res.in/service/innovation-and-entrepreneurship-development-centre/",
-    colorScheme: "amber"
+    id: "surfaces-interfaces",
+    number: "15",
+    name: "Surfaces & Interfaces",
+    category: "Materials",
+    metadata: "Superhydrophobic · Anti-Corrosion",
+    image: "/images/instruments/bet.jpg",
+    description: "High-performance boundary physics, wetting kinetics, anti-corrosion barriers, and self-cleaning coatings for aerospace and industrial parts.",
+    url: "https://ciirc.res.in/service/surfaces-interfaces/"
+  },
+  {
+    id: "thermal-engineering-tribology",
+    number: "16",
+    name: "Thermal Engineering & Tribology",
+    category: "Engineering",
+    metadata: "Nano-Lubricants · Heat Dissipation",
+    image: "/images/instruments/tga.jpg",
+    description: "Friction reduction via hydrodynamic nano-lubrication, pin-on-disc wear analysis, and thermal management in dense microelectronics.",
+    url: "https://ciirc.res.in/service/thermal-engineering-tribology/"
+  },
+  {
+    id: "water",
+    number: "17",
+    name: "Water",
+    category: "Environment",
+    metadata: "Ceramic Membranes · Heavy Metal Adsorption",
+    image: "/images/instruments/dsc.jpg",
+    description: "Engineered functional membranes and nano-adsorbents removing arsenic, fluoride, and toxic dye effluents from industrial wastewater.",
+    url: "https://ciirc.res.in/service/water/"
   }
 ];
 
-export const HISTORIC_MILESTONES: MilestoneItem[] = [
+export const AUTHENTIC_INSTRUMENTS: InstrumentItem[] = [
   {
-    year: "2017",
-    title: "Pace-Setting Biodiesel Vehicle at Asia Pacific Rally",
-    badge: "Automotive Innovation",
-    description: "Successfully engineered and demonstrated a vehicle running on 100% used cooking oil (WCO) biodiesel, serving as the official pace-setting car at the prestigious Asia Pacific Coffee-500 rally."
+    id: "sem",
+    code: "SEM",
+    fullName: "Scanning Electron Microscope",
+    specs: "High-resolution surface topography & morphological analysis down to nanometer resolution with elemental EDX mapping.",
+    image: "/images/instruments/sem.jpg",
+    role: "Nanoscale Morphology"
   },
   {
-    year: "2018",
-    title: "Bangalore Nano Most Innovative Product Display",
-    badge: "National Honour",
-    description: "Recognized at the prestigious Bangalore India Nano summit for breakthrough innovative nanotechnology displays and translational materials developed in CIIRC laboratories."
+    id: "xrd",
+    code: "XRD",
+    fullName: "X-Ray Diffractometer",
+    specs: "Crystal phase identification, lattice parameter determination, and thin film crystallographic orientation analysis.",
+    image: "/images/instruments/xrd.jpg",
+    role: "Crystallography"
   },
   {
-    year: "2019",
-    title: "4th Indian Scientific Expedition to the North Pole (Arctic)",
-    badge: "Polar Milestone",
-    isArcticOrPolar: true,
-    description: "Led the Indian scientific contingent to the Arctic in September 2019 for mapping glaciers, proudly becoming the first Indians to fly autonomous research drones in the extreme Arctic climate."
+    id: "gc",
+    code: "GC",
+    fullName: "Gas Chromatography System",
+    specs: "High-sensitivity separation and quantification of volatile organic compounds, fatty acid methyl esters, and gases.",
+    image: "/images/instruments/gc.jpg",
+    role: "Chemical Separation"
   },
   {
-    year: "2019",
-    title: "ISRO IRNSS Satellite Receiver Ground Station",
-    badge: "Space Telemetry",
-    description: "Commissioned a dedicated on-campus ISRO IRNSS (NavIC) satellite receiver for precision atmospheric data collection, positioning telemetry, and aerospace research."
+    id: "ftir",
+    code: "FT-IR",
+    fullName: "Fourier Transform Infrared Spectrophotometer",
+    specs: "Functional group identification across polymers, nanocomposites, and biological specimens in ATR and transmission modes.",
+    image: "/images/instruments/ftir.jpg",
+    role: "Molecular Spectroscopy"
   },
   {
-    year: "2020",
-    title: "National Nano Sparx Innovation Award",
-    badge: "Nanotechnology",
-    description: "Conferred the acclaimed Nano Sparx 2020 recognition for high-impact translational research in functional nanomaterials and healthcare sensors."
+    id: "dsc",
+    code: "DSC",
+    fullName: "Differential Scanning Calorimeter",
+    specs: "Precision measurement of thermal transitions, glass transition (Tg), melting point, crystallization kinetics, and curing.",
+    image: "/images/instruments/dsc.jpg",
+    role: "Thermal Transitions"
   },
   {
-    year: "2022",
-    title: "Selected for Scientific Expedition to the South Pole (Antarctica)",
-    badge: "Polar Milestone",
-    isArcticOrPolar: true,
-    description: "Faculty selected as part of an elite international scientific expedition to the South Pole (Antarctica) in March 2022, expanding polar climate, ice shelf, and instrumentation research."
+    id: "tga",
+    code: "TGA",
+    fullName: "Thermogravimetric Analyzer",
+    specs: "Evaluation of thermal decomposition thresholds, volatile filler content, oxidation kinetics, and residue quantification.",
+    image: "/images/instruments/tga.jpg",
+    role: "Decomposition Kinetics"
+  },
+  {
+    id: "bet",
+    code: "BET SURFACE AREA ANALYZER",
+    fullName: "Brunauer-Emmett-Teller Analyzer",
+    specs: "Precise multi-point determination of specific surface area, pore size distribution, and sorption capacity of nanoadsorbents.",
+    image: "/images/instruments/bet.jpg",
+    role: "Surface Porosimetry"
   }
 ];
 
-export const STRATEGIC_COLLABORATIONS: PartnerItem[] = [
-  { name: "DST - Dept. of Science & Technology", category: "Government / Funding", initials: "DST" },
-  { name: "DRDO - Defence Research & Development", category: "Government / Funding", initials: "DRDO" },
-  { name: "ISRO / DOS - Dept. of Space", category: "Government / Funding", initials: "ISRO" },
-  { name: "DBT - Dept. of Biotechnology", category: "Government / Funding", initials: "DBT" },
-  { name: "CEFIPRA - Indo-French S&T Council", category: "Government / Funding", initials: "CEFIPRA" },
-  { name: "P.N. Lebedev Physical Institute (Russia)", category: "International Academic", initials: "LPI", logoUrl: "https://ciirc.res.in/wp-content/uploads/2021/05/PN-Lebedev-Institute-Russia.jpg" },
-  { name: "Tunghai University (Taiwan)", category: "International Academic", initials: "THU", logoUrl: "https://ciirc.res.in/wp-content/uploads/2021/01/Tunghai-University.jpg" },
-  { name: "TÜV Rheinland (Germany)", category: "Industry & Enterprise", initials: "TUV", logoUrl: "https://ciirc.res.in/wp-content/uploads/2021/01/TUV-Rheinland.jpg" },
-  { name: "National Remote Sensing Centre (NRSC)", category: "Government / Funding", initials: "NRSC", logoUrl: "https://ciirc.res.in/wp-content/uploads/2021/01/National-Remote-Sensing-Centre.jpg" },
-  { name: "BOHECO", category: "Industry & Enterprise", initials: "BHC", logoUrl: "https://ciirc.res.in/wp-content/uploads/2021/01/BOHECO.jpg" },
-  { name: "Desicon", category: "Industry & Enterprise", initials: "DSC", logoUrl: "https://ciirc.res.in/wp-content/uploads/2021/05/Desicon.jpg" },
-  { name: "Dover", category: "Industry & Enterprise", initials: "DVR", logoUrl: "https://ciirc.res.in/wp-content/uploads/2021/01/Dover.jpg" },
-  { name: "S-VYASA Yoga University", category: "International Academic", initials: "SVYASA", logoUrl: "https://ciirc.res.in/wp-content/uploads/2021/05/svyasa-logo.jpg" },
-  { name: "Vsix Analytical Solutions", category: "Industry & Enterprise", initials: "V6", logoUrl: "https://ciirc.res.in/wp-content/uploads/2021/05/Vsix_new.jpg" }
-];
-
-export const RESEARCH_FELLOWSHIPS_WON = [
-  "Commonwealth Fellowship",
-  "BRICS Young Scientist",
-  "DBT Women Fellowship",
-  "DBT Ramalingaswami Fellowship",
-  "CSIR Fellowship",
-  "Raman Charpak (Indo-French) Fellowship",
-  "WOS-A & WOS-B (DST)",
-  "BIRAC-Shrishti Award",
-  "DST Young Scientist Award",
-  "Soviet Union Grant Challenge"
-];
-
-export const LIVE_OPPORTUNITIES: OpportunityItem[] = [
+export const AUTHENTIC_ACHIEVEMENTS: AuthenticAchievement[] = [
   {
-    id: "rf-sept-2023",
-    title: "Requirement for Research Fellow — Translational Instrumentation",
+    id: "north-pole-expedition",
+    title: "Fourth Indian Scientific Expedition to the North Pole (Arctic)",
+    category: "Polar Milestone",
+    description: "Led the Indian scientific contingent to the Arctic in September 2019, successfully mapping Arctic glaciers using autonomous research drones.",
+    accent: "blue"
+  },
+  {
+    id: "arctic-drone",
+    title: "First Autonomous Drone Missions in Arctic Glaciers",
+    category: "Autonomous Systems",
+    description: "Pioneered extreme-cold autonomous UAV flights over polar ice sheets for precision geospatial photogrammetry.",
+    accent: "blue"
+  },
+  {
+    id: "isro-receiver",
+    title: "ISRO Satellite Receiver & IRNSS Telemetry Station",
+    category: "Space Telemetry",
+    description: "Commissioned a dedicated on-campus ISRO IRNSS (NavIC) ground station for precision navigation and atmospheric data collection.",
+    accent: "blue"
+  },
+  {
+    id: "himalayan-mapping",
+    title: "Himalayan Glacier Geospatial Telemetry",
+    category: "Remote Sensing",
+    description: "High-altitude multi-spectral telemetry monitoring glacial retreat and water security dynamics across the Himalayas.",
+    accent: "teal"
+  },
+  {
+    id: "bangalore-nano-2018",
+    title: "Bangalore Nano 2018 Innovation Display Award",
+    category: "Nanotechnology",
+    description: "Recognized at the prestigious Bangalore India Nano summit for outstanding translational nanomaterial exhibits.",
+    accent: "teal"
+  },
+  {
+    id: "nano-sparx-2020",
+    title: "National Nano Sparx 2020 Innovation Award",
+    category: "Healthcare Sensors",
+    description: "Conferred the national Nano Sparx award for breakthrough point-of-care medical sensors and translational devices.",
+    accent: "teal"
+  },
+  {
+    id: "coffee-500-rally",
+    title: "Asia Pacific Coffee-500 Rally Pace-Setting Vehicle",
+    category: "Automotive Innovation",
+    description: "Engineered and deployed a vehicle operating on 100% used cooking oil (WCO) biodiesel as the official pace car.",
+    accent: "coral"
+  },
+  {
+    id: "biodiesel-wco",
+    title: "Biodiesel from Used Cooking Oil (WCO)",
+    category: "Clean Energy",
+    description: "Developed proprietary transesterification catalyst processes to convert commercial food waste oil into standardized fuel.",
+    accent: "coral"
+  },
+  {
+    id: "south-pole-antarctica",
+    title: "Scientific Expedition to the South Pole (Antarctica)",
+    category: "Polar Milestone",
+    description: "Faculty selected for an elite international scientific expedition to the South Pole, investigating ice shelf dynamics and extreme-climate materials.",
+    accent: "blue"
+  }
+];
+
+export const AUTHENTIC_PARTNERS: PartnerItem[] = [
+  { name: "DST - Dept. of Science & Technology", type: "Government / R&D", region: "India" },
+  { name: "DRDO - Defence Research & Development", type: "Defence / R&D", region: "India" },
+  { name: "ISRO - Indian Space Research Organisation", type: "Space / Telemetry", region: "India" },
+  { name: "DBT - Dept. of Biotechnology", type: "Biotech / R&D", region: "India" },
+  { name: "CEFIPRA - Indo-French Centre", type: "International / Bilateral", region: "France - India" },
+  { name: "P.N. Lebedev Physical Institute", type: "International Academic", region: "Russia" },
+  { name: "Tunghai University", type: "International Academic", region: "Taiwan" },
+  { name: "TÜV Rheinland", type: "Industrial Quality & Certification", region: "Germany" },
+  { name: "National Remote Sensing Centre (NRSC)", type: "Earth Observation", region: "India" },
+  { name: "BOHECO", type: "Industrial Enterprise", region: "India" },
+  { name: "Desicon", type: "Industrial Enterprise", region: "India" },
+  { name: "Dover", type: "Enterprise Consultancy", region: "Global" }
+];
+
+export const AUTHENTIC_NEWS_POSTS = [
+  {
+    id: "news-rf-trans",
+    isFeatured: true,
+    title: "Requirement for Research Fellow — Translational Instrumentation & Advanced Characterization",
     date: "September 5, 2023",
-    department: "Multidisciplinary Engineering",
-    status: "Open Application",
+    category: "Call for Research Fellows",
+    summary: "Inviting applications from qualified doctoral and post-graduate candidates for sponsored translational projects utilizing SEM, XRD, and microfluidic fabrication lines.",
     link: "https://ciirc.res.in/requirement-for-research-fellow/"
   },
   {
-    id: "rf-rs-apr-2023",
-    title: "Requirement for Research Fellow RS — Remote Sensing & Geospatial",
+    id: "news-rf-rs",
+    isFeatured: false,
+    title: "Requirement for Research Fellow RS — Remote Sensing & Geospatial Satellite Telemetry",
     date: "April 11, 2023",
-    department: "Remote Sensing & Satellite Lab",
-    status: "Open Application",
+    category: "Research Fellowship",
+    summary: "Dedicated position supporting the ISRO IRNSS receiver project and Himalayan glacier GIS modeling.",
     link: "https://ciirc.res.in/requirement-for-research-fellow-rs/"
   },
   {
-    id: "rf-as-apr-2023",
-    title: "Requirement for Research Fellow AS — Autonomous Systems & Avionics",
+    id: "news-rf-as",
+    isFeatured: false,
+    title: "Requirement for Research Fellow AS — Autonomous Systems, Drone Avionics & Flight Control",
     date: "April 11, 2023",
-    department: "Autonomous Systems Lab",
-    status: "Open Application",
+    category: "Research Fellowship",
+    summary: "Investigation into polar drone telemetry, computer vision payloads, and fail-safe flight stabilization.",
     link: "https://ciirc.res.in/requirement-for-research-fellow-as/"
-  },
-  {
-    id: "rf-cb-apr-2023",
-    title: "Requirement for Research Fellow CB — Cell & Molecular Biology",
-    date: "April 11, 2023",
-    department: "Life & Health Sciences",
-    status: "Open Application",
-    link: "https://ciirc.res.in/requirement-for-research-fellow-cb/"
-  },
-  {
-    id: "pa-indo-swedish",
-    title: "Project Assistant Post — Indo-Swedish GITA Bilateral Initiative",
-    date: "June 6, 2021",
-    department: "International Collaborations",
-    status: "Archived Record",
-    link: "https://ciirc.res.in/requirement-for-project-assistant-post-indo-swedish-gita/"
   }
-];
-
-export const INDUSTRY_5_ENABLERS = [
-  { title: "Nanotechnology", desc: "Atomic precision engineering and nanomaterials" },
-  { title: "Additive Technology", desc: "Rapid 3D micro-fabrication and structural printing" },
-  { title: "Biotechnology", desc: "Cellular diagnostics, natural actives and biopolymers" },
-  { title: "Autonomous Systems", desc: "UAVs, telemetry control and robotics" },
-  { title: "Artificial Intelligence", desc: "Predictive modeling, data telemetry and sensor fusion" },
-  { title: "5G+ Communication", desc: "Low-latency satellite & remote sensing networks" }
 ];
