@@ -10,7 +10,7 @@ export const EngageSection: React.FC = () => {
       style={{
         position: 'relative',
         backgroundColor: 'var(--surface)',
-        padding: '130px 0',
+        padding: 'clamp(64px, 8vw, 130px) 0',
         borderTop: '1px solid var(--border)',
         overflow: 'hidden'
       }}
@@ -19,8 +19,8 @@ export const EngageSection: React.FC = () => {
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: '55% 45%',
-            gap: '56px',
+            gridTemplateColumns: 'minmax(0, 1.15fr) minmax(0, 0.85fr)',
+            gap: 'clamp(28px, 4vw, 56px)',
             alignItems: 'center'
           }}
           className="engage-grid"
@@ -199,6 +199,15 @@ export const EngageSection: React.FC = () => {
           </div>
         </div>
       </div>
+
+      <style jsx global>{`
+        @media (max-width: 900px) {
+          .engage-grid {
+            grid-template-columns: 1fr !important;
+            gap: 36px !important;
+          }
+        }
+      `}</style>
     </section>
   );
 };

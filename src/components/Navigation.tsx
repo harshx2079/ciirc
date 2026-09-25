@@ -94,10 +94,10 @@ export const Navigation: React.FC = () => {
       <nav
         style={{
           position: 'fixed',
-          top: scrolled ? '16px' : '26px',
-          left: '32px',
-          right: '32px',
-          height: scrolled ? '64px' : '76px',
+          top: scrolled ? '14px' : '22px',
+          left: '50%',
+          width: 'min(calc(100% - clamp(20px, 4vw, 64px)), 1480px)',
+          height: scrolled ? '64px' : '74px',
           borderRadius: scrolled ? '20px' : '22px',
           backgroundColor: scrolled ? 'rgba(255, 255, 255, 0.94)' : 'rgba(255, 255, 255, 0.90)',
           backdropFilter: 'blur(20px)',
@@ -109,11 +109,11 @@ export const Navigation: React.FC = () => {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          padding: '0 28px',
+          padding: '0 clamp(16px, 2.5vw, 30px)',
           zIndex: 900,
-          transform: navVisible ? 'translateY(0)' : 'translateY(-100px)',
+          transform: navVisible ? 'translateX(-50%) translateY(0)' : 'translateX(-50%) translateY(-110px)',
           transition:
-            'transform 380ms cubic-bezier(0.22, 1, 0.36, 1), height 360ms cubic-bezier(0.22, 1, 0.36, 1), top 360ms cubic-bezier(0.22, 1, 0.36, 1), background-color 300ms ease, box-shadow 300ms ease, border-color 300ms ease, border-radius 360ms ease'
+            'transform 380ms cubic-bezier(0.22, 1, 0.36, 1), height 360ms cubic-bezier(0.22, 1, 0.36, 1), top 360ms cubic-bezier(0.22, 1, 0.36, 1), background-color 300ms ease, box-shadow 300ms ease, border-color 300ms ease, border-radius 360ms ease, width 300ms ease'
         }}
         className="ciirc-floating-nav"
       >
@@ -127,15 +127,16 @@ export const Navigation: React.FC = () => {
           style={{
             display: 'flex',
             alignItems: 'center',
-            textDecoration: 'none'
+            textDecoration: 'none',
+            flexShrink: 0
           }}
           aria-label="CIIRC Home"
         >
           <div
             style={{
               position: 'relative',
-              width: scrolled ? '132px' : '142px',
-              height: scrolled ? '38px' : '42px',
+              width: scrolled ? '128px' : '138px',
+              height: scrolled ? '36px' : '40px',
               transition: 'all 360ms cubic-bezier(0.22, 1, 0.36, 1)'
             }}
           >
@@ -156,7 +157,7 @@ export const Navigation: React.FC = () => {
           style={{
             display: 'flex',
             alignItems: 'center',
-            gap: '32px',
+            gap: 'clamp(14px, 1.8vw, 28px)',
             position: 'relative',
             paddingBottom: '2px'
           }}
@@ -358,13 +359,9 @@ export const Navigation: React.FC = () => {
           }
         }
 
-        @media (min-width: 768px) and (max-width: 1024px) {
+        @media (max-width: 1080px) {
           .ciirc-floating-nav {
-            left: 20px !important;
-            right: 20px !important;
-            top: 16px !important;
-            height: 68px !important;
-            border-radius: 20px !important;
+            height: 64px !important;
             padding: 0 20px !important;
           }
           .desktop-links,
@@ -376,25 +373,12 @@ export const Navigation: React.FC = () => {
           }
         }
 
-        @media (max-width: 767px) {
+        @media (max-width: 640px) {
           .ciirc-floating-nav {
-            width: calc(100% - 24px) !important;
-            left: 12px !important;
-            right: 12px !important;
-            top: 12px !important;
-            height: 62px !important;
-            border-radius: 18px !important;
-            padding: 0 16px !important;
-            background-color: rgba(255, 255, 255, 0.92) !important;
-            border: 1px solid rgba(20, 40, 80, 0.09) !important;
-            box-shadow: 0 8px 24px rgba(20, 40, 80, 0.06) !important;
-          }
-          .desktop-links,
-          .desktop-cta {
-            display: none !important;
-          }
-          .mobile-toggle {
-            display: flex !important;
+            top: 10px !important;
+            height: 58px !important;
+            border-radius: 16px !important;
+            padding: 0 14px !important;
           }
         }
 

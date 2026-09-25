@@ -11,8 +11,8 @@ export const Footer: React.FC = () => {
         style={{
           background: 'linear-gradient(180deg, var(--background) 0%, #1A2A4A 60%, #14213D 100%)',
           position: 'relative',
-          paddingTop: '160px',
-          paddingBottom: '120px',
+          paddingTop: 'clamp(80px, 9vw, 150px)',
+          paddingBottom: 'clamp(60px, 7vw, 110px)',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
@@ -296,10 +296,17 @@ export const Footer: React.FC = () => {
           border-color: #25BFEF;
         }
 
-        @media (max-width: 900px) {
+        @media (max-width: 1024px) {
+          .footer-grid {
+            grid-template-columns: repeat(2, 1fr) !important;
+            gap: 40px !important;
+          }
+        }
+
+        @media (max-width: 640px) {
           .footer-grid {
             grid-template-columns: 1fr !important;
-            gap: 36px !important;
+            gap: 32px !important;
           }
         }
       `}</style>

@@ -89,35 +89,14 @@ button {
   background: none;
 }
 
-/* Global Container Utility (Section 7) */
+/* Global Container Utility (Fluid Responsive Container System) */
 .atlas-container {
   width: 100%;
-  max-width: var(--max-width);
+  max-width: min(1480px, 100%);
   margin-left: auto;
   margin-right: auto;
-  padding-left: 72px;
-  padding-right: 72px;
-}
-
-@media (min-width: 1600px) {
-  .atlas-container {
-    padding-left: 96px;
-    padding-right: 96px;
-  }
-}
-
-@media (max-width: 1024px) {
-  .atlas-container {
-    padding-left: 40px;
-    padding-right: 40px;
-  }
-}
-
-@media (max-width: 768px) {
-  .atlas-container {
-    padding-left: 20px;
-    padding-right: 20px;
-  }
+  padding-left: clamp(18px, 3.8vw, 64px);
+  padding-right: clamp(18px, 3.8vw, 64px);
 }
 
 /* Monospace Scientific Metadata */

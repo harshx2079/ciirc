@@ -209,8 +209,8 @@ export const AchievementsTimeline: React.FC = () => {
                     left: 0,
                     right: 0,
                     display: 'grid',
-                    gridTemplateColumns: '44% 56%',
-                    gap: '56px',
+                    gridTemplateColumns: 'minmax(0, 0.44fr) minmax(0, 0.56fr)',
+                    gap: 'clamp(24px, 4vw, 56px)',
                     alignItems: 'center',
                     opacity: isCurrent ? 1 : 0,
                     transform: isCurrent

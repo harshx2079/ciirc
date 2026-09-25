@@ -32,8 +32,8 @@ export const DirectorSection: React.FC = () => {
       style={{
         position: 'relative',
         backgroundColor: 'var(--background)',
-        paddingTop: '180px',
-        paddingBottom: '180px',
+        paddingTop: 'clamp(72px, 8vw, 140px)',
+        paddingBottom: 'clamp(72px, 8vw, 140px)',
         overflow: 'hidden'
       }}
     >
@@ -54,7 +54,7 @@ export const DirectorSection: React.FC = () => {
 
       <div className="atlas-container">
         {/* Section Header */}
-        <div style={{ marginBottom: '72px' }}>
+        <div style={{ marginBottom: 'clamp(40px, 5vw, 72px)' }}>
           <div
             style={{
               opacity: inView ? 1 : 0,
@@ -70,7 +70,7 @@ export const DirectorSection: React.FC = () => {
 
           <h2
             style={{
-              fontSize: 'clamp(38px, 4.4vw, 68px)',
+              fontSize: 'clamp(34px, 4.4vw, 68px)',
               lineHeight: 1.02,
               letterSpacing: '-0.045em',
               fontWeight: 700,
@@ -89,8 +89,8 @@ export const DirectorSection: React.FC = () => {
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: '44% 56%',
-            gap: '68px',
+            gridTemplateColumns: 'minmax(0, 0.44fr) minmax(0, 0.56fr)',
+            gap: 'clamp(28px, 4.5vw, 68px)',
             alignItems: 'center'
           }}
           className="director-editorial-grid"
@@ -115,7 +115,7 @@ export const DirectorSection: React.FC = () => {
               style={{
                 position: 'relative',
                 width: '100%',
-                height: '560px'
+                height: 'clamp(340px, 44vw, 560px)'
               }}
             >
               <Image

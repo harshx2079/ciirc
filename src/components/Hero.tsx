@@ -123,14 +123,15 @@ export const Hero: React.FC = () => {
         position: 'relative',
         display: 'flex',
         alignItems: 'center',
-        paddingTop: '165px',
-        paddingBottom: '80px',
+        justifyContent: 'center',
+        paddingTop: 'clamp(96px, 12vh, 150px)',
+        paddingBottom: 'clamp(48px, 6vh, 80px)',
         overflow: 'hidden',
         backgroundColor: 'var(--background)'
       }}
       className="hero-stage"
     >
-      {/* Multi-Layer Soft Atmospheric Blue Field (Smooth continuous drift, strictly contained within viewport) */}
+      {/* Multi-Layer Soft Atmospheric Blue Field (Expansive organic drift all over hero, strictly screen-bounded) */}
       <div
         className="hero-atmosphere-field"
         style={{
@@ -164,21 +165,25 @@ export const Hero: React.FC = () => {
         />
       </div>
 
-      {/* Hero Content Container */}
+      {/* Hero Content Container (Unified Responsive CSS Grid) */}
       <div
         className="atlas-container hero-container"
         style={{
           width: '100%',
           position: 'relative',
           zIndex: 2,
-          pointerEvents: 'none'
+          pointerEvents: 'none',
+          display: 'grid',
+          gridTemplateColumns: 'minmax(0, 1.15fr) minmax(320px, 0.85fr)',
+          alignItems: 'center',
+          gap: 'clamp(24px, 3.5vw, 56px)'
         }}
       >
         {/* Left Column: Editorial Typography */}
         <div
           style={{
             width: '100%',
-            maxWidth: '620px',
+            maxWidth: '680px',
             display: 'flex',
             flexDirection: 'column',
             pointerEvents: 'auto'
@@ -193,7 +198,7 @@ export const Hero: React.FC = () => {
               transform: mounted ? 'translateY(0)' : 'translateY(14px)',
               transition:
                 'opacity 650ms cubic-bezier(0.22, 1, 0.36, 1) 250ms, transform 650ms cubic-bezier(0.22, 1, 0.36, 1) 250ms',
-              marginBottom: 'clamp(32px, 3.2vw, 42px)'
+              marginBottom: 'clamp(24px, 2.8vw, 38px)'
             }}
           >
             <div className="eyebrow-capsule">
@@ -205,7 +210,7 @@ export const Hero: React.FC = () => {
           {/* Masked Editorial Headline (Reliable line boxes, no collision with descenders) */}
           <h1
             style={{
-              fontSize: 'clamp(52px, 5.8vw, 102px)',
+              fontSize: 'clamp(46px, 5.4vw, 94px)',
               lineHeight: 0.98,
               letterSpacing: '-0.052em',
               fontWeight: 650,
@@ -300,12 +305,12 @@ export const Hero: React.FC = () => {
           <p
             className="hero-paragraph"
             style={{
-              fontSize: '18px',
+              fontSize: 'clamp(15.5px, 1.25vw, 18px)',
               lineHeight: 1.66,
               color: 'var(--text-secondary)',
-              maxWidth: '540px',
+              maxWidth: '560px',
               margin: 0,
-              marginTop: 'clamp(26px, 2.5vw, 36px)',
+              marginTop: 'clamp(20px, 2.4vw, 34px)',
               transform: `translateY(-${descOffsetY}px)`,
               opacity: descOpacity * (mounted ? 1 : 0),
               transition: mounted
@@ -324,9 +329,9 @@ export const Hero: React.FC = () => {
             style={{
               display: 'flex',
               alignItems: 'center',
-              gap: '16px',
+              gap: 'clamp(12px, 1.5vw, 16px)',
               flexWrap: 'wrap',
-              marginTop: 'clamp(28px, 2.8vw, 40px)',
+              marginTop: 'clamp(24px, 2.6vw, 38px)',
               opacity: ctaOpacity * (mounted ? 1 : 0),
               transform: mounted ? 'translateY(0)' : 'translateY(16px)',
               transition: mounted
@@ -341,12 +346,13 @@ export const Hero: React.FC = () => {
               onMouseLeave={handleBtnMouseLeave}
               className="btn-primary-ciirc hero-btn"
               style={{
-                height: '52px',
+                height: 'clamp(48px, 4vw, 52px)',
                 padding: '0 24px',
                 borderRadius: '12px',
                 display: 'inline-flex',
                 alignItems: 'center',
-                gap: '10px'
+                gap: '10px',
+                whiteSpace: 'nowrap'
               }}
             >
               <span>Explore Research</span>
@@ -362,46 +368,44 @@ export const Hero: React.FC = () => {
               href="#idea"
               className="btn-secondary-ciirc hero-btn"
               style={{
-                height: '52px',
+                height: 'clamp(48px, 4vw, 52px)',
                 padding: '0 24px',
                 borderRadius: '12px',
                 display: 'inline-flex',
-                alignItems: 'center'
+                alignItems: 'center',
+                whiteSpace: 'nowrap'
               }}
             >
               <span>Discover CIIRC</span>
             </a>
           </div>
         </div>
-      </div>
 
-      {/* Integrated 3D Element: Part of the hero environment, full-height stage across the right */}
-      <div
-        className="hero-3d-stage"
-        style={{
-          position: 'absolute',
-          top: 0,
-          right: '2%',
-          bottom: 0,
-          width: '48vw',
-          maxWidth: '720px',
-          height: '100%',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          zIndex: 1,
-          pointerEvents: 'none',
-          opacity: mounted ? 1 : 0,
-          transform: mounted
-            ? `translateY(${scrollRatio * 30}px) scale(${1 - scrollRatio * 0.06})`
-            : 'scale(0.96)',
-          transition: mounted
-            ? 'transform 100ms ease-out'
-            : 'opacity 1100ms cubic-bezier(0.22, 1, 0.36, 1) 300ms, transform 1100ms cubic-bezier(0.22, 1, 0.36, 1) 300ms'
-        }}
-      >
-        <div style={{ width: '100%', height: '100%', pointerEvents: 'auto' }}>
-          <PorousLatticeSphere scrollY={scrollY} />
+        {/* Right Column: 3D Stage (Integrated directly into the fluid CSS Grid) */}
+        <div
+          className="hero-3d-stage"
+          style={{
+            position: 'relative',
+            width: '100%',
+            maxWidth: '680px',
+            height: 'clamp(400px, 46vw, 660px)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 1,
+            pointerEvents: 'auto',
+            opacity: mounted ? 1 : 0,
+            transform: mounted
+              ? `translateY(${scrollRatio * 24}px) scale(${1 - scrollRatio * 0.05})`
+              : 'scale(0.96)',
+            transition: mounted
+              ? 'transform 100ms ease-out'
+              : 'opacity 1100ms cubic-bezier(0.22, 1, 0.36, 1) 300ms, transform 1100ms cubic-bezier(0.22, 1, 0.36, 1) 300ms'
+          }}
+        >
+          <div style={{ width: '100%', height: '100%', pointerEvents: 'auto' }}>
+            <PorousLatticeSphere scrollY={scrollY} />
+          </div>
         </div>
       </div>
 
@@ -409,13 +413,13 @@ export const Hero: React.FC = () => {
       <div
         style={{
           position: 'absolute',
-          bottom: '28px',
+          bottom: 'clamp(16px, 2.8vh, 30px)',
           left: '50%',
           transform: 'translateX(-50%)',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          gap: '9px',
+          gap: '8px',
           opacity: Math.max(1 - scrollY / 80, 0),
           pointerEvents: 'none',
           transition: 'opacity 250ms ease',
@@ -451,26 +455,31 @@ export const Hero: React.FC = () => {
       </div>
 
       <style jsx global>{`
-        /* Atmospheric Drift Animations (Fluid, visibly drifting across the hero while strictly bounded) */
+        /* Atmospheric Drift Animations (Expansive multi-quadrant drift all over hero, strictly screen-bounded) */
         @keyframes atmosphericDriftPrimary {
           0% {
             transform: translate3d(0, 0, 0) rotate(0deg) scale(1);
             border-radius: 54% 46% 50% 50% / 48% 52% 48% 52%;
           }
-          28% {
-            /* Smoothly drifts rightwards, enveloping the 3D lattice in vibrant atmospheric blue */
-            transform: translate3d(185px, -42px, 0) rotate(14deg) scale(1.08);
+          18% {
+            /* Sweeps into top-right quadrant, bathing the 3D lattice in atmospheric blue */
+            transform: translate3d(clamp(140px, 18vw, 240px), clamp(-110px, -13vh, -50px), 0) rotate(18deg) scale(1.08);
+            border-radius: 46% 54% 52% 48% / 54% 46% 50% 50%;
+          }
+          38% {
+            /* Sweeps down into bottom-right quadrant */
+            transform: translate3d(clamp(110px, 15vw, 200px), clamp(60px, 14vh, 120px), 0) rotate(32deg) scale(0.96);
+            border-radius: 52% 48% 46% 54% / 48% 52% 46% 54%;
+          }
+          58% {
+            /* Sweeps across lower center into bottom-left quadrant */
+            transform: translate3d(clamp(-220px, -16vw, -110px), clamp(50px, 13vh, 110px), 0) rotate(14deg) scale(1.06);
             border-radius: 48% 52% 54% 46% / 52% 48% 52% 48%;
           }
-          55% {
-            /* Glides through lower-center with gentle compression */
-            transform: translate3d(35px, 46px, 0) rotate(22deg) scale(0.95);
-            border-radius: 52% 48% 46% 54% / 46% 54% 48% 52%;
-          }
           78% {
-            /* Smoothly drifts leftwards, bathing the headline & editorial copy */
-            transform: translate3d(-175px, -24px, 0) rotate(8deg) scale(1.06);
-            border-radius: 46% 54% 52% 48% / 54% 46% 52% 48%;
+            /* Sweeps up into top-left quadrant behind the headline & eyebrow */
+            transform: translate3d(clamp(-230px, -18vw, -130px), clamp(-100px, -12vh, -40px), 0) rotate(-16deg) scale(1.02);
+            border-radius: 54% 46% 50% 50% / 46% 54% 48% 52%;
           }
           100% {
             transform: translate3d(0, 0, 0) rotate(0deg) scale(1);
@@ -480,20 +489,26 @@ export const Hero: React.FC = () => {
 
         @keyframes atmosphericDriftSecondary {
           0% {
-            transform: translate3d(-110px, 30px, 0) rotate(0deg) scale(0.94);
+            transform: translate3d(clamp(-190px, -15vw, -100px), clamp(50px, 11vh, 100px), 0) rotate(0deg) scale(0.95);
             border-radius: 48% 52% 50% 50% / 52% 48% 52% 48%;
           }
-          32% {
-            /* Counter-balances primary drift across the center */
-            transform: translate3d(130px, 38px, 0) rotate(-16deg) scale(1.07);
-            border-radius: 52% 48% 46% 54% / 48% 52% 46% 54%;
+          26% {
+            /* Sweeps up into top-center / top-right */
+            transform: translate3d(clamp(80px, 12vw, 160px), clamp(-120px, -14vh, -60px), 0) rotate(-22deg) scale(1.08);
+            border-radius: 54% 46% 52% 48% / 46% 54% 50% 50%;
           }
-          68% {
-            transform: translate3d(40px, -45px, 0) rotate(-8deg) scale(0.95);
-            border-radius: 46% 54% 52% 48% / 54% 46% 50% 50%;
+          52% {
+            /* Sweeps over to mid-right */
+            transform: translate3d(clamp(120px, 16vw, 210px), clamp(35px, 8vh, 80px), 0) rotate(16deg) scale(0.94);
+            border-radius: 46% 54% 48% 52% / 54% 46% 52% 48%;
+          }
+          74% {
+            /* Sweeps across to mid-left */
+            transform: translate3d(clamp(-160px, -14vw, -80px), clamp(-70px, -9vh, -30px), 0) rotate(-14deg) scale(1.05);
+            border-radius: 52% 48% 54% 46% / 48% 52% 46% 54%;
           }
           100% {
-            transform: translate3d(-110px, 30px, 0) rotate(0deg) scale(0.94);
+            transform: translate3d(clamp(-190px, -15vw, -100px), clamp(50px, 11vh, 100px), 0) rotate(0deg) scale(0.95);
             border-radius: 48% 52% 50% 50% / 52% 48% 52% 48%;
           }
         }
@@ -503,10 +518,10 @@ export const Hero: React.FC = () => {
             transform: translate3d(0, 0, 0) scale(1);
           }
           33% {
-            transform: translate3d(36px, -24px, 0) scale(1.05);
+            transform: translate3d(28px, -20px, 0) scale(1.05);
           }
           66% {
-            transform: translate3d(-32px, 20px, 0) scale(0.96);
+            transform: translate3d(-24px, 16px, 0) scale(0.96);
           }
           100% {
             transform: translate3d(0, 0, 0) scale(1);
@@ -518,10 +533,10 @@ export const Hero: React.FC = () => {
           position: absolute;
           left: 50%;
           top: 48%;
-          width: clamp(500px, 50vw, 740px);
-          height: clamp(400px, 42vw, 580px);
-          margin-left: calc(-1 * clamp(250px, 25vw, 370px));
-          margin-top: calc(-1 * clamp(200px, 21vw, 290px));
+          width: clamp(460px, 46vw, 680px);
+          height: clamp(380px, 40vw, 560px);
+          margin-left: calc(-1 * clamp(230px, 23vw, 340px));
+          margin-top: calc(-1 * clamp(190px, 20vw, 280px));
           border-radius: 50%;
           background: radial-gradient(
             ellipse 64% 58% at 50% 50%,
@@ -533,17 +548,17 @@ export const Hero: React.FC = () => {
           );
           filter: blur(65px);
           will-change: transform, border-radius;
-          animation: atmosphericDriftPrimary 12s cubic-bezier(0.42, 0, 0.58, 1) infinite !important;
+          animation: atmosphericDriftPrimary 14s cubic-bezier(0.42, 0, 0.58, 1) infinite !important;
         }
 
         .hero-atmosphere-secondary {
           position: absolute;
-          left: 52%;
-          top: 50%;
-          width: clamp(440px, 46vw, 660px);
-          height: clamp(360px, 38vw, 520px);
-          margin-left: calc(-1 * clamp(220px, 23vw, 330px));
-          margin-top: calc(-1 * clamp(180px, 19vw, 260px));
+          left: 50%;
+          top: 52%;
+          width: clamp(400px, 42vw, 620px);
+          height: clamp(340px, 36vw, 480px);
+          margin-left: calc(-1 * clamp(200px, 21vw, 310px));
+          margin-top: calc(-1 * clamp(170px, 18vw, 240px));
           border-radius: 50%;
           background: radial-gradient(
             circle at 50% 50%,
@@ -554,7 +569,7 @@ export const Hero: React.FC = () => {
           );
           filter: blur(72px);
           will-change: transform, border-radius;
-          animation: atmosphericDriftSecondary 16s cubic-bezier(0.42, 0, 0.58, 1) infinite !important;
+          animation: atmosphericDriftSecondary 18s cubic-bezier(0.42, 0, 0.58, 1) infinite !important;
         }
 
         /* Gradient word treatment */
@@ -567,128 +582,81 @@ export const Hero: React.FC = () => {
           margin-bottom: -0.22em;
         }
 
-        /* Default Desktop Styling */
-        .hero-stage {
-          padding-top: 165px;
-          padding-bottom: 80px;
-        }
-
         /* Responsive Breakpoints */
-        @media (max-width: 1024px) {
-          .hero-atmosphere-primary {
-            width: clamp(420px, 72vw, 580px);
-            height: clamp(340px, 60vw, 480px);
-            margin-left: calc(-1 * clamp(210px, 36vw, 290px));
-            margin-top: calc(-1 * clamp(170px, 30vw, 240px));
-            filter: blur(75px);
-          }
-          .hero-atmosphere-secondary {
-            width: clamp(360px, 64vw, 500px);
-            height: clamp(300px, 54vw, 420px);
-            margin-left: calc(-1 * clamp(180px, 32vw, 250px));
-            margin-top: calc(-1 * clamp(150px, 27vw, 210px));
-            filter: blur(80px);
-          }
+        @media (max-width: 960px) {
           .hero-stage {
-            flex-direction: column !important;
-            padding-top: 120px !important;
-            padding-bottom: 60px !important;
+            padding-top: 110px !important;
+            padding-bottom: 56px !important;
             min-height: auto !important;
           }
           .hero-container {
-            order: 1 !important;
+            grid-template-columns: 1fr !important;
+            gap: 36px !important;
           }
           .hero-copy-column {
             max-width: 100% !important;
           }
           .hero-3d-stage {
-            position: relative !important;
             width: 100% !important;
-            height: 520px !important;
-            max-width: 560px !important;
-            margin: 40px auto 0 !important;
-            right: auto !important;
-            bottom: auto !important;
-            order: 2 !important;
-          }
-          .hero-headline {
-            font-size: clamp(48px, 6vw, 76px) !important;
-          }
-          .hero-paragraph {
-            margin-top: 30px !important;
+            height: clamp(340px, 55vw, 460px) !important;
+            max-width: 480px !important;
+            margin: 0 auto !important;
           }
           .hero-scroll-indicator {
-            bottom: 20px !important;
+            display: none !important;
           }
-        }
-
-        @media (max-width: 768px) {
           .hero-atmosphere-primary {
-            width: 76vw;
-            height: 76vw;
-            max-width: 340px;
-            max-height: 340px;
-            margin-left: calc(-1 * min(38vw, 170px));
-            margin-top: calc(-1 * min(38vw, 170px));
-            top: 38%;
-            background: radial-gradient(
-              circle at 50% 50%,
-              rgba(22, 119, 255, 0.34) 0%,
-              rgba(22, 119, 255, 0.18) 42%,
-              rgba(20, 100, 210, 0.05) 65%,
-              transparent 80%
-            );
-            filter: blur(55px);
-            animation: atmosphericDriftMobile 10s ease-in-out infinite alternate !important;
+            width: clamp(380px, 68vw, 540px);
+            height: clamp(320px, 58vw, 440px);
+            margin-left: calc(-1 * clamp(190px, 34vw, 270px));
+            margin-top: calc(-1 * clamp(160px, 29vw, 220px));
+            filter: blur(65px);
           }
           .hero-atmosphere-secondary {
             display: none !important;
           }
-          .hero-scroll-indicator {
-            display: none !important;
-          }
-          .hero-stage {
-            padding-top: 96px !important;
-            padding-bottom: 48px !important;
-          }
-          .hero-eyebrow-wrapper {
-            margin-bottom: 24px !important;
-          }
-          .hero-headline {
-            font-size: clamp(42px, 8.8vw, 54px) !important;
-            line-height: 0.96 !important;
-            letter-spacing: -0.048em !important;
-          }
-          .hero-paragraph {
-            font-size: 16.5px !important;
-            line-height: 1.62 !important;
-            margin-top: 26px !important;
-          }
-          .hero-cta-wrapper {
-            margin-top: 28px !important;
-            gap: 12px !important;
-          }
-          .hero-btn {
-            height: 52px !important;
-          }
-          .hero-3d-stage {
-            height: 420px !important;
-            max-width: 440px !important;
-            margin: 36px auto 0 !important;
-          }
         }
 
-        @media (max-width: 480px) {
+        @media (max-width: 640px) {
           .hero-stage {
-            padding-top: 88px !important;
+            padding-top: 84px !important;
+            padding-bottom: 36px !important;
           }
           .hero-headline {
-            font-size: clamp(38px, 8.4vw, 46px) !important;
+            font-size: clamp(36px, 8.8vw, 50px) !important;
+            line-height: 0.98 !important;
+            letter-spacing: -0.048em !important;
+          }
+          .hero-eyebrow-wrapper {
+            margin-bottom: 18px !important;
+          }
+          .hero-paragraph {
+            font-size: 15.5px !important;
+            line-height: 1.62 !important;
+            margin-top: 18px !important;
+          }
+          .hero-cta-wrapper {
+            margin-top: 22px !important;
+            gap: 10px !important;
+          }
+          .hero-btn {
+            height: 48px !important;
+            padding: 0 20px !important;
+            font-size: 13.5px !important;
           }
           .hero-3d-stage {
-            height: 340px !important;
-            max-width: 340px !important;
-            margin-top: 28px !important;
+            height: clamp(280px, 72vw, 360px) !important;
+            max-width: 360px !important;
+          }
+          .hero-atmosphere-primary {
+            width: 78vw;
+            height: 78vw;
+            max-width: 320px;
+            max-height: 320px;
+            margin-left: calc(-1 * min(39vw, 160px));
+            margin-top: calc(-1 * min(39vw, 160px));
+            filter: blur(50px);
+            animation: atmosphericDriftMobile 10s ease-in-out infinite alternate !important;
           }
         }
       `}</style>

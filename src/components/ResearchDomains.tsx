@@ -148,15 +148,15 @@ export const ResearchDomains: React.FC = () => {
       style={{
         position: 'relative',
         backgroundColor: 'var(--background)',
-        paddingTop: '160px',
-        paddingBottom: '160px',
+        paddingTop: 'clamp(72px, 8vw, 140px)',
+        paddingBottom: 'clamp(72px, 8vw, 140px)',
         borderBottom: '1px solid var(--border-subtle)',
         overflow: 'hidden'
       }}
     >
       <div className="atlas-container">
         {/* Section Header */}
-        <div style={{ maxWidth: '780px', marginBottom: '80px' }}>
+        <div style={{ maxWidth: '780px', marginBottom: 'clamp(44px, 5vw, 80px)' }}>
           <div className="eyebrow-capsule" style={{ marginBottom: '22px' }}>
             <span className="eyebrow-pulse-dot" />
             <span>03 // RESEARCH CONVERGENCE EXPLORER</span>
@@ -164,7 +164,7 @@ export const ResearchDomains: React.FC = () => {
 
           <h2
             style={{
-              fontSize: 'clamp(40px, 4.5vw, 68px)',
+              fontSize: 'clamp(36px, 4.4vw, 68px)',
               lineHeight: 1.04,
               letterSpacing: '-0.045em',
               fontWeight: 700,
@@ -177,7 +177,7 @@ export const ResearchDomains: React.FC = () => {
 
           <p
             style={{
-              fontSize: '18px',
+              fontSize: 'clamp(15.5px, 1.25vw, 18px)',
               lineHeight: 1.65,
               color: 'var(--text-secondary)',
               maxWidth: '600px',
@@ -193,8 +193,8 @@ export const ResearchDomains: React.FC = () => {
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: '50% 50%',
-            gap: '56px',
+            gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
+            gap: 'clamp(24px, 3.8vw, 56px)',
             alignItems: 'start'
           }}
           className="research-explorer-grid"

@@ -58,8 +58,8 @@ export const SectionIdea: React.FC = () => {
       style={{
         position: 'relative',
         backgroundColor: 'var(--background)',
-        paddingTop: '160px',
-        paddingBottom: '160px',
+        paddingTop: 'clamp(72px, 8vw, 140px)',
+        paddingBottom: 'clamp(72px, 8vw, 140px)',
         boxShadow: '0 -24px 64px rgba(20, 33, 61, 0.04)',
         zIndex: 3,
         overflow: 'hidden'

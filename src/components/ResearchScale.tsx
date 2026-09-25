@@ -106,8 +106,8 @@ export const ResearchScale: React.FC = () => {
       ref={sectionRef}
       style={{
         position: 'relative',
-        paddingTop: '180px',
-        paddingBottom: '180px',
+        paddingTop: 'clamp(72px, 8vw, 140px)',
+        paddingBottom: 'clamp(72px, 8vw, 140px)',
         backgroundColor: 'var(--surface-soft)',
         borderTop: '1px solid var(--border)',
         borderBottom: '1px solid var(--border)',
@@ -119,7 +119,7 @@ export const ResearchScale: React.FC = () => {
         <div
           style={{
             maxWidth: '1100px',
-            marginBottom: '130px',
+            marginBottom: 'clamp(44px, 6vw, 110px)',
             display: 'flex',
             flexDirection: 'column',
             gap: '24px'
@@ -132,7 +132,7 @@ export const ResearchScale: React.FC = () => {
 
           <h2
             style={{
-              fontSize: 'clamp(38px, 5.4vw, 84px)',
+              fontSize: 'clamp(34px, 5vw, 84px)',
               lineHeight: 1.02,
               letterSpacing: '-0.05em',
               fontWeight: 650,
@@ -146,7 +146,7 @@ export const ResearchScale: React.FC = () => {
 
           <p
             style={{
-              fontSize: '18px',
+              fontSize: 'clamp(15.5px, 1.25vw, 18px)',
               lineHeight: 1.68,
               color: 'var(--text-secondary)',
               maxWidth: '640px',
@@ -163,8 +163,8 @@ export const ResearchScale: React.FC = () => {
           style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(2, 1fr)',
-            columnGap: '80px',
-            rowGap: '64px'
+            columnGap: 'clamp(32px, 5vw, 80px)',
+            rowGap: 'clamp(32px, 4vw, 64px)'
           }}
           className="research-scale-grid"
         >
