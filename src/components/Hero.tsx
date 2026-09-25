@@ -164,7 +164,7 @@ export const Hero: React.FC = () => {
         />
       </div>
 
-      {/* Hero Content Container (Fluid Multi-Regime Responsive Grid) */}
+      {/* Hero Content Container */}
       <div
         className="atlas-container hero-container"
         style={{
@@ -174,10 +174,11 @@ export const Hero: React.FC = () => {
           pointerEvents: 'none'
         }}
       >
-        {/* Left Column: Editorial Typography */}
+        {/* Editorial Typography Column */}
         <div
           style={{
             width: '100%',
+            maxWidth: '620px',
             display: 'flex',
             flexDirection: 'column',
             pointerEvents: 'auto'
@@ -204,7 +205,7 @@ export const Hero: React.FC = () => {
           {/* Masked Editorial Headline (Reliable line boxes, no collision with descenders) */}
           <h1
             style={{
-              fontSize: 'clamp(52px, 5.4vw, 94px)',
+              fontSize: 'clamp(52px, 5.8vw, 102px)',
               lineHeight: 0.98,
               letterSpacing: '-0.052em',
               fontWeight: 650,
@@ -374,30 +375,35 @@ export const Hero: React.FC = () => {
             </a>
           </div>
         </div>
+      </div>
 
-        {/* Right Column: 3D Stage (Integrated directly into the fluid responsive grid) */}
-        <div
-          className="hero-3d-stage"
-          style={{
-            position: 'relative',
-            width: '100%',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            zIndex: 1,
-            pointerEvents: 'auto',
-            opacity: mounted ? 1 : 0,
-            transform: mounted
-              ? `translateY(${scrollRatio * 24}px) scale(${1 - scrollRatio * 0.05})`
-              : 'scale(0.96)',
-            transition: mounted
-              ? 'transform 100ms ease-out'
-              : 'opacity 1100ms cubic-bezier(0.22, 1, 0.36, 1) 300ms, transform 1100ms cubic-bezier(0.22, 1, 0.36, 1) 300ms'
-          }}
-        >
-          <div style={{ width: '100%', height: '100%', pointerEvents: 'auto' }}>
-            <PorousLatticeSphere scrollY={scrollY} />
-          </div>
+      {/* Integrated 3D Element: Part of the hero environment, full-height stage across the right on desktop */}
+      <div
+        className="hero-3d-stage"
+        style={{
+          position: 'absolute',
+          top: 0,
+          right: '2%',
+          bottom: 0,
+          width: '48vw',
+          maxWidth: '720px',
+          height: '100%',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 1,
+          pointerEvents: 'none',
+          opacity: mounted ? 1 : 0,
+          transform: mounted
+            ? `translateY(${scrollRatio * 30}px) scale(${1 - scrollRatio * 0.06})`
+            : 'scale(0.96)',
+          transition: mounted
+            ? 'transform 100ms ease-out'
+            : 'opacity 1100ms cubic-bezier(0.22, 1, 0.36, 1) 300ms, transform 1100ms cubic-bezier(0.22, 1, 0.36, 1) 300ms'
+        }}
+      >
+        <div style={{ width: '100%', height: '100%', pointerEvents: 'auto' }}>
+          <PorousLatticeSphere scrollY={scrollY} />
         </div>
       </div>
 
@@ -454,18 +460,22 @@ export const Hero: React.FC = () => {
             border-radius: 54% 46% 50% 50% / 48% 52% 48% 52%;
           }
           18% {
+            /* Sweeps into top-right quadrant, bathing the 3D lattice in atmospheric blue */
             transform: translate3d(clamp(140px, 18vw, 240px), clamp(-110px, -13vh, -50px), 0) rotate(18deg) scale(1.08);
             border-radius: 46% 54% 52% 48% / 54% 46% 50% 50%;
           }
           38% {
+            /* Sweeps down into bottom-right quadrant */
             transform: translate3d(clamp(110px, 15vw, 200px), clamp(60px, 14vh, 120px), 0) rotate(32deg) scale(0.96);
             border-radius: 52% 48% 46% 54% / 48% 52% 46% 54%;
           }
           58% {
+            /* Sweeps across lower center into bottom-left quadrant */
             transform: translate3d(clamp(-220px, -16vw, -110px), clamp(50px, 13vh, 110px), 0) rotate(14deg) scale(1.06);
             border-radius: 48% 52% 54% 46% / 52% 48% 52% 48%;
           }
           78% {
+            /* Sweeps up into top-left quadrant behind the headline & eyebrow */
             transform: translate3d(clamp(-230px, -18vw, -130px), clamp(-100px, -12vh, -40px), 0) rotate(-16deg) scale(1.02);
             border-radius: 54% 46% 50% 50% / 46% 54% 48% 52%;
           }
@@ -481,14 +491,17 @@ export const Hero: React.FC = () => {
             border-radius: 48% 52% 50% 50% / 52% 48% 52% 48%;
           }
           26% {
+            /* Sweeps up into top-center / top-right */
             transform: translate3d(clamp(80px, 12vw, 160px), clamp(-120px, -14vh, -60px), 0) rotate(-22deg) scale(1.08);
             border-radius: 54% 46% 52% 48% / 46% 54% 50% 50%;
           }
           52% {
+            /* Sweeps over to mid-right */
             transform: translate3d(clamp(120px, 16vw, 210px), clamp(35px, 8vh, 80px), 0) rotate(16deg) scale(0.94);
             border-radius: 46% 54% 48% 52% / 54% 46% 52% 48%;
           }
           74% {
+            /* Sweeps across to mid-left */
             transform: translate3d(clamp(-160px, -14vw, -80px), clamp(-70px, -9vh, -30px), 0) rotate(-14deg) scale(1.05);
             border-radius: 52% 48% 54% 46% / 48% 52% 46% 54%;
           }
@@ -513,7 +526,7 @@ export const Hero: React.FC = () => {
           }
         }
 
-        /* Default Desktop Atmospheric Field Layers (Normal Desktop) */
+        /* Desktop Atmospheric Field Layers — More Visible, Silky Drift, Strictly Screen-Bounded */
         .hero-atmosphere-primary {
           position: absolute;
           left: 50%;
@@ -567,168 +580,14 @@ export const Hero: React.FC = () => {
           margin-bottom: -0.24em;
         }
 
-        /* Default Desktop Styling (1025px - 1599px): 100% Approved Baseline */
+        /* Default Desktop Styling */
         .hero-stage {
-          min-height: 100svh;
-          padding-top: 155px;
-          padding-bottom: 75px;
-        }
-        .hero-container {
-          display: grid !important;
-          grid-template-columns: minmax(0, 1.15fr) minmax(360px, 0.85fr) !important;
-          align-items: center !important;
-          gap: clamp(32px, 3.5vw, 64px) !important;
-        }
-        .hero-copy-column {
-          max-width: 680px;
-        }
-        .hero-headline {
-          font-size: clamp(52px, 5.4vw, 94px);
-          line-height: 0.98;
-          letter-spacing: -0.052em;
-        }
-        .hero-paragraph {
-          font-size: 18px;
-          line-height: 1.66;
-          max-width: 540px;
-          margin-top: 26px;
-        }
-        .hero-cta-wrapper {
-          gap: 16px;
-          margin-top: 28px;
-        }
-        .hero-btn {
-          height: 52px;
-          padding: 0 24px;
-        }
-        .hero-3d-stage {
-          height: 640px !important;
-          max-width: 680px !important;
-        }
-
-        /* Large Desktop Regime (1600px - 1999px, e.g. 80% browser zoom) */
-        @media (min-width: 1600px) {
-          .hero-stage {
-            padding-top: 175px !important;
-            padding-bottom: 85px !important;
-          }
-          .hero-container {
-            grid-template-columns: minmax(0, 1.18fr) minmax(460px, 0.82fr) !important;
-            gap: clamp(48px, 4vw, 84px) !important;
-          }
-          .hero-copy-column {
-            max-width: 840px !important;
-          }
-          .hero-eyebrow-wrapper {
-            margin-bottom: 36px !important;
-          }
-          .eyebrow-capsule {
-            font-size: 12px !important;
-            padding: 7px 16px !important;
-          }
-          .hero-headline {
-            font-size: clamp(86px, 5.2vw, 108px) !important;
-            line-height: 0.97 !important;
-            letter-spacing: -0.05em !important;
-          }
-          .hero-paragraph {
-            font-size: 20px !important;
-            line-height: 1.68 !important;
-            max-width: 660px !important;
-            margin-top: 32px !important;
-          }
-          .hero-cta-wrapper {
-            gap: 18px !important;
-            margin-top: 34px !important;
-          }
-          .hero-btn {
-            height: 56px !important;
-            padding: 0 28px !important;
-            font-size: 15px !important;
-          }
-          .hero-3d-stage {
-            height: 720px !important;
-            max-width: 760px !important;
-          }
-          .hero-atmosphere-primary {
-            width: clamp(720px, 48vw, 960px) !important;
-            height: clamp(580px, 42vw, 780px) !important;
-            margin-left: calc(-1 * clamp(360px, 24vw, 480px)) !important;
-            margin-top: calc(-1 * clamp(290px, 21vw, 390px)) !important;
-            filter: blur(85px) !important;
-          }
-          .hero-atmosphere-secondary {
-            width: clamp(620px, 44vw, 860px) !important;
-            height: clamp(500px, 38vw, 680px) !important;
-            margin-left: calc(-1 * clamp(310px, 22vw, 430px)) !important;
-            margin-top: calc(-1 * clamp(250px, 19vw, 340px)) !important;
-            filter: blur(95px) !important;
-          }
-        }
-
-        /* Ultra-Wide Desktop Regime (>= 2000px, e.g. 67% and 50% browser zoom) */
-        @media (min-width: 2000px) {
-          .hero-stage {
-            padding-top: 195px !important;
-            padding-bottom: 95px !important;
-          }
-          .hero-container {
-            grid-template-columns: minmax(0, 1.2fr) minmax(540px, 0.8fr) !important;
-            gap: clamp(64px, 4.5vw, 104px) !important;
-          }
-          .hero-copy-column {
-            max-width: 1060px !important;
-          }
-          .hero-eyebrow-wrapper {
-            margin-bottom: 42px !important;
-          }
-          .eyebrow-capsule {
-            font-size: 13.5px !important;
-            padding: 8px 18px !important;
-          }
-          .hero-headline {
-            font-size: clamp(104px, 4.6vw, 128px) !important;
-            line-height: 0.96 !important;
-            letter-spacing: -0.048em !important;
-          }
-          .hero-paragraph {
-            font-size: 23px !important;
-            line-height: 1.70 !important;
-            max-width: 820px !important;
-            margin-top: 38px !important;
-          }
-          .hero-cta-wrapper {
-            gap: 20px !important;
-            margin-top: 42px !important;
-          }
-          .hero-btn {
-            height: 62px !important;
-            padding: 0 32px !important;
-            font-size: 16.5px !important;
-            border-radius: 14px !important;
-          }
-          .hero-3d-stage {
-            height: 800px !important;
-            max-width: 860px !important;
-          }
-          .hero-atmosphere-primary {
-            width: clamp(980px, 48vw, 1300px) !important;
-            height: clamp(780px, 42vw, 1020px) !important;
-            margin-left: calc(-1 * clamp(490px, 24vw, 650px)) !important;
-            margin-top: calc(-1 * clamp(390px, 21vw, 510px)) !important;
-            filter: blur(110px) !important;
-          }
-          .hero-atmosphere-secondary {
-            width: clamp(860px, 44vw, 1150px) !important;
-            height: clamp(680px, 38vw, 900px) !important;
-            margin-left: calc(-1 * clamp(430px, 22vw, 575px)) !important;
-            margin-top: calc(-1 * clamp(340px, 19vw, 450px)) !important;
-            filter: blur(120px) !important;
-          }
+          padding-top: 165px;
+          padding-bottom: 80px;
         }
 
         /* Responsive Breakpoints */
-        /* Tablet & Intermediate: 768px - 1024px */
+        /* Tablet: 768px - 1024px */
         @media (max-width: 1024px) {
           .hero-atmosphere-primary {
             width: clamp(420px, 72vw, 580px);
@@ -756,15 +615,12 @@ export const Hero: React.FC = () => {
             height: auto !important;
           }
           .hero-container {
-            display: flex !important;
-            flex-direction: column !important;
-            align-items: center !important;
+            order: 1 !important;
             max-width: 640px !important;
             margin-inline: auto !important;
             text-align: center !important;
           }
           .hero-copy-column {
-            order: 1 !important;
             max-width: 100% !important;
             align-items: center !important;
             text-align: center !important;
@@ -832,9 +688,6 @@ export const Hero: React.FC = () => {
 
           /* Mobile Centered Container */
           .hero-container {
-            display: flex !important;
-            flex-direction: column !important;
-            align-items: center !important;
             order: 1 !important;
             width: 100% !important;
             max-width: 560px !important;
@@ -845,7 +698,6 @@ export const Hero: React.FC = () => {
           }
 
           .hero-copy-column {
-            order: 1 !important;
             width: 100% !important;
             max-width: 100% !important;
             align-items: center !important;
