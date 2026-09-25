@@ -89,14 +89,32 @@ button {
   background: none;
 }
 
-/* Global Container Utility (Fluid Responsive Container System) */
+/* Global Container Utility (Fluid Multi-Regime Container System) */
 .atlas-container {
   width: 100%;
-  max-width: min(1480px, 100%);
+  max-width: min(1500px, calc(100% - clamp(24px, 4vw, 64px)));
   margin-left: auto;
   margin-right: auto;
-  padding-left: clamp(18px, 3.8vw, 64px);
-  padding-right: clamp(18px, 3.8vw, 64px);
+  padding-left: clamp(20px, 3.8vw, 60px);
+  padding-right: clamp(20px, 3.8vw, 60px);
+}
+
+/* Large Desktop Regime (1600px - 1999px, e.g. 80% browser zoom) */
+@media (min-width: 1600px) {
+  .atlas-container {
+    max-width: min(1860px, calc(100% - clamp(36px, 4.2vw, 84px)));
+    padding-left: clamp(32px, 4vw, 76px);
+    padding-right: clamp(32px, 4vw, 76px);
+  }
+}
+
+/* Ultra-Wide Desktop Regime (>= 2000px, e.g. 67% and 50% browser zoom) */
+@media (min-width: 2000px) {
+  .atlas-container {
+    max-width: min(2340px, calc(100% - clamp(48px, 4.5vw, 120px)));
+    padding-left: clamp(48px, 4.5vw, 100px);
+    padding-right: clamp(48px, 4.5vw, 100px);
+  }
 }
 
 /* Monospace Scientific Metadata */

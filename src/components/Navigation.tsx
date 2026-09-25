@@ -96,9 +96,6 @@ export const Navigation: React.FC = () => {
           position: 'fixed',
           top: scrolled ? '14px' : '22px',
           left: '50%',
-          width: 'min(calc(100% - clamp(20px, 4vw, 64px)), 1480px)',
-          height: scrolled ? '64px' : '74px',
-          borderRadius: scrolled ? '20px' : '22px',
           backgroundColor: scrolled ? 'rgba(255, 255, 255, 0.94)' : 'rgba(255, 255, 255, 0.90)',
           backdropFilter: 'blur(20px)',
           WebkitBackdropFilter: 'blur(20px)',
@@ -109,13 +106,12 @@ export const Navigation: React.FC = () => {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          padding: '0 clamp(16px, 2.5vw, 30px)',
           zIndex: 900,
           transform: navVisible ? 'translateX(-50%) translateY(0)' : 'translateX(-50%) translateY(-110px)',
           transition:
             'transform 380ms cubic-bezier(0.22, 1, 0.36, 1), height 360ms cubic-bezier(0.22, 1, 0.36, 1), top 360ms cubic-bezier(0.22, 1, 0.36, 1), background-color 300ms ease, box-shadow 300ms ease, border-color 300ms ease, border-radius 360ms ease, width 300ms ease'
         }}
-        className="ciirc-floating-nav"
+        className={`ciirc-floating-nav ${scrolled ? 'nav-scrolled' : ''}`}
       >
         {/* Left: Authentic CIIRC Logo */}
         <a
@@ -133,10 +129,9 @@ export const Navigation: React.FC = () => {
           aria-label="CIIRC Home"
         >
           <div
+            className="nav-logo-box"
             style={{
               position: 'relative',
-              width: scrolled ? '128px' : '138px',
-              height: scrolled ? '36px' : '40px',
               transition: 'all 360ms cubic-bezier(0.22, 1, 0.36, 1)'
             }}
           >
@@ -356,6 +351,92 @@ export const Navigation: React.FC = () => {
           to {
             opacity: 1;
             transform: translateY(0) scale(1);
+          }
+        }
+
+        /* Default / Normal Desktop (1081px - 1599px): 100% Approved Baseline */
+        .ciirc-floating-nav {
+          width: min(calc(100% - clamp(24px, 4vw, 64px)), 1500px);
+          height: 74px;
+          border-radius: 22px;
+          padding: 0 clamp(16px, 2.5vw, 30px);
+        }
+        .ciirc-floating-nav.nav-scrolled {
+          height: 64px;
+          border-radius: 20px;
+        }
+        .nav-logo-box {
+          width: 138px;
+          height: 40px;
+        }
+        .ciirc-floating-nav.nav-scrolled .nav-logo-box {
+          width: 128px;
+          height: 36px;
+        }
+
+        /* Large Desktop Regime (1600px - 1999px, e.g. 80% browser zoom) */
+        @media (min-width: 1600px) {
+          .ciirc-floating-nav {
+            width: min(calc(100% - clamp(36px, 4.2vw, 84px)), 1860px) !important;
+            height: 80px !important;
+            border-radius: 24px !important;
+            padding: 0 34px !important;
+          }
+          .ciirc-floating-nav.nav-scrolled {
+            height: 70px !important;
+          }
+          .nav-logo-box {
+            width: 156px !important;
+            height: 45px !important;
+          }
+          .ciirc-floating-nav.nav-scrolled .nav-logo-box {
+            width: 144px !important;
+            height: 41px !important;
+          }
+          .desktop-links {
+            gap: clamp(22px, 2.2vw, 36px) !important;
+          }
+          .nav-link-ciirc {
+            font-size: 14.5px !important;
+          }
+          .desktop-cta {
+            height: 50px !important;
+            padding: 0 26px !important;
+            font-size: 14px !important;
+            border-radius: 13px !important;
+          }
+        }
+
+        /* Ultra-Wide Desktop Regime (>= 2000px, e.g. 67% and 50% browser zoom) */
+        @media (min-width: 2000px) {
+          .ciirc-floating-nav {
+            width: min(calc(100% - clamp(48px, 4.5vw, 120px)), 2340px) !important;
+            height: 88px !important;
+            border-radius: 28px !important;
+            padding: 0 42px !important;
+          }
+          .ciirc-floating-nav.nav-scrolled {
+            height: 76px !important;
+          }
+          .nav-logo-box {
+            width: 178px !important;
+            height: 52px !important;
+          }
+          .ciirc-floating-nav.nav-scrolled .nav-logo-box {
+            width: 162px !important;
+            height: 46px !important;
+          }
+          .desktop-links {
+            gap: clamp(28px, 2.4vw, 44px) !important;
+          }
+          .nav-link-ciirc {
+            font-size: 15.5px !important;
+          }
+          .desktop-cta {
+            height: 54px !important;
+            padding: 0 30px !important;
+            font-size: 15px !important;
+            border-radius: 14px !important;
           }
         }
 
