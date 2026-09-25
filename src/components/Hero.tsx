@@ -170,7 +170,7 @@ export const Hero: React.FC = () => {
         style={{
           width: '100%',
           position: 'relative',
-          zIndex: 2,
+          zIndex: 10,
           pointerEvents: 'none'
         }}
       >
@@ -178,7 +178,6 @@ export const Hero: React.FC = () => {
         <div
           style={{
             width: '100%',
-            maxWidth: '620px',
             display: 'flex',
             flexDirection: 'column',
             pointerEvents: 'auto'
@@ -205,11 +204,6 @@ export const Hero: React.FC = () => {
           {/* Masked Editorial Headline (Reliable line boxes, no collision with descenders) */}
           <h1
             style={{
-              fontSize: 'clamp(52px, 5.8vw, 102px)',
-              lineHeight: 0.98,
-              letterSpacing: '-0.052em',
-              fontWeight: 650,
-              color: 'var(--text-primary)',
               margin: 0,
               padding: 0,
               transform: `translateY(-${headlineOffsetY}px) scale(${headlineScale})`,
@@ -224,12 +218,13 @@ export const Hero: React.FC = () => {
               style={{
                 display: 'block',
                 overflow: 'hidden',
-                paddingBottom: '2px'
+                paddingBottom: '2px',
+                width: '100%'
               }}
             >
               <span
                 style={{
-                  display: 'block',
+                  display: 'inline-block',
                   whiteSpace: 'nowrap',
                   opacity: mounted ? 1 : 0,
                   transform: mounted ? 'translateY(0)' : 'translateY(100%)',
@@ -246,12 +241,13 @@ export const Hero: React.FC = () => {
               style={{
                 display: 'block',
                 overflow: 'hidden',
-                paddingBottom: '2px'
+                paddingBottom: '2px',
+                width: '100%'
               }}
             >
               <span
                 style={{
-                  display: 'block',
+                  display: 'inline-block',
                   whiteSpace: 'nowrap',
                   opacity: mounted ? 1 : 0,
                   transform: mounted ? 'translateY(0)' : 'translateY(115%)',
@@ -300,12 +296,8 @@ export const Hero: React.FC = () => {
           <p
             className="hero-paragraph"
             style={{
-              fontSize: '18px',
-              lineHeight: 1.66,
               color: 'var(--text-secondary)',
-              maxWidth: '540px',
               margin: 0,
-              marginTop: '26px',
               transform: `translateY(-${descOffsetY}px)`,
               opacity: descOpacity * (mounted ? 1 : 0),
               transition: mounted
@@ -584,6 +576,92 @@ export const Hero: React.FC = () => {
         .hero-stage {
           padding-top: 165px;
           padding-bottom: 80px;
+        }
+        .hero-copy-column {
+          max-width: clamp(640px, 48vw, 760px);
+        }
+        .hero-headline {
+          font-size: clamp(52px, 5.2vw, 84px);
+          line-height: 0.98;
+          letter-spacing: -0.052em;
+          font-weight: 650;
+          color: var(--text-primary);
+        }
+        .hero-paragraph {
+          font-size: 18px;
+          line-height: 1.66;
+          max-width: 540px;
+          margin-top: 26px;
+        }
+        .hero-cta-wrapper {
+          gap: 16px;
+          margin-top: 28px;
+        }
+        .hero-btn {
+          height: 52px;
+          padding: 0 24px;
+        }
+
+        /* Large Desktop Regime (1600px - 1999px, e.g. 80% browser zoom) */
+        @media (min-width: 1600px) {
+          .hero-stage {
+            padding-top: 175px;
+            padding-bottom: 85px;
+          }
+          .hero-copy-column {
+            max-width: clamp(760px, 48vw, 940px) !important;
+          }
+          .hero-headline {
+            font-size: clamp(72px, 4.6vw, 92px) !important;
+            line-height: 0.98 !important;
+            letter-spacing: -0.05em !important;
+          }
+          .hero-paragraph {
+            font-size: 20px !important;
+            line-height: 1.68 !important;
+            max-width: 640px !important;
+            margin-top: 30px !important;
+          }
+          .hero-cta-wrapper {
+            gap: 18px !important;
+            margin-top: 32px !important;
+          }
+          .hero-btn {
+            height: 56px !important;
+            padding: 0 28px !important;
+            font-size: 15px !important;
+          }
+        }
+
+        /* Ultra-Wide Desktop Regime (>= 2000px, e.g. 67% and 50% browser zoom) */
+        @media (min-width: 2000px) {
+          .hero-stage {
+            padding-top: 195px;
+            padding-bottom: 95px;
+          }
+          .hero-copy-column {
+            max-width: clamp(940px, 46vw, 1140px) !important;
+          }
+          .hero-headline {
+            font-size: clamp(88px, 4.2vw, 108px) !important;
+            line-height: 0.98 !important;
+            letter-spacing: -0.048em !important;
+          }
+          .hero-paragraph {
+            font-size: 22px !important;
+            line-height: 1.70 !important;
+            max-width: 740px !important;
+            margin-top: 34px !important;
+          }
+          .hero-cta-wrapper {
+            gap: 20px !important;
+            margin-top: 36px !important;
+          }
+          .hero-btn {
+            height: 60px !important;
+            padding: 0 32px !important;
+            font-size: 16px !important;
+          }
         }
 
         /* Responsive Breakpoints */
