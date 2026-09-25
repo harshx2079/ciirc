@@ -451,40 +451,50 @@ export const Hero: React.FC = () => {
       </div>
 
       <style jsx global>{`
-        /* Atmospheric Drift Animations (Smooth, continuous organic drift along the hero section) */
+        /* Atmospheric Drift Animations (Fluid, visibly drifting across the hero while strictly bounded) */
         @keyframes atmosphericDriftPrimary {
           0% {
-            transform: translate3d(0, 0, 0) scale(1);
+            transform: translate3d(0, 0, 0) rotate(0deg) scale(1);
+            border-radius: 54% 46% 50% 50% / 48% 52% 48% 52%;
           }
           28% {
-            /* Drifts smoothly rightwards towards the 3D lattice, bathed in blue */
-            transform: translate3d(120px, -32px, 0) scale(1.06);
+            /* Smoothly drifts rightwards, enveloping the 3D lattice in vibrant atmospheric blue */
+            transform: translate3d(185px, -42px, 0) rotate(14deg) scale(1.08);
+            border-radius: 48% 52% 54% 46% / 52% 48% 52% 48%;
           }
           55% {
-            /* Drifts smoothly through the lower-center */
-            transform: translate3d(30px, 38px, 0) scale(0.96);
+            /* Glides through lower-center with gentle compression */
+            transform: translate3d(35px, 46px, 0) rotate(22deg) scale(0.95);
+            border-radius: 52% 48% 46% 54% / 46% 54% 48% 52%;
           }
           78% {
-            /* Drifts smoothly leftwards towards the editorial copy */
-            transform: translate3d(-110px, -18px, 0) scale(1.04);
+            /* Smoothly drifts leftwards, bathing the headline & editorial copy */
+            transform: translate3d(-175px, -24px, 0) rotate(8deg) scale(1.06);
+            border-radius: 46% 54% 52% 48% / 54% 46% 52% 48%;
           }
           100% {
-            transform: translate3d(0, 0, 0) scale(1);
+            transform: translate3d(0, 0, 0) rotate(0deg) scale(1);
+            border-radius: 54% 46% 50% 50% / 48% 52% 48% 52%;
           }
         }
 
         @keyframes atmosphericDriftSecondary {
           0% {
-            transform: translate3d(-60px, 20px, 0) scale(0.96);
+            transform: translate3d(-110px, 30px, 0) rotate(0deg) scale(0.94);
+            border-radius: 48% 52% 50% 50% / 52% 48% 52% 48%;
           }
           32% {
-            transform: translate3d(75px, 28px, 0) scale(1.05);
+            /* Counter-balances primary drift across the center */
+            transform: translate3d(130px, 38px, 0) rotate(-16deg) scale(1.07);
+            border-radius: 52% 48% 46% 54% / 48% 52% 46% 54%;
           }
           68% {
-            transform: translate3d(25px, -30px, 0) scale(0.97);
+            transform: translate3d(40px, -45px, 0) rotate(-8deg) scale(0.95);
+            border-radius: 46% 54% 52% 48% / 54% 46% 50% 50%;
           }
           100% {
-            transform: translate3d(-60px, 20px, 0) scale(0.96);
+            transform: translate3d(-110px, 30px, 0) rotate(0deg) scale(0.94);
+            border-radius: 48% 52% 50% 50% / 52% 48% 52% 48%;
           }
         }
 
@@ -493,37 +503,37 @@ export const Hero: React.FC = () => {
             transform: translate3d(0, 0, 0) scale(1);
           }
           33% {
-            transform: translate3d(24px, -18px, 0) scale(1.04);
+            transform: translate3d(36px, -24px, 0) scale(1.05);
           }
           66% {
-            transform: translate3d(-20px, 16px, 0) scale(0.97);
+            transform: translate3d(-32px, 20px, 0) scale(0.96);
           }
           100% {
             transform: translate3d(0, 0, 0) scale(1);
           }
         }
 
-        /* Desktop Atmospheric Field Layers — Smooth Drift, Strictly Contained Within Viewport */
+        /* Desktop Atmospheric Field Layers — More Visible, Silky Drift, Strictly Screen-Bounded */
         .hero-atmosphere-primary {
           position: absolute;
           left: 50%;
           top: 48%;
-          width: clamp(520px, 52vw, 760px);
-          height: clamp(420px, 44vw, 600px);
-          margin-left: calc(-1 * clamp(260px, 26vw, 380px));
-          margin-top: calc(-1 * clamp(210px, 22vw, 300px));
+          width: clamp(500px, 50vw, 740px);
+          height: clamp(400px, 42vw, 580px);
+          margin-left: calc(-1 * clamp(250px, 25vw, 370px));
+          margin-top: calc(-1 * clamp(200px, 21vw, 290px));
           border-radius: 50%;
           background: radial-gradient(
-            ellipse 60% 55% at 50% 50%,
-            rgba(22, 119, 255, 0.25) 0%,
-            rgba(22, 119, 255, 0.17) 32%,
-            rgba(20, 100, 210, 0.08) 58%,
-            rgba(15, 98, 236, 0.02) 76%,
+            ellipse 64% 58% at 50% 50%,
+            rgba(22, 119, 255, 0.38) 0%,
+            rgba(20, 100, 220, 0.28) 28%,
+            rgba(22, 119, 255, 0.14) 54%,
+            rgba(15, 98, 236, 0.04) 74%,
             transparent 88%
           );
-          filter: blur(85px);
-          will-change: transform;
-          animation: atmosphericDriftPrimary 19s cubic-bezier(0.42, 0, 0.58, 1) infinite;
+          filter: blur(65px);
+          will-change: transform, border-radius;
+          animation: atmosphericDriftPrimary 12s cubic-bezier(0.42, 0, 0.58, 1) infinite !important;
         }
 
         .hero-atmosphere-secondary {
@@ -537,14 +547,14 @@ export const Hero: React.FC = () => {
           border-radius: 50%;
           background: radial-gradient(
             circle at 50% 50%,
-            rgba(15, 98, 236, 0.19) 0%,
-            rgba(22, 119, 255, 0.12) 36%,
-            rgba(20, 100, 210, 0.04) 65%,
+            rgba(15, 98, 236, 0.30) 0%,
+            rgba(22, 119, 255, 0.19) 34%,
+            rgba(20, 100, 210, 0.07) 62%,
             transparent 84%
           );
-          filter: blur(95px);
-          will-change: transform;
-          animation: atmosphericDriftSecondary 25s cubic-bezier(0.42, 0, 0.58, 1) infinite;
+          filter: blur(72px);
+          will-change: transform, border-radius;
+          animation: atmosphericDriftSecondary 16s cubic-bezier(0.42, 0, 0.58, 1) infinite !important;
         }
 
         /* Gradient word treatment */
@@ -623,12 +633,13 @@ export const Hero: React.FC = () => {
             top: 38%;
             background: radial-gradient(
               circle at 50% 50%,
-              rgba(22, 119, 255, 0.22) 0%,
-              rgba(22, 119, 255, 0.12) 42%,
-              transparent 78%
+              rgba(22, 119, 255, 0.34) 0%,
+              rgba(22, 119, 255, 0.18) 42%,
+              rgba(20, 100, 210, 0.05) 65%,
+              transparent 80%
             );
             filter: blur(55px);
-            animation: atmosphericDriftMobile 15s ease-in-out infinite alternate;
+            animation: atmosphericDriftMobile 10s ease-in-out infinite alternate !important;
           }
           .hero-atmosphere-secondary {
             display: none !important;
