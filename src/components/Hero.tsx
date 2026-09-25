@@ -130,7 +130,7 @@ export const Hero: React.FC = () => {
       }}
       className="hero-stage"
     >
-      {/* Multi-Layer Soft Atmospheric Blue Field (CIIRC Dashboard Blue #1677FF / #1464D2) */}
+      {/* Multi-Layer Soft Atmospheric Blue Field (Smooth continuous drift, strictly contained within viewport) */}
       <div
         className="hero-atmosphere-field"
         style={{
@@ -144,14 +144,11 @@ export const Hero: React.FC = () => {
         }}
         aria-hidden="true"
       >
-        {/* Layer 1: Central Blue Atmosphere (Primary Concentration at ~55% 46%) */}
+        {/* Layer 1: Primary Soft Atmospheric Blue Gradient */}
         <div className="hero-atmosphere-primary" />
 
-        {/* Layer 2: Hero / 3D Object Atmosphere (Grounding 3D Sphere & Lower Shadow at ~72% 52%) */}
+        {/* Layer 2: Harmonic Secondary Ambient Drift */}
         <div className="hero-atmosphere-secondary" />
-
-        {/* Layer 3: Left Soft Blue Field (Supporting Typography at ~28% 58%) */}
-        <div className="hero-atmosphere-tertiary" />
 
         {/* Canvas for delicate ambient particles */}
         <canvas
@@ -408,15 +405,17 @@ export const Hero: React.FC = () => {
         </div>
       </div>
 
-      {/* Scroll Indicator (Refined placement & desktop/tablet balance) */}
+      {/* Scroll Indicator (Middle - Bottom Centre) */}
       <div
         style={{
           position: 'absolute',
-          bottom: '36px',
-          left: '72px',
+          bottom: '28px',
+          left: '50%',
+          transform: 'translateX(-50%)',
           display: 'flex',
+          flexDirection: 'column',
           alignItems: 'center',
-          gap: '14px',
+          gap: '9px',
           opacity: Math.max(1 - scrollY / 80, 0),
           pointerEvents: 'none',
           transition: 'opacity 250ms ease',
@@ -428,10 +427,11 @@ export const Hero: React.FC = () => {
           style={{
             fontFamily: 'var(--font-mono)',
             fontSize: '10px',
-            letterSpacing: '0.18em',
+            letterSpacing: '0.2em',
             textTransform: 'uppercase',
             color: 'var(--text-muted)',
-            fontWeight: 600
+            fontWeight: 600,
+            whiteSpace: 'nowrap'
           }}
         >
           SCROLL TO EXPLORE
@@ -440,7 +440,7 @@ export const Hero: React.FC = () => {
         <div
           style={{
             width: '1px',
-            height: '40px',
+            height: '36px',
             backgroundColor: 'rgba(20, 33, 61, 0.12)',
             position: 'relative',
             overflow: 'hidden'
@@ -451,101 +451,100 @@ export const Hero: React.FC = () => {
       </div>
 
       <style jsx global>{`
-        /* Atmospheric Drift Animations (Asynchronous, organic, non-pulsing) */
+        /* Atmospheric Drift Animations (Smooth, continuous organic drift along the hero section) */
         @keyframes atmosphericDriftPrimary {
           0% {
-            transform: translate3d(0, 0, 0);
+            transform: translate3d(0, 0, 0) scale(1);
           }
-          50% {
-            transform: translate3d(24px, -20px, 0);
+          28% {
+            /* Drifts smoothly rightwards towards the 3D lattice, bathed in blue */
+            transform: translate3d(120px, -32px, 0) scale(1.06);
+          }
+          55% {
+            /* Drifts smoothly through the lower-center */
+            transform: translate3d(30px, 38px, 0) scale(0.96);
+          }
+          78% {
+            /* Drifts smoothly leftwards towards the editorial copy */
+            transform: translate3d(-110px, -18px, 0) scale(1.04);
           }
           100% {
-            transform: translate3d(-18px, 16px, 0);
+            transform: translate3d(0, 0, 0) scale(1);
           }
         }
 
-        @keyframes atmosphericDriftObject {
+        @keyframes atmosphericDriftSecondary {
           0% {
-            transform: translate3d(0, 0, 0);
+            transform: translate3d(-60px, 20px, 0) scale(0.96);
           }
-          50% {
-            transform: translate3d(-22px, 22px, 0);
+          32% {
+            transform: translate3d(75px, 28px, 0) scale(1.05);
+          }
+          68% {
+            transform: translate3d(25px, -30px, 0) scale(0.97);
           }
           100% {
-            transform: translate3d(18px, -18px, 0);
+            transform: translate3d(-60px, 20px, 0) scale(0.96);
           }
         }
 
-        @keyframes atmosphericDriftLeft {
+        @keyframes atmosphericDriftMobile {
           0% {
-            transform: translate3d(0, 0, 0);
+            transform: translate3d(0, 0, 0) scale(1);
           }
-          50% {
-            transform: translate3d(16px, 16px, 0);
+          33% {
+            transform: translate3d(24px, -18px, 0) scale(1.04);
+          }
+          66% {
+            transform: translate3d(-20px, 16px, 0) scale(0.97);
           }
           100% {
-            transform: translate3d(-14px, -14px, 0);
+            transform: translate3d(0, 0, 0) scale(1);
           }
         }
 
-        /* Desktop Atmospheric Field Layers — 2-3x More Visible Center, Feathered Edges */
+        /* Desktop Atmospheric Field Layers — Smooth Drift, Strictly Contained Within Viewport */
         .hero-atmosphere-primary {
           position: absolute;
-          left: calc(55% - 625px);
-          top: calc(48% - 490px);
-          width: 1250px;
-          height: 980px;
+          left: 50%;
+          top: 48%;
+          width: clamp(520px, 52vw, 760px);
+          height: clamp(420px, 44vw, 600px);
+          margin-left: calc(-1 * clamp(260px, 26vw, 380px));
+          margin-top: calc(-1 * clamp(210px, 22vw, 300px));
           border-radius: 50%;
           background: radial-gradient(
-            ellipse 65% 58% at 50% 50%,
-            rgba(22, 119, 255, 0.22) 0%,
-            rgba(22, 119, 255, 0.16) 30%,
-            rgba(22, 119, 255, 0.08) 55%,
-            rgba(20, 100, 210, 0.03) 72%,
+            ellipse 60% 55% at 50% 50%,
+            rgba(22, 119, 255, 0.25) 0%,
+            rgba(22, 119, 255, 0.17) 32%,
+            rgba(20, 100, 210, 0.08) 58%,
+            rgba(15, 98, 236, 0.02) 76%,
             transparent 88%
           );
-          filter: blur(95px);
+          filter: blur(85px);
           will-change: transform;
-          animation: atmosphericDriftPrimary 30s ease-in-out infinite alternate;
+          animation: atmosphericDriftPrimary 19s cubic-bezier(0.42, 0, 0.58, 1) infinite;
         }
 
         .hero-atmosphere-secondary {
           position: absolute;
-          left: calc(72% - 550px);
-          top: calc(52% - 460px);
-          width: 1100px;
-          height: 920px;
-          border-radius: 50%;
-          background: radial-gradient(
-            circle at 50% 52%,
-            rgba(20, 100, 210, 0.24) 0%,
-            rgba(22, 119, 255, 0.17) 32%,
-            rgba(22, 119, 255, 0.08) 58%,
-            rgba(20, 100, 210, 0.025) 75%,
-            transparent 88%
-          );
-          filter: blur(90px);
-          will-change: transform;
-          animation: atmosphericDriftObject 24s ease-in-out infinite alternate;
-        }
-
-        .hero-atmosphere-tertiary {
-          position: absolute;
-          left: calc(28% - 500px);
-          top: calc(58% - 425px);
-          width: 1000px;
-          height: 850px;
+          left: 52%;
+          top: 50%;
+          width: clamp(440px, 46vw, 660px);
+          height: clamp(360px, 38vw, 520px);
+          margin-left: calc(-1 * clamp(220px, 23vw, 330px));
+          margin-top: calc(-1 * clamp(180px, 19vw, 260px));
           border-radius: 50%;
           background: radial-gradient(
             circle at 50% 50%,
-            rgba(22, 119, 255, 0.15) 0%,
-            rgba(22, 119, 255, 0.09) 34%,
-            rgba(22, 119, 255, 0.04) 60%,
-            transparent 82%
+            rgba(15, 98, 236, 0.19) 0%,
+            rgba(22, 119, 255, 0.12) 36%,
+            rgba(20, 100, 210, 0.04) 65%,
+            transparent 84%
           );
-          filter: blur(105px);
+          filter: blur(95px);
           will-change: transform;
-          animation: atmosphericDriftLeft 36s ease-in-out infinite alternate;
+          animation: atmosphericDriftSecondary 25s cubic-bezier(0.42, 0, 0.58, 1) infinite;
         }
 
         /* Gradient word treatment */
@@ -567,25 +566,18 @@ export const Hero: React.FC = () => {
         /* Responsive Breakpoints */
         @media (max-width: 1024px) {
           .hero-atmosphere-primary {
-            width: 900px;
-            height: 750px;
-            left: calc(50% - 450px);
-            top: calc(42% - 375px);
-            filter: blur(80px);
+            width: clamp(420px, 72vw, 580px);
+            height: clamp(340px, 60vw, 480px);
+            margin-left: calc(-1 * clamp(210px, 36vw, 290px));
+            margin-top: calc(-1 * clamp(170px, 30vw, 240px));
+            filter: blur(75px);
           }
           .hero-atmosphere-secondary {
-            width: 800px;
-            height: 700px;
-            left: calc(50% - 400px);
-            top: calc(65% - 350px);
+            width: clamp(360px, 64vw, 500px);
+            height: clamp(300px, 54vw, 420px);
+            margin-left: calc(-1 * clamp(180px, 32vw, 250px));
+            margin-top: calc(-1 * clamp(150px, 27vw, 210px));
             filter: blur(80px);
-          }
-          .hero-atmosphere-tertiary {
-            width: 700px;
-            height: 600px;
-            left: calc(30% - 350px);
-            top: calc(28% - 300px);
-            filter: blur(85px);
           }
           .hero-stage {
             flex-direction: column !important;
@@ -616,42 +608,32 @@ export const Hero: React.FC = () => {
             margin-top: 30px !important;
           }
           .hero-scroll-indicator {
-            display: none !important;
+            bottom: 20px !important;
           }
         }
 
         @media (max-width: 768px) {
           .hero-atmosphere-primary {
-            width: 92vw;
-            height: 92vw;
-            max-width: 480px;
-            max-height: 480px;
-            left: calc(50% - 46vw);
-            top: 18%;
+            width: 76vw;
+            height: 76vw;
+            max-width: 340px;
+            max-height: 340px;
+            margin-left: calc(-1 * min(38vw, 170px));
+            margin-top: calc(-1 * min(38vw, 170px));
+            top: 38%;
             background: radial-gradient(
               circle at 50% 50%,
-              rgba(22, 119, 255, 0.20) 0%,
-              rgba(22, 119, 255, 0.12) 40%,
+              rgba(22, 119, 255, 0.22) 0%,
+              rgba(22, 119, 255, 0.12) 42%,
               transparent 78%
             );
-            filter: blur(65px);
+            filter: blur(55px);
+            animation: atmosphericDriftMobile 15s ease-in-out infinite alternate;
           }
           .hero-atmosphere-secondary {
-            width: 90vw;
-            height: 90vw;
-            max-width: 420px;
-            max-height: 420px;
-            left: calc(50% - 45vw);
-            top: 50%;
-            background: radial-gradient(
-              circle at 50% 52%,
-              rgba(20, 100, 210, 0.22) 0%,
-              rgba(22, 119, 255, 0.12) 45%,
-              transparent 80%
-            );
-            filter: blur(65px);
+            display: none !important;
           }
-          .hero-atmosphere-tertiary {
+          .hero-scroll-indicator {
             display: none !important;
           }
           .hero-stage {
