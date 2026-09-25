@@ -1,12 +1,12 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
-import { ResearchField } from './ResearchField';
-import { HeroAmbientDrift } from './HeroAmbientDrift';
+import React, { useState, useEffect, useRef } from 'react';
+import { PorousLatticeSphere } from './PorousLatticeSphere';
 
 export const Hero: React.FC = () => {
   const [scrollY, setScrollY] = useState(0);
   const [mounted, setMounted] = useState(false);
+  const primaryBtnRef = useRef<HTMLAnchorElement>(null);
 
   useEffect(() => {
     setMounted(true);
@@ -17,338 +17,685 @@ export const Hero: React.FC = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Scroll exit transformations
-  const progress = Math.min(1, Math.max(0, scrollY / 700));
-  const headlineY = progress * -80;
-  const headlineOpacity = 1 - progress * 0.85;
-  const fieldScale = 1 - progress * 0.15;
-  const fieldX = progress * 80;
-  const fieldOpacity = 1 - progress * 0.75;
+  // Section 22: Refined Physical Button Interaction (4-6px subtle magnet on desktop only)
+  const handleBtnMouseMove = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    const btn = primaryBtnRef.current;
+    if (!btn || window.innerWidth < 1024) return;
+    const rect = btn.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    const deltaX = (e.clientX - centerX) * 0.12;
+    const deltaY = (e.clientY - centerY) * 0.12;
+
+    const clampX = Math.max(Math.min(deltaX, 6), -6);
+    const clampY = Math.max(Math.min(deltaY, 6), -6);
+
+    btn.style.transform = `translate(${clampX}px, ${clampY - 2}px)`;
+  };
+
+  const handleBtnMouseLeave = () => {
+    const btn = primaryBtnRef.current;
+    if (!btn) return;
+    btn.style.transform = 'translate(0px, 0px)';
+    btn.style.transition = 'transform 260ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 260ms ease, background-color 220ms ease';
+    setTimeout(() => {
+      if (btn) {
+        btn.style.transition = '';
+      }
+    }, 260);
+  };
+
+  // Section 4: Hero Scroll Exit Choreography (Page feels like a camera moving through CIIRC)
+  const scrollRatio = Math.min(scrollY / 500, 1);
+  const headlineOffsetY = scrollRatio * 40; // 0 -> -40px translation
+  const headlineScale = 1 - scrollRatio * 0.04; // 1 -> 0.96 scale
+  const headlineOpacity = 1 - scrollRatio * 0.8; // 1 -> 0.2 opacity
+  const descOffsetY = scrollRatio * 24;
+  const descOpacity = Math.max(1 - scrollRatio * 0.9, 0);
+  const ctaOpacity = Math.max(1 - scrollRatio * 1.1, 0);
+  const particleCanvasRef = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    const canvas = particleCanvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    let animId: number;
+    let width = (canvas.width = canvas.parentElement?.clientWidth || window.innerWidth);
+    let height = (canvas.height = canvas.parentElement?.clientHeight || window.innerHeight);
+
+    const handleResize = () => {
+      if (!canvas) return;
+      width = canvas.width = canvas.parentElement?.clientWidth || window.innerWidth;
+      height = canvas.height = canvas.parentElement?.clientHeight || window.innerHeight;
+    };
+    window.addEventListener('resize', handleResize);
+
+    const isMobile = window.innerWidth < 768;
+    const count = isMobile ? 20 : 38;
+    const particles = Array.from({ length: count }, () => {
+      const x = Math.random() * width;
+      const y = Math.random() * height;
+      return {
+        baseX: x,
+        baseY: y,
+        x,
+        y,
+        r: Math.random() * 0.7 + 0.7,
+        opacity: Math.random() * 0.08 + 0.06,
+        ampX: Math.random() * 14 + 6,
+        ampY: Math.random() * 10 + 4,
+        speed: Math.random() * 0.0004 + 0.0002,
+        phase: Math.random() * Math.PI * 2
+      };
+    });
+
+    const render = (time: number) => {
+      ctx.clearRect(0, 0, width, height);
+      for (let i = 0; i < count; i++) {
+        const p = particles[i];
+        p.x = p.baseX + Math.sin(time * p.speed + p.phase) * p.ampX;
+        p.y = p.baseY + Math.cos(time * p.speed + p.phase) * p.ampY;
+
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(22, 119, 255, ${p.opacity})`;
+        ctx.fill();
+      }
+      animId = requestAnimationFrame(render);
+    };
+
+    animId = requestAnimationFrame(render);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      cancelAnimationFrame(animId);
+    };
+  }, []);
 
   return (
     <section
-      id="hero"
-      className="hero-section"
+      id="about"
       style={{
-        position: 'relative',
         minHeight: '100svh',
+        width: '100%',
+        position: 'relative',
         display: 'flex',
         alignItems: 'center',
-        backgroundColor: 'var(--paper)',
+        paddingTop: '165px',
+        paddingBottom: '80px',
         overflow: 'hidden',
-        paddingTop: '96px',
-        paddingBottom: '48px'
+        backgroundColor: 'var(--background)'
       }}
+      className="hero-stage"
     >
-      {/* Dynamic Drifting Background Ambient Gradient */}
-      <HeroAmbientDrift />
-
-      {/* Subtle Coordinate Grid Lines */}
+      {/* Multi-Layer Soft Atmospheric Blue Field (CIIRC Dashboard Blue #1677FF / #1464D2) */}
       <div
-        aria-hidden="true"
+        className="hero-atmosphere-field"
         style={{
           position: 'absolute',
           inset: 0,
-          backgroundImage:
-            'linear-gradient(var(--line) 1px, transparent 1px), linear-gradient(90deg, var(--line) 1px, transparent 1px)',
-          backgroundSize: '80px 80px',
-          opacity: 0.28,
           pointerEvents: 'none',
-          zIndex: 1
+          zIndex: 0,
+          overflow: 'hidden',
+          transform: `translateY(${Math.min(scrollY * 0.07, 32)}px)`,
+          transition: 'transform 80ms ease-out'
         }}
-      />
+        aria-hidden="true"
+      >
+        {/* Layer 1: Central Blue Atmosphere (Primary Concentration at ~55% 46%) */}
+        <div className="hero-atmosphere-primary" />
 
-      {/* 12-Column Grid Container */}
+        {/* Layer 2: Hero / 3D Object Atmosphere (Grounding 3D Sphere & Lower Shadow at ~72% 52%) */}
+        <div className="hero-atmosphere-secondary" />
+
+        {/* Layer 3: Left Soft Blue Field (Supporting Typography at ~28% 58%) */}
+        <div className="hero-atmosphere-tertiary" />
+
+        {/* Canvas for delicate ambient particles */}
+        <canvas
+          ref={particleCanvasRef}
+          style={{
+            position: 'absolute',
+            inset: 0,
+            width: '100%',
+            height: '100%',
+            pointerEvents: 'none',
+            zIndex: 1
+          }}
+        />
+      </div>
+
+      {/* Hero Content Container */}
       <div
-        className="atlas-container hero-grid-container"
+        className="atlas-container hero-container"
         style={{
+          width: '100%',
           position: 'relative',
           zIndex: 2,
-          display: 'grid',
-          gridTemplateColumns: 'repeat(12, 1fr)',
-          columnGap: '20px',
-          alignItems: 'center',
-          width: '100%'
+          pointerEvents: 'none'
         }}
       >
-        {/* Columns 1–7: Hero Copy (explicit width min(100%, 700px)) */}
+        {/* Left Column: Editorial Typography */}
         <div
-          className="hero-copy"
           style={{
-            gridColumn: '1 / 8',
-            width: 'min(100%, 700px)',
-            transform: `translate3d(0, ${headlineY}px, 0)`,
-            opacity: headlineOpacity,
-            transition: 'opacity 0.1s ease-out',
+            width: '100%',
+            maxWidth: '620px',
             display: 'flex',
             flexDirection: 'column',
-            overflow: 'visible'
+            pointerEvents: 'auto'
           }}
+          className="hero-copy-column"
         >
-          {/* Eyebrow Label (top approx 255px at 1440x900) */}
+          {/* Eyebrow Capsule */}
           <div
-            className="mono-meta hero-eyebrow"
+            className="hero-eyebrow-wrapper"
             style={{
-              marginBottom: '28px',
-              color: 'var(--muted)',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '12px'
+              opacity: mounted ? 1 : 0,
+              transform: mounted ? 'translateY(0)' : 'translateY(14px)',
+              transition:
+                'opacity 650ms cubic-bezier(0.22, 1, 0.36, 1) 250ms, transform 650ms cubic-bezier(0.22, 1, 0.36, 1) 250ms',
+              marginBottom: 'clamp(32px, 3.2vw, 42px)'
             }}
           >
-            <span
-              style={{
-                width: '6px',
-                height: '6px',
-                borderRadius: '50%',
-                backgroundColor: 'var(--teal)',
-                display: 'inline-block'
-              }}
-            />
-            <span>CIIRC / RESEARCH IN MOTION / 01</span>
+            <div className="eyebrow-capsule">
+              <span className="eyebrow-pulse-dot" />
+              <span>Centre for Incubation, Innovation, Research &amp; Consultancy</span>
+            </div>
           </div>
 
-          {/* Headline (overflow: visible, each line has dedicated inner mask) */}
+          {/* Masked Editorial Headline (Reliable line boxes, no collision with descenders) */}
           <h1
-            className="hero-headline"
             style={{
-              overflow: 'visible',
-              margin: '0 0 32px 0',
+              fontSize: 'clamp(52px, 5.8vw, 102px)',
+              lineHeight: 0.98,
+              letterSpacing: '-0.052em',
+              fontWeight: 650,
+              color: 'var(--text-primary)',
+              margin: 0,
               padding: 0,
-              display: 'flex',
-              flexDirection: 'column',
-              fontWeight: 700,
-              letterSpacing: '-0.065em',
-              textTransform: 'uppercase'
+              transform: `translateY(-${headlineOffsetY}px) scale(${headlineScale})`,
+              transformOrigin: 'left top',
+              opacity: headlineOpacity,
+              transition: 'transform 80ms ease-out, opacity 80ms ease-out'
             }}
+            className="hero-headline"
           >
-            {/* Line 1: WHERE */}
-            <div
-              className="hero-line-mask"
+            {/* Line 1: Where research */}
+            <span
               style={{
+                display: 'block',
                 overflow: 'hidden',
-                lineHeight: 1.0,
-                marginBottom: '8px'
+                paddingBottom: '2px'
               }}
             >
-              <div
-                className="hero-line hero-line-small"
+              <span
                 style={{
-                  color: 'var(--forest-soft)',
-                  transform: mounted ? 'translateY(0)' : 'translateY(110%)',
-                  transition: 'transform 850ms cubic-bezier(0.16, 1, 0.3, 1) 100ms'
+                  display: 'block',
+                  whiteSpace: 'nowrap',
+                  opacity: mounted ? 1 : 0,
+                  transform: mounted ? 'translateY(0)' : 'translateY(100%)',
+                  transition:
+                    'opacity 800ms cubic-bezier(0.22, 1, 0.36, 1) 350ms, transform 800ms cubic-bezier(0.22, 1, 0.36, 1) 350ms'
                 }}
               >
-                WHERE
-              </div>
-            </div>
+                Where research
+              </span>
+            </span>
 
-            {/* Line 2: RESEARCH */}
-            <div
-              className="hero-line-mask"
+            {/* Line 2: becomes */}
+            <span
               style={{
+                display: 'block',
                 overflow: 'hidden',
-                lineHeight: 0.82,
-                marginBottom: '2px'
+                paddingBottom: '2px'
               }}
             >
-              <div
-                className="hero-line hero-line-primary"
+              <span
                 style={{
-                  color: 'var(--forest)',
-                  transform: mounted ? 'translateY(0)' : 'translateY(110%)',
-                  transition: 'transform 850ms cubic-bezier(0.16, 1, 0.3, 1) 200ms'
+                  display: 'block',
+                  whiteSpace: 'nowrap',
+                  opacity: mounted ? 1 : 0,
+                  transform: mounted ? 'translateY(0)' : 'translateY(115%)',
+                  transition:
+                    'opacity 800ms cubic-bezier(0.22, 1, 0.36, 1) 430ms, transform 800ms cubic-bezier(0.22, 1, 0.36, 1) 430ms'
                 }}
               >
-                RESEARCH
-              </div>
-            </div>
+                becomes
+              </span>
+            </span>
 
-            {/* Line 3: BECOMES */}
-            <div
-              className="hero-line-mask"
+            {/* Line 3: Accent with generous bottom padding for descender ("y.") clearance */}
+            <span
               style={{
+                display: 'block',
                 overflow: 'hidden',
-                lineHeight: 0.88,
-                marginBottom: '2px'
+                paddingBottom: '0.28em',
+                marginBottom: '-0.16em'
               }}
             >
-              <div
-                className="hero-line hero-line-secondary"
+              <span
+                className="hero-gradient-word"
                 style={{
-                  color: 'var(--forest-soft)',
-                  transform: mounted ? 'translateY(0)' : 'translateY(110%)',
-                  transition: 'transform 850ms cubic-bezier(0.16, 1, 0.3, 1) 300ms'
+                  display: 'inline-block',
+                  whiteSpace: 'nowrap',
+                  paddingBottom: '0.22em',
+                  marginBottom: '-0.22em',
+                  background:
+                    'linear-gradient(135deg, #0F62EC 0%, #1677FF 38%, #3C8FFF 68%, #1464D2 100%)',
+                  WebkitBackgroundClip: 'text',
+                  backgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  color: 'var(--blue)',
+                  opacity: mounted ? 1 : 0,
+                  transform: mounted ? 'translateY(0)' : 'translateY(90%)',
+                  transition:
+                    'opacity 800ms cubic-bezier(0.22, 1, 0.36, 1) 510ms, transform 800ms cubic-bezier(0.22, 1, 0.36, 1) 510ms'
                 }}
               >
-                BECOMES
-              </div>
-            </div>
-
-            {/* Line 4: IMPACT. */}
-            <div
-              className="hero-line-mask"
-              style={{
-                overflow: 'hidden',
-                lineHeight: 0.82
-              }}
-            >
-              <div
-                className="hero-line hero-line-primary hero-line-impact"
-                style={{
-                  color: 'var(--teal)',
-                  transform: mounted ? 'translateY(0)' : 'translateY(110%)',
-                  transition: 'transform 850ms cubic-bezier(0.16, 1, 0.3, 1) 400ms'
-                }}
-              >
-                IMPACT.
-              </div>
-            </div>
+                possibility.
+              </span>
+            </span>
           </h1>
 
-          {/* Support Copy Paragraph */}
+          {/* Description Paragraph with strictly governed responsive breathing space */}
           <p
             className="hero-paragraph"
             style={{
-              maxWidth: '480px',
-              fontSize: '17px',
-              lineHeight: 1.55,
-              color: 'var(--forest-soft)',
-              marginBottom: '30px'
+              fontSize: '18px',
+              lineHeight: 1.66,
+              color: 'var(--text-secondary)',
+              maxWidth: '540px',
+              margin: 0,
+              marginTop: 'clamp(26px, 2.5vw, 36px)',
+              transform: `translateY(-${descOffsetY}px)`,
+              opacity: descOpacity * (mounted ? 1 : 0),
+              transition: mounted
+                ? 'transform 80ms ease-out, opacity 80ms ease-out'
+                : 'opacity 750ms cubic-bezier(0.22, 1, 0.36, 1) 700ms, transform 750ms cubic-bezier(0.22, 1, 0.36, 1) 700ms'
             }}
           >
-            A multidisciplinary research, innovation and incubation centre bringing science,
-            engineering, business and entrepreneurship together for societal impact.
+            A multidisciplinary research and incubation centre uniting fundamental science,
+            advanced engineering, and translational enterprise to transform pioneering discovery
+            into profound societal consequence.
           </p>
 
-          {/* CTAs */}
+          {/* CTAs with balanced breathing space */}
           <div
-            className="hero-cta-group"
-            style={{ display: 'flex', alignItems: 'center', gap: '28px', flexWrap: 'wrap' }}
-          >
-            <a href="#research" className="btn-forest-solid">
-              <span>Explore Research</span>
-              <span className="btn-arrow">→</span>
-            </a>
-
-            <a href="#about" className="btn-text-secondary">
-              Discover CIIRC
-            </a>
-          </div>
-        </div>
-
-        {/* Columns 8–12: Hero Visual (560–600px width/height, separation preserved) */}
-        <div
-          className="hero-visual-col"
-          style={{
-            gridColumn: '8 / 13',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            transform: `translate3d(${fieldX}px, 0, 0) scale(${fieldScale})`,
-            opacity: fieldOpacity,
-            transition: 'opacity 0.1s ease-out',
-            clipPath: mounted ? 'inset(0)' : 'inset(0 0 100% 0)',
-            transitionProperty: 'clip-path',
-            transitionDuration: '1200ms',
-            transitionDelay: '400ms',
-            transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)',
-            minWidth: 0
-          }}
-        >
-          <div
-            className="hero-visual-wrapper"
+            className="hero-cta-wrapper"
             style={{
-              width: '100%',
-              maxWidth: '580px',
-              aspectRatio: '1 / 1'
+              display: 'flex',
+              alignItems: 'center',
+              gap: '16px',
+              flexWrap: 'wrap',
+              marginTop: 'clamp(28px, 2.8vw, 40px)',
+              opacity: ctaOpacity * (mounted ? 1 : 0),
+              transform: mounted ? 'translateY(0)' : 'translateY(16px)',
+              transition: mounted
+                ? 'opacity 80ms ease-out'
+                : 'opacity 750ms cubic-bezier(0.22, 1, 0.36, 1) 800ms, transform 750ms cubic-bezier(0.22, 1, 0.36, 1) 800ms'
             }}
           >
-            <ResearchField />
+            <a
+              ref={primaryBtnRef}
+              href="#research"
+              onMouseMove={handleBtnMouseMove}
+              onMouseLeave={handleBtnMouseLeave}
+              className="btn-primary-ciirc hero-btn"
+              style={{
+                height: '52px',
+                padding: '0 24px',
+                borderRadius: '12px',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '10px'
+              }}
+            >
+              <span>Explore Research</span>
+              <span
+                className="cta-arrow"
+                style={{ transition: 'transform 240ms cubic-bezier(0.22, 1, 0.36, 1)' }}
+              >
+                →
+              </span>
+            </a>
+
+            <a
+              href="#idea"
+              className="btn-secondary-ciirc hero-btn"
+              style={{
+                height: '52px',
+                padding: '0 24px',
+                borderRadius: '12px',
+                display: 'inline-flex',
+                alignItems: 'center'
+              }}
+            >
+              <span>Discover CIIRC</span>
+            </a>
           </div>
         </div>
       </div>
 
-      <style jsx>{`
-        /* White-space nowrap on all individual lines */
-        .hero-line {
-          white-space: nowrap;
+      {/* Integrated 3D Element: Part of the hero environment, full-height stage across the right */}
+      <div
+        className="hero-3d-stage"
+        style={{
+          position: 'absolute',
+          top: 0,
+          right: '2%',
+          bottom: 0,
+          width: '48vw',
+          maxWidth: '720px',
+          height: '100%',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 1,
+          pointerEvents: 'none',
+          opacity: mounted ? 1 : 0,
+          transform: mounted
+            ? `translateY(${scrollRatio * 30}px) scale(${1 - scrollRatio * 0.06})`
+            : 'scale(0.96)',
+          transition: mounted
+            ? 'transform 100ms ease-out'
+            : 'opacity 1100ms cubic-bezier(0.22, 1, 0.36, 1) 300ms, transform 1100ms cubic-bezier(0.22, 1, 0.36, 1) 300ms'
+        }}
+      >
+        <div style={{ width: '100%', height: '100%', pointerEvents: 'auto' }}>
+          <PorousLatticeSphere scrollY={scrollY} />
+        </div>
+      </div>
+
+      {/* Scroll Indicator (Refined placement & desktop/tablet balance) */}
+      <div
+        style={{
+          position: 'absolute',
+          bottom: '36px',
+          left: '72px',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '14px',
+          opacity: Math.max(1 - scrollY / 80, 0),
+          pointerEvents: 'none',
+          transition: 'opacity 250ms ease',
+          zIndex: 5
+        }}
+        className="hero-scroll-indicator"
+      >
+        <span
+          style={{
+            fontFamily: 'var(--font-mono)',
+            fontSize: '10px',
+            letterSpacing: '0.18em',
+            textTransform: 'uppercase',
+            color: 'var(--text-muted)',
+            fontWeight: 600
+          }}
+        >
+          SCROLL TO EXPLORE
+        </span>
+
+        <div
+          style={{
+            width: '1px',
+            height: '40px',
+            backgroundColor: 'rgba(20, 33, 61, 0.12)',
+            position: 'relative',
+            overflow: 'hidden'
+          }}
+        >
+          <div className="scroll-light-travel" />
+        </div>
+      </div>
+
+      <style jsx global>{`
+        /* Atmospheric Drift Animations (Asynchronous, organic, non-pulsing) */
+        @keyframes atmosphericDriftPrimary {
+          0% {
+            transform: translate3d(0, 0, 0);
+          }
+          50% {
+            transform: translate3d(24px, -20px, 0);
+          }
+          100% {
+            transform: translate3d(-18px, 16px, 0);
+          }
+        }
+
+        @keyframes atmosphericDriftObject {
+          0% {
+            transform: translate3d(0, 0, 0);
+          }
+          50% {
+            transform: translate3d(-22px, 22px, 0);
+          }
+          100% {
+            transform: translate3d(18px, -18px, 0);
+          }
+        }
+
+        @keyframes atmosphericDriftLeft {
+          0% {
+            transform: translate3d(0, 0, 0);
+          }
+          50% {
+            transform: translate3d(16px, 16px, 0);
+          }
+          100% {
+            transform: translate3d(-14px, -14px, 0);
+          }
+        }
+
+        /* Desktop Atmospheric Field Layers — 2-3x More Visible Center, Feathered Edges */
+        .hero-atmosphere-primary {
+          position: absolute;
+          left: calc(55% - 625px);
+          top: calc(48% - 490px);
+          width: 1250px;
+          height: 980px;
+          border-radius: 50%;
+          background: radial-gradient(
+            ellipse 65% 58% at 50% 50%,
+            rgba(22, 119, 255, 0.22) 0%,
+            rgba(22, 119, 255, 0.16) 30%,
+            rgba(22, 119, 255, 0.08) 55%,
+            rgba(20, 100, 210, 0.03) 72%,
+            transparent 88%
+          );
+          filter: blur(95px);
           will-change: transform;
+          animation: atmosphericDriftPrimary 30s ease-in-out infinite alternate;
         }
 
-        /* Desktop Typography Specs >= 1440px */
-        @media (min-width: 1440px) {
-          .hero-line-small {
-            font-size: 32px;
-          }
-          .hero-line-primary {
-            font-size: 108px;
-          }
-          .hero-line-secondary {
-            font-size: 78px;
-          }
+        .hero-atmosphere-secondary {
+          position: absolute;
+          left: calc(72% - 550px);
+          top: calc(52% - 460px);
+          width: 1100px;
+          height: 920px;
+          border-radius: 50%;
+          background: radial-gradient(
+            circle at 50% 52%,
+            rgba(20, 100, 210, 0.24) 0%,
+            rgba(22, 119, 255, 0.17) 32%,
+            rgba(22, 119, 255, 0.08) 58%,
+            rgba(20, 100, 210, 0.025) 75%,
+            transparent 88%
+          );
+          filter: blur(90px);
+          will-change: transform;
+          animation: atmosphericDriftObject 24s ease-in-out infinite alternate;
         }
 
-        /* Responsive Type at 1280px */
-        @media (min-width: 1025px) and (max-width: 1439px) {
-          .hero-line-small {
-            font-size: 30px;
-          }
-          .hero-line-primary {
-            font-size: 94px;
-          }
-          .hero-line-secondary {
-            font-size: 70px;
-          }
+        .hero-atmosphere-tertiary {
+          position: absolute;
+          left: calc(28% - 500px);
+          top: calc(58% - 425px);
+          width: 1000px;
+          height: 850px;
+          border-radius: 50%;
+          background: radial-gradient(
+            circle at 50% 50%,
+            rgba(22, 119, 255, 0.15) 0%,
+            rgba(22, 119, 255, 0.09) 34%,
+            rgba(22, 119, 255, 0.04) 60%,
+            transparent 82%
+          );
+          filter: blur(105px);
+          will-change: transform;
+          animation: atmosphericDriftLeft 36s ease-in-out infinite alternate;
         }
 
-        /* Responsive Type at 1024px */
-        @media (min-width: 769px) and (max-width: 1024px) {
-          .hero-grid-container {
-            grid-template-columns: repeat(12, 1fr) !important;
-          }
-          .hero-copy {
-            grid-column: 1 / 8 !important;
-          }
-          .hero-visual-col {
-            grid-column: 8 / 13 !important;
-          }
-          .hero-line-small {
-            font-size: 26px;
-          }
-          .hero-line-primary {
-            font-size: 76px;
-          }
-          .hero-line-secondary {
-            font-size: 58px;
-          }
+        /* Gradient word treatment */
+        .hero-gradient-word {
+          background: linear-gradient(135deg, #0F62EC 0%, #1677FF 38%, #3C8FFF 68%, #1464D2 100%);
+          -webkit-background-clip: text;
+          background-clip: text;
+          -webkit-text-fill-color: transparent;
+          padding-bottom: 0.22em;
+          margin-bottom: -0.22em;
         }
 
-        /* Mobile Recomposition <= 768px */
-        @media (max-width: 768px) {
-          .hero-grid-container {
-            grid-template-columns: 1fr !important;
-            gap: 48px !important;
+        /* Default Desktop Styling */
+        .hero-stage {
+          padding-top: 165px;
+          padding-bottom: 80px;
+        }
+
+        /* Responsive Breakpoints */
+        @media (max-width: 1024px) {
+          .hero-atmosphere-primary {
+            width: 900px;
+            height: 750px;
+            left: calc(50% - 450px);
+            top: calc(42% - 375px);
+            filter: blur(80px);
           }
-          .hero-copy {
-            grid-column: 1 / -1 !important;
+          .hero-atmosphere-secondary {
+            width: 800px;
+            height: 700px;
+            left: calc(50% - 400px);
+            top: calc(65% - 350px);
+            filter: blur(80px);
+          }
+          .hero-atmosphere-tertiary {
+            width: 700px;
+            height: 600px;
+            left: calc(30% - 350px);
+            top: calc(28% - 300px);
+            filter: blur(85px);
+          }
+          .hero-stage {
+            flex-direction: column !important;
+            padding-top: 120px !important;
+            padding-bottom: 60px !important;
+            min-height: auto !important;
+          }
+          .hero-container {
+            order: 1 !important;
+          }
+          .hero-copy-column {
+            max-width: 100% !important;
+          }
+          .hero-3d-stage {
+            position: relative !important;
             width: 100% !important;
+            height: 520px !important;
+            max-width: 560px !important;
+            margin: 40px auto 0 !important;
+            right: auto !important;
+            bottom: auto !important;
+            order: 2 !important;
           }
-          .hero-visual-col {
-            grid-column: 1 / -1 !important;
-            justify-content: center !important;
+          .hero-headline {
+            font-size: clamp(48px, 6vw, 76px) !important;
           }
-          .hero-visual-wrapper {
-            max-width: 380px !important;
+          .hero-paragraph {
+            margin-top: 30px !important;
           }
-          .hero-line-small {
-            font-size: 24px;
+          .hero-scroll-indicator {
+            display: none !important;
           }
-          .hero-line-primary {
-            font-size: 56px;
+        }
+
+        @media (max-width: 768px) {
+          .hero-atmosphere-primary {
+            width: 92vw;
+            height: 92vw;
+            max-width: 480px;
+            max-height: 480px;
+            left: calc(50% - 46vw);
+            top: 18%;
+            background: radial-gradient(
+              circle at 50% 50%,
+              rgba(22, 119, 255, 0.20) 0%,
+              rgba(22, 119, 255, 0.12) 40%,
+              transparent 78%
+            );
+            filter: blur(65px);
           }
-          .hero-line-secondary {
-            font-size: 42px;
+          .hero-atmosphere-secondary {
+            width: 90vw;
+            height: 90vw;
+            max-width: 420px;
+            max-height: 420px;
+            left: calc(50% - 45vw);
+            top: 50%;
+            background: radial-gradient(
+              circle at 50% 52%,
+              rgba(20, 100, 210, 0.22) 0%,
+              rgba(22, 119, 255, 0.12) 45%,
+              transparent 80%
+            );
+            filter: blur(65px);
+          }
+          .hero-atmosphere-tertiary {
+            display: none !important;
+          }
+          .hero-stage {
+            padding-top: 96px !important;
+            padding-bottom: 48px !important;
+          }
+          .hero-eyebrow-wrapper {
+            margin-bottom: 24px !important;
+          }
+          .hero-headline {
+            font-size: clamp(42px, 8.8vw, 54px) !important;
+            line-height: 0.96 !important;
+            letter-spacing: -0.048em !important;
+          }
+          .hero-paragraph {
+            font-size: 16.5px !important;
+            line-height: 1.62 !important;
+            margin-top: 26px !important;
+          }
+          .hero-cta-wrapper {
+            margin-top: 28px !important;
+            gap: 12px !important;
+          }
+          .hero-btn {
+            height: 52px !important;
+          }
+          .hero-3d-stage {
+            height: 420px !important;
+            max-width: 440px !important;
+            margin: 36px auto 0 !important;
+          }
+        }
+
+        @media (max-width: 480px) {
+          .hero-stage {
+            padding-top: 88px !important;
+          }
+          .hero-headline {
+            font-size: clamp(38px, 8.4vw, 46px) !important;
+          }
+          .hero-3d-stage {
+            height: 340px !important;
+            max-width: 340px !important;
+            margin-top: 28px !important;
           }
         }
       `}</style>

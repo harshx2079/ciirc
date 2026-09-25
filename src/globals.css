@@ -6,34 +6,24 @@
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;650;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
 
 :root {
-  /* Exact Light Color System */
-  --paper: #F7F8F3;
-  --paper-warm: #F0F1EA;
-  --paper-blue: #E9F0F3;
-  --paper-green: #E7F0EB;
-
-  --forest: #10251F;
-  --forest-soft: #30453E;
-  --muted: #71807A;
-  --faint: #A8B1AC;
-
-  --teal: #087F78;
-  --teal-dark: #05655F;
-  --teal-soft: #D7ECE8;
-
-  --cobalt: #3157D5;
-  --cobalt-soft: #DEE5FA;
-
-  --lime: #A9BE45;
-  --lime-soft: #EAF0CE;
-
-  --coral: #DF705B;
-  --coral-soft: #F5DDD8;
-
-  --white: #FFFFFF;
-
-  --line: rgba(16, 37, 31, 0.12);
-  --line-strong: rgba(16, 37, 31, 0.22);
+  /* Exact Light Scientific Color System */
+  --background: #F7F9FC;
+  --surface: #FFFFFF;
+  --surface-soft: #F1F5FB;
+  --surface-warm: #F4F6FA;
+  --text-primary: #14213D;
+  --text-secondary: #5E718F;
+  --text-muted: #8EA0BA;
+  
+  --blue: #1677FF;
+  --blue-deep: #1464D2;
+  --blue-soft: #EBF3FF;
+  --indigo: #635BFF;
+  --cyan: #25BFEF;
+  --border: #E4EAF2;
+  --border-strong: #CDD7E5;
+  --border-subtle: rgba(228, 234, 242, 0.7);
+  --success: #16B77A;
 
   /* Typography */
   --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -41,10 +31,11 @@
 
   /* Global Layout */
   --max-width: 1440px;
-  --side-padding: 5.5vw;
 
-  /* Motion */
-  --ease-editorial: cubic-bezier(0.16, 1, 0.3, 1);
+  /* Easing curves */
+  --ease-editorial: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-cinematic: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-smooth: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 /* Base Reset */
@@ -57,8 +48,8 @@
 html {
   font-size: 16px;
   scroll-behavior: smooth;
-  background-color: var(--paper);
-  color: var(--forest);
+  background-color: var(--background);
+  color: var(--text-primary);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   width: 100%;
@@ -68,8 +59,11 @@ html {
 
 body {
   font-family: var(--font-sans);
-  background-color: var(--paper);
-  color: var(--forest);
+  background-color: var(--background);
+  background: radial-gradient(circle at 78% 18%, rgba(22, 119, 255, 0.08), transparent 28%),
+              radial-gradient(circle at 15% 65%, rgba(99, 91, 255, 0.05), transparent 30%),
+              #F7F9FC;
+  color: var(--text-primary);
   line-height: 1.55;
   font-size: 16px;
   font-weight: 400;
@@ -79,8 +73,8 @@ body {
 }
 
 ::selection {
-  background-color: var(--teal-soft);
-  color: var(--teal-dark);
+  background-color: rgba(22, 119, 255, 0.15);
+  color: var(--blue-deep);
 }
 
 a {
@@ -95,31 +89,34 @@ button {
   background: none;
 }
 
-/* Global Container Utility */
+/* Global Container Utility (Section 7) */
 .atlas-container {
   width: 100%;
   max-width: var(--max-width);
   margin-left: auto;
   margin-right: auto;
-  padding-left: var(--side-padding);
-  padding-right: var(--side-padding);
+  padding-left: 72px;
+  padding-right: 72px;
 }
 
-@media (max-width: 1280px) {
-  :root {
-    --side-padding: 64px;
+@media (min-width: 1600px) {
+  .atlas-container {
+    padding-left: 96px;
+    padding-right: 96px;
   }
 }
 
 @media (max-width: 1024px) {
-  :root {
-    --side-padding: 44px;
+  .atlas-container {
+    padding-left: 40px;
+    padding-right: 40px;
   }
 }
 
 @media (max-width: 768px) {
-  :root {
-    --side-padding: 20px;
+  .atlas-container {
+    padding-left: 20px;
+    padding-right: 20px;
   }
 }
 
@@ -129,157 +126,225 @@ button {
   font-size: 11px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--muted);
+  color: var(--text-secondary);
 }
 
-/* Custom Interactive Cursor Dot */
-.custom-cursor-dot {
+/* Section 11: Eyebrow capsule & pulsing dot */
+.eyebrow-capsule {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--blue);
+  background: rgba(22, 119, 255, 0.06);
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(22, 119, 255, 0.14);
+}
+
+.eyebrow-pulse-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background-color: var(--blue);
+  animation: dotPulse 2.8s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes dotPulse {
+  0%, 100% {
+    opacity: 0.45;
+    transform: scale(0.9);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.15);
+  }
+}
+
+/* Section 41: Cursor Halo */
+.cursor-halo {
   position: fixed;
   top: 0;
   left: 0;
-  width: 8px;
-  height: 8px;
+  width: 16px;
+  height: 16px;
   border-radius: 50%;
-  background-color: var(--teal);
+  border: 1px solid rgba(22, 119, 255, 0.45);
+  background: rgba(22, 119, 255, 0.08);
   pointer-events: none;
   z-index: 9999;
   transform: translate(-50%, -50%);
-  transition: width 0.25s var(--ease-editorial), height 0.25s var(--ease-editorial), background-color 0.25s ease, opacity 0.25s ease;
+  transition: width 0.22s var(--ease-cinematic),
+              height 0.22s var(--ease-cinematic),
+              background 0.22s ease,
+              border-color 0.22s ease;
 }
 
-.custom-cursor-dot.active {
-  width: 22px;
-  height: 22px;
-  background-color: rgba(8, 127, 120, 0.25);
-  border: 1px solid var(--teal);
+.cursor-halo.active {
+  width: 28px;
+  height: 28px;
+  background: rgba(22, 119, 255, 0.14);
+  border-color: rgba(22, 119, 255, 0.8);
 }
 
 @media (pointer: coarse), (max-width: 1024px) {
-  .custom-cursor-dot {
+  .cursor-halo {
     display: none !important;
   }
 }
 
-/* Subtle Link Underline Effect */
-.nav-link-cobalt {
+/* Section 13 & 14: Primary Hero CTA Button */
+.btn-primary-ciirc {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  height: 52px;
+  padding: 0 22px;
+  border-radius: 12px;
+  background-color: var(--blue);
+  color: #FFFFFF;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  border: none;
+  text-decoration: none;
+  box-shadow: 0 4px 12px rgba(22, 119, 255, 0.12);
+  transition: transform 220ms var(--ease-cinematic),
+              background-color 220ms ease,
+              box-shadow 220ms var(--ease-cinematic);
+  user-select: none;
+}
+
+.btn-primary-ciirc .cta-arrow {
+  transition: transform 220ms var(--ease-cinematic);
+  display: inline-block;
+}
+
+.btn-primary-ciirc:hover {
+  transform: translateY(-2px);
+  background-color: var(--blue-deep);
+  box-shadow: 0 10px 24px rgba(22, 119, 255, 0.18);
+  color: #FFFFFF;
+}
+
+.btn-primary-ciirc:hover .cta-arrow {
+  transform: translateX(4px);
+}
+
+.btn-primary-ciirc:active {
+  transform: scale(0.97);
+  transition-duration: 90ms;
+}
+
+/* Section 13: Secondary Hero CTA Button */
+.btn-secondary-ciirc {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 52px;
+  padding: 0 22px;
+  border-radius: 12px;
+  background: transparent;
+  border: 1px solid #DCE5F0;
+  color: var(--text-primary);
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background-color 220ms var(--ease-cinematic),
+              border-color 220ms var(--ease-cinematic),
+              color 220ms ease;
+  user-select: none;
+}
+
+.btn-secondary-ciirc:hover {
+  background-color: rgba(22, 119, 255, 0.04);
+  border-color: #CDD7E5;
+  color: var(--blue-deep);
+}
+
+.btn-secondary-ciirc:active {
+  transform: scale(0.98);
+}
+
+/* Subtle Link Underline */
+.nav-link-ciirc {
   position: relative;
   display: inline-flex;
   align-items: center;
-  font-weight: 500;
-  font-size: 14px;
-  color: var(--forest);
-  padding: 4px 0;
-  transition: color 0.18s ease;
+  font-size: 13.5px;
+  font-weight: 550;
+  color: var(--text-secondary);
+  padding: 6px 0;
+  transition: color 200ms ease;
 }
 
-.nav-link-cobalt::after {
+.nav-link-ciirc:hover {
+  color: var(--text-primary);
+}
+
+.nav-link-ciirc::after {
   content: '';
   position: absolute;
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 1px;
-  background-color: var(--cobalt);
+  height: 2px;
+  background-color: var(--blue);
   transform: scaleX(0);
   transform-origin: left;
-  transition: transform 180ms var(--ease-editorial);
+  transition: transform 220ms var(--ease-cinematic);
 }
 
-.nav-link-cobalt:hover::after {
+.nav-link-ciirc:hover::after {
   transform: scaleX(1);
 }
 
-/* Outlined Forest CTA Button */
-.btn-forest-outline {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  padding: 11px 22px;
-  font-size: 13.5px;
-  font-weight: 600;
-  letter-spacing: 0.02em;
-  border: 1px solid var(--forest);
-  color: var(--forest);
-  background-color: transparent;
-  transition: background-color 220ms var(--ease-editorial), color 220ms var(--ease-editorial), transform 220ms var(--ease-editorial);
+/* Section 20: Scroll Indicator pulse line */
+@keyframes scrollPulse {
+  0% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  30% {
+    opacity: 1;
+  }
+  70% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100%);
+    opacity: 0;
+  }
 }
 
-.btn-forest-outline .btn-arrow {
-  transition: transform 220ms var(--ease-editorial);
-  display: inline-block;
-}
-
-.btn-forest-outline:hover {
-  background-color: var(--forest);
-  color: var(--paper);
-}
-
-.btn-forest-outline:hover .btn-arrow {
-  transform: translateX(5px);
-}
-
-/* Primary Forest Solid Button */
-.btn-forest-solid {
-  display: inline-flex;
-  align-items: center;
-  gap: 12px;
-  padding: 14px 28px;
-  font-size: 14px;
-  font-weight: 600;
-  background-color: var(--forest);
-  color: var(--paper);
-  border: 1px solid var(--forest);
-  transition: transform 220ms var(--ease-editorial), background-color 220ms ease;
-}
-
-.btn-forest-solid .btn-arrow {
-  transition: transform 220ms var(--ease-editorial);
-  display: inline-block;
-}
-
-.btn-forest-solid:hover {
-  transform: translateY(-2px);
-}
-
-.btn-forest-solid:hover .btn-arrow {
-  transform: translateX(7px);
-}
-
-/* Secondary Underline Text Button */
-.btn-text-secondary {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  padding: 14px 4px;
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--forest);
-  background: transparent;
-}
-
-.btn-text-secondary::after {
-  content: '';
+.scroll-light-travel {
   position: absolute;
-  bottom: 10px;
+  top: 0;
   left: 0;
   width: 100%;
-  height: 1px;
-  background-color: var(--teal);
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 220ms var(--ease-editorial);
+  height: 40%;
+  background: linear-gradient(180deg, transparent, var(--blue), transparent);
+  animation: scrollPulse 1.8s ease-in-out infinite;
 }
 
-.btn-text-secondary:hover::after {
-  transform: scaleX(1);
-}
-
-/* Reduced Motion Override */
+/* Reduced Motion Override (Section 47) */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+  .scroll-light-travel,
+  .eyebrow-pulse-dot {
+    animation: none !important;
+  }
+  .cursor-halo {
+    display: none !important;
   }
 }

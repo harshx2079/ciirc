@@ -1,21 +1,19 @@
 'use client';
 
 import React from 'react';
-import { Header } from '../components/Header';
+import { LoadingScreen } from '../components/LoadingScreen';
+import { Navigation } from '../components/Navigation';
 import { Hero } from '../components/Hero';
-import { ResearchEcosystem } from '../components/ResearchEcosystem';
-import { InstrumentationSection } from '../components/InstrumentationSection';
-import { InfrastructureSection } from '../components/InfrastructureSection';
-import { PeopleNumbers } from '../components/PeopleNumbers';
-import { FundingFlow } from '../components/FundingFlow';
-import { ImpactNarrative } from '../components/ImpactNarrative';
-import { AchievementsMap } from '../components/AchievementsMap';
-import { CollaborationConstellation } from '../components/CollaborationConstellation';
-import { DirectorStory } from '../components/DirectorStory';
-import { FinalCTA } from '../components/FinalCTA';
-import { FooterAtlas } from '../components/FooterAtlas';
-import { CustomCursor } from '../components/CustomCursor';
-
+import { SectionIdea } from '../components/SectionIdea';
+import { ResearchDomains } from '../components/ResearchDomains';
+import { ResearchScale } from '../components/ResearchScale';
+import { AchievementsTimeline } from '../components/AchievementsTimeline';
+import { ResearchToImpact } from '../components/ResearchToImpact';
+import { DirectorSection } from '../components/DirectorSection';
+import { CollaborationsMarquee } from '../components/CollaborationsMarquee';
+import { LatestResearchNews } from '../components/LatestResearchNews';
+import { EngageSection } from '../components/EngageSection';
+import { Footer } from '../components/Footer';
 export default function Home() {
   return (
     <div
@@ -24,52 +22,51 @@ export default function Home() {
         display: 'flex',
         flexDirection: 'column',
         position: 'relative',
-        backgroundColor: 'var(--paper)'
+        backgroundColor: 'var(--background)',
+        overflowX: 'clip'
       }}
     >
-      {/* Subtle 8px Custom Cursor */}
-      <CustomCursor />
+      {/* Minimal Institutional Loading Screen */}
+      <LoadingScreen />
 
-      {/* 01 HEADER: Fixed 72px, Typographic CIIRC®, Cobalt underline hover, Outlined Forest CTA */}
-      <Header />
+      {/* Floating Institutional Navigation */}
+      <Navigation />
 
+      {/* 12-Section Narrative Architecture */}
       <main style={{ flex: 1, position: 'relative', zIndex: 1 }}>
-        {/* 02 HERO: 100svh Asymmetric Split + Staggered Masked Headline + Procedural Research Field Visual */}
+        {/* 01 — HERO: 3D Porous Organic Lattice Hero Sphere + Staggered Typography + CTAs */}
         <Hero />
 
-        {/* 03 SECTION 02: "THE RESEARCH ECOSYSTEM" (--paper-blue, 17 Directions Matrix + Dynamic Generative Map) */}
-        <ResearchEcosystem />
+        {/* 02 — INSTITUTIONAL INTRO: The Convergence Principle */}
+        <SectionIdea />
 
-        {/* 04 SECTION 03: "RESEARCH INSTRUMENT" (--paper, "PRECISION AT EVERY SCALE" + SEM/XRD/GC/FT-IR/DSC/TGA/BET) */}
-        <InstrumentationSection />
+        {/* 03 & 04 — RESEARCH ECOSYSTEM & EXPLORER: 17 Domains + Interactive Visual Previews */}
+        <ResearchDomains />
 
-        {/* 05 SECTION 04: "50,000+ SQ. FT." (--paper-warm, Massive 220-300px Typography + Lab Photo Parallax) */}
-        <InfrastructureSection />
+        {/* 05 — RESEARCH SCALE & IMPACT: Factual verified institutional data */}
+        <ResearchScale />
 
-        {/* 06 SECTION 05: "PEOPLE" (--paper, Giant "27 DOCTORATES", "13 MASTERS", "20 PG RESEARCH FELLOWS") */}
-        <PeopleNumbers />
+        {/* 06 — SIGNATURE ACHIEVEMENTS TIMELINE: Scroll-pinned editorial milestone journey */}
+        <AchievementsTimeline />
 
-        {/* 07 SECTION 06: "RESEARCH FUNDING" (--paper-warm, 50 Funded Projects + Progressive Research Flow Diagram) */}
-        <FundingFlow />
+        {/* 07 — INNOVATION & INCUBATION: AIC-JIT translational pipeline & products */}
+        <ResearchToImpact />
 
-        {/* 08 SECTION 07: "IMPACT" (--forest, "RESEARCH THAT LEAVES THE LAB" + Travelling Line Metric Activation) */}
-        <ImpactNarrative />
+        {/* 08 — DIRECTOR: Official portrait, verified quotation, institutional philosophy */}
+        <DirectorSection />
 
-        {/* 09 SECTION 08: "ACHIEVEMENTS" (--paper, Giant Scientific Expedition Map + Waypoint Trajectory) */}
-        <AchievementsMap />
+        {/* 09 — COLLABORATIONS: National & international research partners */}
+        <CollaborationsMarquee />
 
-        {/* 10 SECTION 09: "COLLABORATION" (--paper-blue, 5 Distinct Geometric Domains Around CIIRC Central Node) */}
-        <CollaborationConstellation />
+        {/* 10 — LATEST RESEARCH DISPATCHES: Verified academic notices & fellowship calls */}
+        <LatestResearchNews />
 
-        {/* 11 SECTION 10: "DIRECTOR / HUMAN STORY" (--paper-green, Authentic Portrait + Verified Philosophy) */}
-        <DirectorStory />
-
-        {/* 12 SECTION 11: "FINAL CTA" (--paper, "BUILD WHAT COMES NEXT" + Distilled Sparse Research Field) */}
-        <FinalCTA />
+        {/* 11 — ENGAGEMENT & CONTACT: Direct collaborative touchpoint & campus coordinates */}
+        <EngageSection />
       </main>
 
-      {/* 13 SECTION 12: FOOTER (--forest, Editorial 4-Column Directory + DSIR-SIRO Authentic Details) */}
-      <FooterAtlas />
+      {/* 12 — INSTITUTIONAL FOOTER */}
+      <Footer />
     </div>
   );
 }

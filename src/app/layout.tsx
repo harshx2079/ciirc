@@ -1,20 +1,5 @@
 import type { Metadata } from 'next';
-import { Plus_Jakarta_Sans, JetBrains_Mono } from 'next/font/google';
 import '../globals.css';
-
-const plusJakartaSans = Plus_Jakarta_Sans({
-  subsets: ['latin'],
-  weight: ['400', '500', '600', '700', '800'],
-  display: 'swap',
-  variable: '--font-sans',
-});
-
-const jetbrainsMono = JetBrains_Mono({
-  subsets: ['latin'],
-  weight: ['400', '500', '600', '700'],
-  display: 'swap',
-  variable: '--font-mono',
-});
 
 export const metadata: Metadata = {
   title: 'CIIRC® | Centre for Incubation, Innovation, Research and Consultancy',
@@ -31,15 +16,21 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${plusJakartaSans.variable} ${jetbrainsMono.variable}`}>
+    <html lang="en">
       <head>
         <link
           rel="icon"
           type="image/png"
           href="https://ciirc.res.in/site/wp-content/uploads/2021/05/ciirc-favicon.png"
         />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;650;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
+          rel="stylesheet"
+        />
       </head>
-      <body style={{ backgroundColor: 'var(--paper)', color: 'var(--forest)', position: 'relative', minHeight: '100vh' }}>
+      <body style={{ backgroundColor: 'var(--background)', color: 'var(--text-primary)', position: 'relative', minHeight: '100vh' }}>
         <div style={{ position: 'relative', zIndex: 1 }}>{children}</div>
       </body>
     </html>
