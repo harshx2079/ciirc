@@ -123,9 +123,8 @@ export const Hero: React.FC = () => {
         position: 'relative',
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'center',
-        paddingTop: 'clamp(96px, 12vh, 150px)',
-        paddingBottom: 'clamp(48px, 6vh, 80px)',
+        paddingTop: '165px',
+        paddingBottom: '80px',
         overflow: 'hidden',
         backgroundColor: 'var(--background)'
       }}
@@ -165,25 +164,21 @@ export const Hero: React.FC = () => {
         />
       </div>
 
-      {/* Hero Content Container (Unified Responsive CSS Grid) */}
+      {/* Hero Content Container */}
       <div
         className="atlas-container hero-container"
         style={{
           width: '100%',
           position: 'relative',
           zIndex: 2,
-          pointerEvents: 'none',
-          display: 'grid',
-          gridTemplateColumns: 'minmax(0, 1.15fr) minmax(320px, 0.85fr)',
-          alignItems: 'center',
-          gap: 'clamp(24px, 3.5vw, 56px)'
+          pointerEvents: 'none'
         }}
       >
-        {/* Left Column: Editorial Typography */}
+        {/* Editorial Typography Column */}
         <div
           style={{
             width: '100%',
-            maxWidth: '680px',
+            maxWidth: '620px',
             display: 'flex',
             flexDirection: 'column',
             pointerEvents: 'auto'
@@ -198,7 +193,7 @@ export const Hero: React.FC = () => {
               transform: mounted ? 'translateY(0)' : 'translateY(14px)',
               transition:
                 'opacity 650ms cubic-bezier(0.22, 1, 0.36, 1) 250ms, transform 650ms cubic-bezier(0.22, 1, 0.36, 1) 250ms',
-              marginBottom: 'clamp(24px, 2.8vw, 38px)'
+              marginBottom: '32px'
             }}
           >
             <div className="eyebrow-capsule">
@@ -210,7 +205,7 @@ export const Hero: React.FC = () => {
           {/* Masked Editorial Headline (Reliable line boxes, no collision with descenders) */}
           <h1
             style={{
-              fontSize: 'clamp(46px, 5.4vw, 94px)',
+              fontSize: 'clamp(52px, 5.8vw, 102px)',
               lineHeight: 0.98,
               letterSpacing: '-0.052em',
               fontWeight: 650,
@@ -305,12 +300,12 @@ export const Hero: React.FC = () => {
           <p
             className="hero-paragraph"
             style={{
-              fontSize: 'clamp(15.5px, 1.25vw, 18px)',
+              fontSize: '18px',
               lineHeight: 1.66,
               color: 'var(--text-secondary)',
-              maxWidth: '560px',
+              maxWidth: '540px',
               margin: 0,
-              marginTop: 'clamp(20px, 2.4vw, 34px)',
+              marginTop: '26px',
               transform: `translateY(-${descOffsetY}px)`,
               opacity: descOpacity * (mounted ? 1 : 0),
               transition: mounted
@@ -329,9 +324,9 @@ export const Hero: React.FC = () => {
             style={{
               display: 'flex',
               alignItems: 'center',
-              gap: 'clamp(12px, 1.5vw, 16px)',
+              gap: '16px',
               flexWrap: 'wrap',
-              marginTop: 'clamp(24px, 2.6vw, 38px)',
+              marginTop: '28px',
               opacity: ctaOpacity * (mounted ? 1 : 0),
               transform: mounted ? 'translateY(0)' : 'translateY(16px)',
               transition: mounted
@@ -346,7 +341,7 @@ export const Hero: React.FC = () => {
               onMouseLeave={handleBtnMouseLeave}
               className="btn-primary-ciirc hero-btn"
               style={{
-                height: 'clamp(48px, 4vw, 52px)',
+                height: '52px',
                 padding: '0 24px',
                 borderRadius: '12px',
                 display: 'inline-flex',
@@ -368,7 +363,7 @@ export const Hero: React.FC = () => {
               href="#idea"
               className="btn-secondary-ciirc hero-btn"
               style={{
-                height: 'clamp(48px, 4vw, 52px)',
+                height: '52px',
                 padding: '0 24px',
                 borderRadius: '12px',
                 display: 'inline-flex',
@@ -380,46 +375,49 @@ export const Hero: React.FC = () => {
             </a>
           </div>
         </div>
+      </div>
 
-        {/* Right Column: 3D Stage (Integrated directly into the fluid CSS Grid) */}
-        <div
-          className="hero-3d-stage"
-          style={{
-            position: 'relative',
-            width: '100%',
-            maxWidth: '680px',
-            height: 'clamp(400px, 46vw, 660px)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            zIndex: 1,
-            pointerEvents: 'auto',
-            opacity: mounted ? 1 : 0,
-            transform: mounted
-              ? `translateY(${scrollRatio * 24}px) scale(${1 - scrollRatio * 0.05})`
-              : 'scale(0.96)',
-            transition: mounted
-              ? 'transform 100ms ease-out'
-              : 'opacity 1100ms cubic-bezier(0.22, 1, 0.36, 1) 300ms, transform 1100ms cubic-bezier(0.22, 1, 0.36, 1) 300ms'
-          }}
-        >
-          <div style={{ width: '100%', height: '100%', pointerEvents: 'auto' }}>
-            <PorousLatticeSphere scrollY={scrollY} />
-          </div>
+      {/* Integrated 3D Element: Part of the hero environment, full-height stage across the right on desktop */}
+      <div
+        className="hero-3d-stage"
+        style={{
+          position: 'absolute',
+          top: 0,
+          right: '2%',
+          bottom: 0,
+          width: '48vw',
+          maxWidth: '720px',
+          height: '100%',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 1,
+          pointerEvents: 'none',
+          opacity: mounted ? 1 : 0,
+          transform: mounted
+            ? `translateY(${scrollRatio * 30}px) scale(${1 - scrollRatio * 0.06})`
+            : 'scale(0.96)',
+          transition: mounted
+            ? 'transform 100ms ease-out'
+            : 'opacity 1100ms cubic-bezier(0.22, 1, 0.36, 1) 300ms, transform 1100ms cubic-bezier(0.22, 1, 0.36, 1) 300ms'
+        }}
+      >
+        <div style={{ width: '100%', height: '100%', pointerEvents: 'auto' }}>
+          <PorousLatticeSphere scrollY={scrollY} />
         </div>
       </div>
 
-      {/* Scroll Indicator (Middle - Bottom Centre) */}
+      {/* Scroll Indicator (Middle - Bottom Centre on desktop, below 3D object on mobile) */}
       <div
         style={{
           position: 'absolute',
-          bottom: 'clamp(16px, 2.8vh, 30px)',
+          bottom: '28px',
           left: '50%',
           transform: 'translateX(-50%)',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          gap: '8px',
+          gap: '9px',
           opacity: Math.max(1 - scrollY / 80, 0),
           pointerEvents: 'none',
           transition: 'opacity 250ms ease',
@@ -578,85 +576,300 @@ export const Hero: React.FC = () => {
           -webkit-background-clip: text;
           background-clip: text;
           -webkit-text-fill-color: transparent;
-          padding-bottom: 0.22em;
-          margin-bottom: -0.22em;
+          padding-bottom: 0.24em;
+          margin-bottom: -0.24em;
+        }
+
+        /* Default Desktop Styling */
+        .hero-stage {
+          padding-top: 165px;
+          padding-bottom: 80px;
         }
 
         /* Responsive Breakpoints */
+        /* Tablet: 768px - 1024px */
+        @media (max-width: 1024px) {
+          .hero-atmosphere-primary {
+            width: clamp(420px, 72vw, 580px);
+            height: clamp(340px, 60vw, 480px);
+            margin-left: calc(-1 * clamp(210px, 36vw, 290px));
+            margin-top: calc(-1 * clamp(170px, 30vw, 240px));
+            filter: blur(75px);
+          }
+          .hero-atmosphere-secondary {
+            width: clamp(360px, 64vw, 500px);
+            height: clamp(300px, 54vw, 420px);
+            margin-left: calc(-1 * clamp(180px, 32vw, 250px));
+            margin-top: calc(-1 * clamp(150px, 27vw, 210px));
+            filter: blur(80px);
+          }
+        }
+
+        /* Squeeze transition: When width <= 960px, deliberately transition into centered composition */
         @media (max-width: 960px) {
           .hero-stage {
-            padding-top: 110px !important;
-            padding-bottom: 56px !important;
-            min-height: auto !important;
+            flex-direction: column !important;
+            padding-top: 120px !important;
+            padding-bottom: 60px !important;
+            min-height: 100svh !important;
+            height: auto !important;
           }
           .hero-container {
-            grid-template-columns: 1fr !important;
-            gap: 36px !important;
+            order: 1 !important;
+            max-width: 640px !important;
+            margin-inline: auto !important;
+            text-align: center !important;
           }
           .hero-copy-column {
             max-width: 100% !important;
+            align-items: center !important;
+            text-align: center !important;
+          }
+          .hero-eyebrow-wrapper {
+            display: flex !important;
+            justify-content: center !important;
+          }
+          .eyebrow-capsule {
+            margin-inline: auto !important;
+          }
+          .hero-headline {
+            text-align: center !important;
+            transform-origin: center top !important;
+            font-size: clamp(48px, 6vw, 76px) !important;
+          }
+          .hero-paragraph {
+            text-align: center !important;
+            margin-top: 28px !important;
+            margin-inline: auto !important;
+            max-width: 480px !important;
+          }
+          .hero-cta-wrapper {
+            justify-content: center !important;
+            margin-top: 28px !important;
           }
           .hero-3d-stage {
+            order: 2 !important;
+            position: relative !important;
+            right: auto !important;
+            bottom: auto !important;
+            top: auto !important;
+            left: auto !important;
             width: 100% !important;
-            height: clamp(340px, 55vw, 460px) !important;
-            max-width: 480px !important;
-            margin: 0 auto !important;
+            max-width: 580px !important;
+            height: 580px !important;
+            margin: 48px auto 0 !important;
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
           }
           .hero-scroll-indicator {
-            display: none !important;
+            order: 3 !important;
+            position: relative !important;
+            bottom: auto !important;
+            left: auto !important;
+            transform: none !important;
+            margin: 40px auto 0 !important;
+            display: flex !important;
           }
+        }
+
+        /* Mobile Viewport (<= 767px): Deliberately Centered Mobile Composition */
+        @media (max-width: 767px) {
+          .hero-stage {
+            padding-top: clamp(96px, 12vh, 110px) !important;
+            padding-bottom: 48px !important;
+            min-height: 100svh !important;
+            height: auto !important;
+            flex-direction: column !important;
+            align-items: center !important;
+            justify-content: flex-start !important;
+            overflow-x: hidden !important;
+          }
+
+          /* Mobile Centered Container */
+          .hero-container {
+            order: 1 !important;
+            width: 100% !important;
+            max-width: 560px !important;
+            margin-inline: auto !important;
+            padding-left: clamp(20px, 5.5vw, 24px) !important;
+            padding-right: clamp(20px, 5.5vw, 24px) !important;
+            box-sizing: border-box !important;
+          }
+
+          .hero-copy-column {
+            width: 100% !important;
+            max-width: 100% !important;
+            align-items: center !important;
+            text-align: center !important;
+            margin-inline: auto !important;
+          }
+
+          /* 1. Mobile Eyebrow — Centered compact pill */
+          .hero-eyebrow-wrapper {
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
+            width: 100% !important;
+            margin-bottom: clamp(24px, 3.5vh, 32px) !important;
+          }
+
+          .eyebrow-capsule {
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            text-align: center !important;
+            width: fit-content !important;
+            max-width: 100% !important;
+            font-size: clamp(9px, 2.5vw, 11px) !important;
+            letter-spacing: clamp(0.10em, 1.2vw, 0.14em) !important;
+            line-height: 1.45 !important;
+            padding: 8px 14px !important;
+            white-space: normal !important;
+            margin-inline: auto !important;
+            flex-wrap: wrap !important;
+          }
+
+          /* 2. Mobile Headline — Dominant, Centered, Responsive Lines */
+          .hero-headline {
+            text-align: center !important;
+            font-size: clamp(42px, 10.8vw, 56px) !important;
+            line-height: 0.96 !important;
+            letter-spacing: -0.048em !important;
+            transform-origin: center top !important;
+            transform: none !important;
+            opacity: 1 !important;
+            margin: 0 auto !important;
+            width: 100% !important;
+          }
+
+          .hero-headline span {
+            text-align: center !important;
+          }
+
+          .hero-gradient-word {
+            display: inline-block !important;
+            white-space: nowrap !important;
+            padding-bottom: 0.24em !important;
+            margin-bottom: -0.24em !important;
+            padding-right: 0.04em !important;
+          }
+
+          /* 3. Mobile Paragraph — Controlled reading width, clear breathing room */
+          .hero-paragraph {
+            text-align: center !important;
+            max-width: min(350px, 92vw) !important;
+            width: 100% !important;
+            margin-inline: auto !important;
+            margin-top: clamp(24px, 3.2vh, 32px) !important;
+            font-size: clamp(15.5px, 3.8vw, 17px) !important;
+            line-height: 1.62 !important;
+            transform: none !important;
+            opacity: 1 !important;
+          }
+
+          /* 4. Mobile CTA Group — Centered, Side-by-Side pair or gracefully stacked */
+          .hero-cta-wrapper {
+            margin-top: clamp(28px, 3.5vh, 36px) !important;
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
+            gap: clamp(10px, 2.5vw, 12px) !important;
+            flex-wrap: wrap !important;
+            width: 100% !important;
+            margin-inline: auto !important;
+            transform: none !important;
+            opacity: 1 !important;
+          }
+
+          .hero-btn {
+            width: fit-content !important;
+            min-height: 50px !important;
+            height: 50px !important;
+            padding: 0 clamp(18px, 4.5vw, 24px) !important;
+            white-space: nowrap !important;
+            font-size: 14.5px !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+          }
+
+          /* 5. Mobile 3D Object — Centered, PRESERVED APPROVED SCALE, Sufficient Space */
+          .hero-3d-stage {
+            order: 2 !important;
+            position: relative !important;
+            right: auto !important;
+            bottom: auto !important;
+            top: auto !important;
+            left: auto !important;
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
+            width: 100% !important;
+            max-width: 560px !important;
+            height: 580px !important;
+            margin: clamp(55px, 7vh, 75px) auto 0 !important;
+            transform: none !important;
+            opacity: 1 !important;
+            pointer-events: auto !important;
+          }
+
+          /* 6. Mobile Scroll Indicator — Centered beneath 3D Object */
+          .hero-scroll-indicator {
+            order: 3 !important;
+            position: relative !important;
+            bottom: auto !important;
+            left: auto !important;
+            transform: none !important;
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: center !important;
+            gap: 8px !important;
+            margin: clamp(40px, 5vh, 56px) auto 0 !important;
+            opacity: 1 !important;
+            pointer-events: none !important;
+            z-index: 5 !important;
+          }
+
+          /* Mobile Atmospheric Soft Blue Atmosphere */
           .hero-atmosphere-primary {
-            width: clamp(380px, 68vw, 540px);
-            height: clamp(320px, 58vw, 440px);
-            margin-left: calc(-1 * clamp(190px, 34vw, 270px));
-            margin-top: calc(-1 * clamp(160px, 29vw, 220px));
-            filter: blur(65px);
+            width: clamp(340px, 85vw, 480px);
+            height: clamp(340px, 85vw, 480px);
+            margin-left: calc(-1 * clamp(170px, 42.5vw, 240px));
+            margin-top: calc(-1 * clamp(170px, 42.5vw, 240px));
+            top: 36%;
+            background: radial-gradient(
+              ellipse 60% 60% at 50% 50%,
+              rgba(22, 119, 255, 0.35) 0%,
+              rgba(20, 100, 220, 0.24) 34%,
+              rgba(22, 119, 255, 0.10) 60%,
+              rgba(15, 98, 236, 0.02) 78%,
+              transparent 88%
+            );
+            filter: blur(60px);
+            animation: atmosphericDriftMobile 10s ease-in-out infinite alternate !important;
           }
+
           .hero-atmosphere-secondary {
             display: none !important;
           }
         }
 
-        @media (max-width: 640px) {
-          .hero-stage {
-            padding-top: 84px !important;
-            padding-bottom: 36px !important;
-          }
+        /* Very Narrow Mobile Viewports (<= 340px) */
+        @media (max-width: 340px) {
           .hero-headline {
-            font-size: clamp(36px, 8.8vw, 50px) !important;
-            line-height: 0.98 !important;
-            letter-spacing: -0.048em !important;
-          }
-          .hero-eyebrow-wrapper {
-            margin-bottom: 18px !important;
-          }
-          .hero-paragraph {
-            font-size: 15.5px !important;
-            line-height: 1.62 !important;
-            margin-top: 18px !important;
+            font-size: clamp(36px, 10.5vw, 42px) !important;
           }
           .hero-cta-wrapper {
-            margin-top: 22px !important;
-            gap: 10px !important;
+            flex-direction: column !important;
+            gap: 12px !important;
           }
           .hero-btn {
-            height: 48px !important;
-            padding: 0 20px !important;
-            font-size: 13.5px !important;
+            width: min(100%, 280px) !important;
+            margin: 0 auto !important;
           }
           .hero-3d-stage {
-            height: clamp(280px, 72vw, 360px) !important;
-            max-width: 360px !important;
-          }
-          .hero-atmosphere-primary {
-            width: 78vw;
-            height: 78vw;
-            max-width: 320px;
-            max-height: 320px;
-            margin-left: calc(-1 * min(39vw, 160px));
-            margin-top: calc(-1 * min(39vw, 160px));
-            filter: blur(50px);
-            animation: atmosphericDriftMobile 10s ease-in-out infinite alternate !important;
+            height: 540px !important;
           }
         }
       `}</style>
